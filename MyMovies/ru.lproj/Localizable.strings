@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  MyMovies
+
+  Created by link on 12/8/20.
+  
+*/
+
+"Movie.Rumored" = "Ходят слухи";
+"Movie.Planned" = "Планируется";
+"Movie.InProduction" = "В производстве";
+"Movie.Post" = "Опубликован";
+"Movie.Production" = "Продолжается";
+"Movie.Released" = "Выпущен";
+"Movie.Canceled" = "Отменено";

@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  MyMovies
+
+  Created by link on 12/8/20.
+  
+*/
+"Movie.Rumored" = "Rumored";
+"Movie.Planned" = "Planned";
+"Movie.InProduction" = "In Production";
+"Movie.Post" = "Post";
+"Movie.Production" = "Production";
+"Movie.Released" = "Released";
+"Movie.Canceled" = "Canceled";
