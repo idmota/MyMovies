@@ -14,22 +14,100 @@ class MovieDetailController: UIViewController, YTPlayerViewDelegate {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-		view.backgroundColor = ColorMode.background
-//		navigationItem.title = presenter.movie?.title
-//		navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-//		navigationController?.navigationBar.shadowImage = UIImage()
-//		navigationController?.tabBarItem.badgeColor = .cyan
-//		navigationController?.navigationI
-//		navigationController?.navigationBar.isTranslucent = true
-//		navigationController?.navigationBar.backgroundColor = UIColor.blue.withAlphaComponent(0)
-
-        // Do any additional setup after loading the view.
-
-		view = MovieDetailView(delegate: self)
 		
-    }
-	
+		view.backgroundColor = ColorMode.background
+		
+		navigationController?.hidesBarsOnSwipe = false
+		navigationController?.isNavigationBarHidden = true
+		//		navigationItem.title = presenter.movie?.title
+//				navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+//				navigationController?.navigationBar.shadowImage = UIImage()
+		//		navigationController?.tabBarItem.badgeColor = .cyan
+		//		navigationController?.navigationI
+		//		navigationController?.navigationBar.isTranslucent = true
+//		navigationController?.navigationBar.backgroundColor = UIColor.gray.withAlphaComponent(0.2)
+//		navigationController?.navigationBar.tintColor = .white
+		view = DetailView(delegate: self)
+		setupView()
+		
+//		view.addSubview(backButton)
+//
+//		backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Space.single).isActive = true
+//		backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Space.single).isActive = true
 
+		
+	}
+	
+	lazy var navigView:UIView = {
+		let v = UIView()
+		let color = UIColor.lightGray
+		
+		v.backgroundColor = color.withAlphaComponent(0.2)
+		v.translatesAutoresizingMaskIntoConstraints = false
+
+		return v
+	}()
+	
+	lazy var backButton:UIButton = {
+		let bb = UIButton()
+		bb.addTarget(self, action: #selector(backAction), for: .touchUpInside)
+		bb.setTitle(" Back", for: .normal)
+		let img = UIImage(systemName: "arrow.uturn.left")
+		
+		bb.setImage(img?.withTintColor(ColorMode.background, renderingMode: .alwaysOriginal), for: .normal)
+		bb.setTitleColor(ColorMode.background, for: .normal)
+		return bb
+	}()
+	
+	lazy var shareButton:UIButton = {
+		let sb = UIButton()
+		sb.setImage(UIImage(named: "shareico")?.withTintColor(ColorMode.background, renderingMode: .alwaysOriginal), for: .normal)
+		sb.addTarget(self, action: #selector(shareAction), for: .touchUpInside)
+//		sb.setTitle("", for: .normal)
+//		sb.setTitleColor(ColorMode.titleColor, for: .normal)
+		return sb
+	}()
+	
+	func setupView() {
+		[
+		backButton,
+		shareButton
+		].forEach {
+			$0.translatesAutoresizingMaskIntoConstraints = false
+			navigView.addSubview($0)
+		}
+		view.addSubview(navigView)
+
+		setupLayout()
+	}
+	func setupLayout() {
+		let constraints = [
+			
+			navigView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+			navigView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+			navigView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+			backButton.topAnchor.constraint(equalTo: navigView.topAnchor, constant: Space.single),
+			backButton.leadingAnchor.constraint(equalTo: navigView.leadingAnchor, constant: Space.single),
+			backButton.bottomAnchor.constraint(equalTo: navigView.bottomAnchor, constant: -Space.single),
+			
+			shareButton.topAnchor.constraint(equalTo: navigView.topAnchor, constant: Space.single),
+			shareButton.trailingAnchor.constraint(equalTo: navigView.trailingAnchor, constant: -Space.single),
+			shareButton.bottomAnchor.constraint(equalTo: navigView.bottomAnchor, constant: -Space.single)
+			
+		]
+		NSLayoutConstraint.activate(constraints)
+		
+	}
+	
+	@objc func backAction() {
+		navigationController?.popViewController(animated: true)
+	}
+	@objc func shareAction() {
+		// mb youtube link
+		let activityViewController = UIActivityViewController(activityItems: [presenter.movie!.originalTitle], applicationActivities: .none)
+		self.present(activityViewController, animated: true, completion: nil)
+	}
 	@objc func playVideo() {
 		
 //		guard let url = URL(string: "https://www.youtube.com/watch?v=2_N3VDK_dJQ") else { return }
@@ -45,6 +123,14 @@ class MovieDetailController: UIViewController, YTPlayerViewDelegate {
 }
 
 extension MovieDetailController: MovieDetailViewDelegateOutput {
+	func shareMovie() {
+		//
+	}
+	
+	func PlayTrailer() {
+		//
+	}
+	
 	func openLink() {
 		print("open link")
 		var yp = YTPlayerView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))

@@ -10,20 +10,20 @@ import UIKit
 
 class WalkthroughRouter: WalkthroughRouterInput {
 
-	let router: Router
+
+	let router: RouterImp
 	
-	weak var presenter: MoviesListPresenter?
-	
-	init(router: Router) {
+	internal init(router: RouterImp) {
 		self.router = router
 	}
+//	weak var presenter: MoviesListPresenter?
+	
 	
 	func openMainViewController() {
 
-		let rootViewController = UINavigationController()
+		let projectDetails = MoviesListModelFactory.make(router: router, model: CommonsMenuModel(name: "Top Movies", icon: nil, category: .now_playing))
+		router.setRoot(projectDetails, animated: true)
 
-		let childRouter = RouterImp(rootController: rootViewController)
-		let projectDetails = MoviesListModelFactory.make(router: childRouter)
-		router.push(projectDetails, animated: true)
 	}
 }
+

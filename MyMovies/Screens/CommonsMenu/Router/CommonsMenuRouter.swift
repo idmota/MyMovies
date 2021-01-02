@@ -11,19 +11,19 @@ import Foundation
 
 class CommonsMenuRouter: CommonsMenuRouterInput {
 	
-	let router: Router
+	let router: RouterImp
 	
 	weak var presenter: MoviesListPresenter?
 	
-	init(router: Router) {
+	init(router: RouterImp) {
 		self.router = router
 	}
 
 	func openScreen(openModel: CommonsMenuModel) {
-		let rootViewController = UINavigationController()
-
-		let childRouter = RouterImp(rootController: rootViewController)
-		let projectDetails = MoviesListModelFactory.make(router: childRouter)
-		router.push(projectDetails, animated: true)
+//		let rootViewController = UINavigationController()
+//
+//		let childRouter = RouterImp(rootController: rootViewController)
+		let projectDetails = MoviesListModelFactory.make(router: router, model:openModel)
+		router.setRoot(projectDetails, animated: true)
 	}
 }

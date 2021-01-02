@@ -27,9 +27,11 @@ struct MovieModel: Codable {
 	let adult: Bool
 	let backdropPath: String?
 	let genreIDS: [Int]
+	var genre: [MovieGenreModel] = []
 	let overview: String
 	let id: Int
-	let originalTitle, posterPath, originalLanguage: String
+	let originalTitle, originalLanguage: String
+	let posterPath: String?
 	let video: Bool
 	
 	enum CodingKeys: String, CodingKey {

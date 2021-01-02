@@ -15,7 +15,8 @@ enum Url {
 //	}
 	static let token: String = "cb606896c629b59ff2130946a21edeeb"
 	
-	static let urlDetail: String = "https://api.themoviedb.org/3/movie/"
+	static let urlDetail: String = "https://api.themoviedb.org/3/"
+	
 	static let urlYoutube: String = "https://www.youtube.com/watch?v="
 	static let urlPoster: String = "https://image.tmdb.org/t/p/"
 	
@@ -28,8 +29,8 @@ enum Url {
 	
 	//https://api.themoviedb.org/3/genre/tv/list?api_key=cb606896c629b59ff2130946a21edeeb&language=ru-RU
 	
-	static func getPosterURL(model:MovieModel)->URL? {
-		let stringUrl = "\(urlPoster)\(apiImg.logo_sizes.w92)\(model.posterPath)"
+	static func getPosterURL(posterPath:String)->URL? {
+		let stringUrl = "\(urlPoster)\(apiImg.logo_sizes.w154)\(posterPath)"
 		return URL(string: stringUrl)
 	}
 	static func getBackPosterURL(posterPath:String)->URL? {
@@ -41,16 +42,26 @@ enum Url {
 			return "\(urlDetail)top_rated?api_key=\(token)&language=\(Locale.preferredLanguages.first!)&page=\(page)"
 	}
 	static func getMovieFromId(_ idMovie:Int)->String {
-			return "\(urlDetail)\(idMovie)?api_key=\(token)&language=\(Locale.preferredLanguages.first!)"
+		return "\(urlDetail)\(typeData.movie)/\(idMovie)?api_key=\(token)&language=\(Locale.preferredLanguages.first!)"
 	}
 	static func getUrlFromCategory(_ category:Category,page:Int)->String {
-		return "\(urlDetail)\(category.rawValue)?api_key=\(token)&language=\(Locale.preferredLanguages.first!)&page=\(page)"
+		return "\(urlDetail)\(typeData.movie)/\(category.rawValue)?api_key=\(token)&language=\(Locale.preferredLanguages.first!)&page=\(page)"
 	}
 	static func getTrailerFromId(_ idMovie:Int)->String {
-		return "\(urlDetail)\(idMovie)/videos?api_key=\(token)"
+		return "\(urlDetail)\(typeData.movie)/\(idMovie)/videos?api_key=\(token)"
 	}
-	
+	static func getFenresList()->String {
+		return "\(urlDetail)genre/\(typeData.movie)/list?api_key=\(token)&language=\(Locale.preferredLanguages.first!)"
+		//https://api.themoviedb.org/3/genre/movie/list?api_key=cb606896c629b59ff2130946a21edeeb&language=ru-RU
+
+	}
+
 }
+enum typeData:String {
+	case movie
+	case tv
+}
+
 enum Category:String {
 	case latest
 	case now_playing

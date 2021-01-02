@@ -8,25 +8,52 @@
 import UIKit
 class MoviesListController: UIViewController {
 	
-	var presenter: MoviesListPresenter!
+	var presenter: MoviesListPresenter?
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		navigationController?.isNavigationBarHidden = false
-		navigationItem.title = "movie list"
-				
 
+		navigationItem.title = presenter?.urlModel.name
 		setupView()
+	}
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
 		
+		navigationController?.hidesBarsOnSwipe = true
+		navigationController?.isNavigationBarHidden = false
 	}
 	
-	
+//	func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//		let height = view.safeAreaLayoutGuide.layoutFrame.size.height
+//		let scrolled = scrollView.panGestureRecognizer.translation(in: scrollView).y
+////		print(scrolled)
+////		print(height)
+////		print(scrollView.visibleSize.height)
+//		navigationController?.navigationBar.frame.offsetBy(dx: 0, dy: scrolled)
+////		if (frameNC.origin.y > 0.0 && frameNC.origin.y <= 44.0) {
+////			frameNC.origin.y += scrolled
+////			print(frameNC.origin.y)
+////
+////		}
+//		//		frameNC.offsetBy(dx: 0, dy: scrolled)
+////		frameNC.origin.y = scrolled
+////		if !(scrollView.visibleSize.height - height >= 90) {
+////			if  scrolled < 0 {
+////				frameNC.origin.y = scrolled
+//////				navigationController?.setNavigationBarHidden(true, animated: true)
+////			} else {
+//////				navigationController?.setNavigationBarHidden(false, animated: true)
+////				navigationController?.view.frame.offsetBy(dx: 0, dy: CGFloat(scrolled))
+////			}
+////		}
+//	}
+//
 	private func setupView() {
 
 		let refreshc = UIRefreshControl.init(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
 		refreshc.addTarget(self, action: #selector(actionReflesh), for: .valueChanged)
 		refreshc.tintColor = .green
-		tableView.refreshControl = refreshc
+//		tableView.refreshControl = refreshc
 		
 		let bBis = UIBarButtonItem(image: UIImage(systemName: "list.bullet")?.withTintColor(ColorMode.colorButton, renderingMode: .alwaysOriginal), style: .done, target: self, action: #selector(openMenu))
 		navigationItem.leftBarButtonItems = [bBis]
@@ -36,7 +63,7 @@ class MoviesListController: UIViewController {
 		
 		
 		navigationItem.rightBarButtonItems = [gridButton,rSearch]
-
+//		view = tableView
 
 		[
 //			leftMenuView,
@@ -47,6 +74,7 @@ class MoviesListController: UIViewController {
 		}
 		setupLayout()
 	}
+	
 	lazy var gridButton:UIBarButtonItem = {
 		let changePreview = UIBarButtonItem(image: UIImage(systemName: "square.grid.2x2")?.withTintColor(ColorMode.colorButton, renderingMode: .alwaysOriginal), style: .done, target: self, action: #selector(changeButton))
 		// rectangle.grid.1x2
@@ -70,7 +98,7 @@ class MoviesListController: UIViewController {
 	}
 	private func setupLayout() {
 		let constraints = [
-			tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+			tableView.topAnchor.constraint(equalTo: view.topAnchor),
 			tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 			tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 			tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
@@ -90,12 +118,12 @@ class MoviesListController: UIViewController {
 		tv.prefetchDataSource = self // top update indicator
 		tv.delegate = self
 		tv.dataSource = self
-		
+		tv.separatorStyle = .none
 		return tv
 	}()
 	
 	@objc func openMenu() {
-		presenter.didOpenCommonMenu()
+		presenter!.didOpenCommonMenu()
 	}
 
 	@objc func clearCashe() {
@@ -107,7 +135,7 @@ class MoviesListController: UIViewController {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: true)
-		presenter.didPressOpenDetail(at: indexPath.row)
+		presenter!.didPressOpenDetail(at: indexPath.row)
 	}
 	
 
@@ -116,7 +144,7 @@ extension MoviesListController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell:MoviesListTableViewCell = tableView.dequeueReusableCell(for: indexPath)
-		let movie = presenter.movie(at: indexPath.row)
+		let movie = presenter!.movie(at: indexPath.row)
 		
 		cell.fill(model:movie)
 
@@ -124,19 +152,19 @@ extension MoviesListController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return presenter.currentCount
+		return presenter?.currentCount ?? 0
 	}
 }
 extension MoviesListController: UITableViewDataSourcePrefetching {
 	func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
 		if indexPaths.contains(where: isLoadingCell) {
-			presenter.getMoviesList()
+			presenter!.getMoviesList()
 		}
 	}
 }
 private extension MoviesListController {
 	func isLoadingCell(for indexPath: IndexPath) -> Bool {
-		return indexPath.row >= presenter.currentCount-1
+		return indexPath.row >= presenter!.currentCount-1
 	}
 }
 extension MoviesListController: MoviesListProtocol {

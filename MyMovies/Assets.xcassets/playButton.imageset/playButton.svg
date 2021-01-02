@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72px" height="72px" viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group</title>
+    <defs>
+        <filter x="-3.2%" y="-3.1%" width="106.4%" height="112.0%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <linearGradient x1="20.016516%" y1="0%" x2="75.3624174%" y2="86.9751149%" id="linearGradient-2">
+            <stop stop-color="#F99F00" offset="0%"></stop>
+            <stop stop-color="#DB3069" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="English" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1.7-Moives-Detail-1" transform="translate(-152.000000, -54.000000)">
+            <g id="View" transform="translate(-6.000000, -50.000000)">
+                <g id="Moive_view" filter="url(#filter-1)" transform="translate(6.000000, 0.000000)">
+                    <g id="Group" transform="translate(161.000000, 113.000000)">
+                        <circle id="Oval-3" fill="url(#linearGradient-2)" cx="27" cy="27" r="27"></circle>
+                        <path d="M29.8092004,20.8270661 L36.2007051,31.0534736 C36.7861258,31.9901467 36.5013794,33.2240474 35.5647064,33.8094681 C35.2468432,34.0081326 34.8795479,34.1134715 34.5047085,34.1134715 L21.7216991,34.1134715 C20.6171296,34.1134715 19.7216991,33.218041 19.7216991,32.1134715 C19.7216991,31.738632 19.8270379,31.3713368 20.0257024,31.0534736 L26.4172072,20.8270661 C27.0026278,19.890393 28.2365286,19.6056467 29.1732017,20.1910673 C29.4307399,20.3520287 29.648239,20.5695278 29.8092004,20.8270661 Z" id="Triangle" fill="#FFFFFF" transform="translate(28.113338, 27.000134) rotate(90.000000) translate(-28.113338, -27.000134) "></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

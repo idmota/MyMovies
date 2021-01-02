@@ -9,10 +9,10 @@ import UIKit
 
 class MoviesListRouter: MoviesListRouterInput {
 	
-	let router: Router
+	let router: RouterImp
 	weak var presenter: MoviesListPresenter?
 	
-	init(router: Router) {
+	init(router: RouterImp) {
 		self.router = router
 	}
 	
@@ -20,17 +20,16 @@ class MoviesListRouter: MoviesListRouterInput {
 		presenter?.showCommonMenu(animated: animated)
 	}
 	
-
-	
 	func openMovieDetail(id:Int, animated:Bool) {
-		let navigationController = UINavigationController()
-		let childRouter = RouterImp(rootController: navigationController)
-		let projectDetails = MovieDetailBuilder.make(router: childRouter, idMovie:id)
-		guard let v = presenter?.view as? UIViewController else {
-			return
-		}
+		
+		let rootViewController = UINavigationController()
+
+		let childRouter = RouterImp(rootController: rootViewController)
+		let projectDetails = MovieDetailBuilder.make(router: childRouter, idMovie: id)
+		
 		router.push(projectDetails, animated: animated)
 
 	}
+
 	
 }

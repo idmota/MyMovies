@@ -37,12 +37,12 @@ class CommonsMenuController: UIViewController {
 		NSLayoutConstraint.activate(array)
 	}
 	lazy var menuTable:UITableView = {
-		let t = UITableView()
+		let t = UITableView(frame: CGRect.zero, style: .plain)
 		t.register(CommonsMenuTableViewCell.self)
 		t.delegate = self
 		t.dataSource = self
 		t.separatorStyle = .none
-		
+		t.isScrollEnabled = false
 		return t
 	}()
 	
@@ -64,8 +64,13 @@ extension CommonsMenuController: UITableViewDelegate, UITableViewDataSource {
 	}
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: true)
-		print("did open \(indexPath.row)")
 		presenter.didOpenScreen(at: indexPath.row)
+	}
+	func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+		return "Movie"
+	}
+	func numberOfSections(in tableView: UITableView) -> Int {
+		return 1
 	}
 }
 extension CommonsMenuController: CommonsMenuControllerProtocol {

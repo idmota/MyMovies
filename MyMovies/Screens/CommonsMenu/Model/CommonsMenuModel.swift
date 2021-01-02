@@ -11,6 +11,7 @@ struct CommonsMenuModel {
 	
 	var name: String
 	var icon: UIImage?
-	var urlLink: String
+	var category: Category
+	var urlLink: String?
 	
 }

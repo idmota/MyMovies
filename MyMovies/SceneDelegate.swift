@@ -23,11 +23,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		window?.makeKeyAndVisible()
 
 		let rootViewController = UINavigationController()
+		rootViewController.isNavigationBarHidden = false
 
 		window?.rootViewController = rootViewController
 
 		let router = RouterImp(rootController: rootViewController)
 		let projectsViewController =  WalkthroughBuilder.make(router: router)
+//		let projectsViewController =  MoviesListModelFactory.make(router: router)
 
 		
 		router.setRoot(projectsViewController, animated: true)

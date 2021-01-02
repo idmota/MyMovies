@@ -12,10 +12,11 @@ protocol Router {
 	func push(_ controller: UIViewController, animated: Bool)
 	func present(_ controller: UIViewController, animated: Bool)
 	func pop(animated: Bool)
+	var rootController: UINavigationController? { get set }
 }
 
 final class RouterImp: Router {
-	private weak var rootController: UINavigationController?
+	var rootController: UINavigationController?
 
 	init(rootController: UINavigationController) {
 		self.rootController = rootController

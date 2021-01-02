@@ -6,10 +6,10 @@
 //
 
 import Foundation
-protocol MoviesListRouterInput {
+protocol MoviesListRouterInput: class {
 	func openMovieDetail(id:Int, animated:Bool)
 	func openCommonMenu(animated:Bool)
 }
-protocol MoviesListRouterOutput {
+protocol MoviesListRouterOutput: class {
 	func showCommonMenu(animated:Bool)
 }
