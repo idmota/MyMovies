@@ -10,7 +10,7 @@ import UIKit
 struct CommonsMenuBuilder {
 	static func make (router:RouterImp) -> CommonsMenuController {
 		let view = CommonsMenuController()
-////		let networkService = NetworkService()
+
 		let commonsMenuRouter = CommonsMenuRouter(router: router)
 		let presenter = CommonsMenuPresenter(view: view, router: commonsMenuRouter)
 

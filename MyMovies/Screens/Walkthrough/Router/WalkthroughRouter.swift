@@ -16,8 +16,6 @@ class WalkthroughRouter: WalkthroughRouterInput {
 	internal init(router: RouterImp) {
 		self.router = router
 	}
-//	weak var presenter: MoviesListPresenter?
-	
 	
 	func openMainViewController() {
 

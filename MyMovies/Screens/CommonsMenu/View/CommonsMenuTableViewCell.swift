@@ -21,10 +21,10 @@ class CommonsMenuTableViewCell: UITableViewCell {
     }
 	func make(menuModel:CommonsMenuModel) {
 		
-	//	frame.inset()// =
+
 		bounds.inset(by: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
 		textLabel?.text = menuModel.name
-//		backgroundColor = .green
+
 	}
 }
 

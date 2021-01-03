@@ -29,8 +29,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		let router = RouterImp(rootController: rootViewController)
 		let projectsViewController =  WalkthroughBuilder.make(router: router)
-//		let projectsViewController =  MoviesListModelFactory.make(router: router)
-
 		
 		router.setRoot(projectsViewController, animated: true)
 	}

@@ -7,14 +7,6 @@
 
 import Foundation
 import UIKit
-//struct MovieDetailModel {
-//	var id:UUID = UUID()
-//	var title:String=""
-//	var created_at:Date
-//	var posterImg:UIImage
-//	var rating: String
-//}
-
 
 struct MovieDetailModel: Codable {
 	let adult: Bool
