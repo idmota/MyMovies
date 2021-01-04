@@ -18,6 +18,7 @@ struct ColorMode {
 	static let colorButton:UIColor = {
 		return .systemGray
 	}()
+	// for gradient orange - red
 	static let color1: UIColor = {
 		return UIColor(displayP3Red: 249/255, green: 159/255, blue: 0/255, alpha: 1)
 	}()

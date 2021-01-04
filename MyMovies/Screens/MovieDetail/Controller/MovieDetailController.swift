@@ -37,7 +37,7 @@ class MovieDetailController: UIViewController, YTPlayerViewDelegate {
 
 		
 	}
-	
+
 	lazy var navigView:UIView = {
 		let v = UIView()
 		let color = UIColor.lightGray
@@ -53,7 +53,7 @@ class MovieDetailController: UIViewController, YTPlayerViewDelegate {
 		bb.addTarget(self, action: #selector(backAction), for: .touchUpInside)
 		bb.setTitle(" Back", for: .normal)
 		let img = UIImage(systemName: "arrow.uturn.left")
-		
+
 		bb.setImage(img?.withTintColor(ColorMode.background, renderingMode: .alwaysOriginal), for: .normal)
 		bb.setTitleColor(ColorMode.background, for: .normal)
 		return bb
@@ -123,6 +123,12 @@ class MovieDetailController: UIViewController, YTPlayerViewDelegate {
 }
 
 extension MovieDetailController: MovieDetailViewDelegateOutput {
+	func dowloadPictures(pathURL: URL?, completion: @escaping (UIImage?) -> Void) {
+		presenter.dowloadPictures(pathURL: pathURL, completion: completion)
+	}
+	
+
+	
 	func shareMovie() {
 		//
 	}

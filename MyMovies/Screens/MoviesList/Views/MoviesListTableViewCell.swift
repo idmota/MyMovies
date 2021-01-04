@@ -310,7 +310,7 @@ extension MoviesListTableViewCell {
 	func fill(model:MovieModel) {
 		titlelabel.text = "\(model.title)"
 		if let posterPath = model.posterPath {
-			imageURL = Url.getPosterURL(posterPath: posterPath)
+			imageURL = Url.getPosterURL(path: posterPath)
 		} else {
 			posterImage.image = UIImage(named: "ImageNotFound")
 

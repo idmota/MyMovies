@@ -286,7 +286,7 @@ extension MovieDetailView: MovieDetailViewDelegateInput {
 		statusLabel.text = "Movie.\(model.status.rawValue)".localized
 		voteAverageLabel.text = model.voteAverage.description
 		
-		imageURL = Url.getBackPosterURL(posterPath:model.backdropPath)
+		imageURL = Url.getBackPosterURL(path:model.backdropPath)
 		overviewLabel.text = model.overview
 	}
 }

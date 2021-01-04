@@ -16,12 +16,14 @@ protocol MovieDetailPresenterProtocol:class {
 	
 	var movie: MovieDetailModel? { get }
 	init(view: MovieDetailProtocol, networkService: NetworkService, idMovie: Int)
+	func dowloadPictures(pathURL:URL?, completion: @escaping (_ result:UIImage?) -> Void)
 }
 class MovieDetailPresenter:MovieDetailPresenterProtocol {
 	
+	
 	var movie: MovieDetailModel?
 	private var idMovie: Int
-	weak var networkService:NetworkService?
+	var networkService:NetworkService?
 	weak var view: MovieDetailProtocol?
 	
 	required init(view: MovieDetailProtocol, networkService: NetworkService, idMovie: Int ) {
@@ -48,5 +50,10 @@ class MovieDetailPresenter:MovieDetailPresenterProtocol {
 		}
 	}
 	
+	func dowloadPictures(pathURL: URL?, completion: @escaping (UIImage?) -> Void) {
+		if let pathURL = pathURL {
+			networkService?.downloadItemImageForSearchResult(imageURL: pathURL, Repeated: true, completion: completion)
+		}
+	}
 	
 }

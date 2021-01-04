@@ -27,7 +27,6 @@ extension UIColor {
 						r = CGFloat((hexNumber & 0xff000000) >> 24) / 255
 						g = CGFloat((hexNumber & 0x00ff0000) >> 16) / 255
 						b = CGFloat((hexNumber & 0x0000ff00) >> 8) / 255
-//						let a = CGFloat(hexNumber & 0x000000ff) / 255
 
 						self.init(displayP3Red: r, green: g, blue: b, alpha: alpha)
 						return
@@ -35,18 +34,6 @@ extension UIColor {
 				}
 			}
 			self.init()
-//			return nil
+
 		}
 }
-//UIColor(displayP3Red: 219/255, green: 48/255, blue: 105/255, alpha: 1)
-//extension Array where Generator.Element == UIColor {
-//	func CGColors() -> [CGColorRef] {
-//		var cgColorArray: [CGColorRef] = []
-//
-//		for color in self {
-//			cgColorArray.append(color.CGColor)
-//		}
-//
-//		return cgColorArray
-//	}
-//}

@@ -53,6 +53,7 @@ class WalkthroughController: UIViewController  {
 
 	}
 	
+	
 	lazy var mainview:UIView = {
 		let v = UIView()
 		return v

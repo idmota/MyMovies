@@ -29,15 +29,20 @@ enum Url {
 	
 	//https://api.themoviedb.org/3/genre/tv/list?api_key=cb606896c629b59ff2130946a21edeeb&language=ru-RU
 	
-	static func getPosterURL(posterPath:String)->URL? {
-		let stringUrl = "\(urlPoster)\(apiImg.logo_sizes.w154)\(posterPath)"
+	static func getPosterURL(path:String)->URL? {
+		let stringUrl = "\(urlPoster)\(apiImg.logo_sizes.w154)\(path)"
 		return URL(string: stringUrl)
 	}
-	static func getBackPosterURL(posterPath:String)->URL? {
-		let stringUrl = "\(urlPoster)\(apiImg.backdrop_sizes.w300)\(posterPath)"
+	static func getBackPosterURL(path:String)->URL? {
+		let stringUrl = "\(urlPoster)\(apiImg.backdrop_sizes.w500)\(path)"
 		return URL(string: stringUrl)
 	}
-	
+	static func getPosterURLWithSize(path:String, size:apiImg.poster_sizes)->URL? {
+		let stringUrl = "\(urlPoster)\(size)\(path)"
+		//apiImg.logo_sizes.w154
+		
+		return URL(string: stringUrl)
+	}
 	static func getTopMoviesFromPage(page:Int)->String {
 			return "\(urlDetail)top_rated?api_key=\(token)&language=\(Locale.preferredLanguages.first!)&page=\(page)"
 	}
@@ -73,6 +78,8 @@ enum Category:String {
 enum apiImg {
 	enum backdrop_sizes {
 		case w300
+		case w400
+		case w500
 		case w780
 		case w1280
 		case original
