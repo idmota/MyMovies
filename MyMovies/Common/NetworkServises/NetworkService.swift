@@ -50,8 +50,9 @@ class NetworkService:NetworkServiseProtocol {
 						} else {
 							
 							if Repeated, let self = self {
-								
-								self.downloadItemImageForSearchResult(imageURL: imageURL, Repeated: false, completion: completion)
+								DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+									self.downloadItemImageForSearchResult(imageURL: imageURL, Repeated: false, completion: completion)
+								}
 							} else {
 								print(urlOfImage.description)
 								completion(nil)

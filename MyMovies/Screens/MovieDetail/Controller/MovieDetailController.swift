@@ -124,32 +124,12 @@ class MovieDetailController: UIViewController, YTPlayerViewDelegate {
 }
 
 extension MovieDetailController: MovieDetailViewDelegateOutput {
+	
 	func dowloadPictures(pathURL: URL?, completion: @escaping (UIImage?) -> Void) {
 		presenter.dowloadPictures(pathURL: pathURL, completion: completion)
 	}
-	
-
-	
-	func shareMovie() {
-		//
-	}
-	
-	func PlayTrailer() {
-		//
-	}
-	
-	func openLink() {
-		print("open link")
-		var yp = YTPlayerView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
-		yp.delegate = self
-		yp.load(withVideoId: "2_N3VDK_dJQ")
-		yp.playVideo()
-		yp.clipsToBounds = true
-		view.addSubview(yp)
-	}
-	
-	
 }
+	
 extension MovieDetailController: MovieDetailProtocol {
 	func succes() {
 		guard let vv = view as? MovieDetailViewDelegateInput else {

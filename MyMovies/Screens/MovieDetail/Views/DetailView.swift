@@ -7,9 +7,9 @@
 
 import UIKit
 //import Foundation
-import youtube_ios_player_helper
+//import youtube_ios_player_helper
 
-class DetailView:UIView, YTPlayerViewDelegate {
+class DetailView:UIView {
 	enum imageSize {
 		static var backHeight:CGFloat = 280.0
 		static var posterHeight:CGFloat = 180
@@ -20,9 +20,8 @@ class DetailView:UIView, YTPlayerViewDelegate {
 		
 	}
 	
-	var segmentData = [SegmentDetailModel]()
+	
 	weak var delegate: MovieDetailViewDelegateOutput?
-	var lastVideoId: String?
 	
 	init(delegate:MovieDetailViewDelegateOutput) {
 		self.delegate = delegate
@@ -59,17 +58,6 @@ class DetailView:UIView, YTPlayerViewDelegate {
 	
 	func setupView() {
 		backgroundColor = ColorMode.background
-		
-		segmentData = [
-			// FIXME: - add view
-			// info
-			// trailer
-			// Info     Trailer    Actors    Posters
-			SegmentDetailModel(name: "Info", view: infoView),
-			SegmentDetailModel(name: "Trailer", view: trailerScrollView),//trailerScrollView),
-			SegmentDetailModel(name: "Actors", view: infoView),
-			SegmentDetailModel(name: "Posters", view: infoView)
-		]
 		
 		[
 			backgroundImage,
@@ -143,33 +131,11 @@ class DetailView:UIView, YTPlayerViewDelegate {
 		b.translatesAutoresizingMaskIntoConstraints = false
 		return b
 	}()
-//	let lastVP:YTPlayerView = YTPlayerView()
-	
+
 	@objc func playLast(_ sender: Any) {
-		if let vp = stackView.subviews.last as? YTPlayerView {
-			vp.playVideo()
+		if let sDV = (segmentedView as? DetailSegmentedViewInput) {
+			sDV.playLastTrailler()
 		}
-		
-		
-//		stackView.addArrangedSubview(lastVP)
-////		var yp = YTPlayerView()
-//		lastVP.delegate = self
-//
-//		lastVP.load(withVideoId: lastVideoId!)
-//
-////			yp.clipsToBounds = true
-////		yp.widthAnchor.constraint(equalToConstant: widthSizeVideo).isActive = true
-////		yp.heightAnchor.constraint(equalToConstant: widthSizeVideo*0.5).isActive = true
-//
-//
-//		lastVP.playVideo()
-////			yp.translatesAutoresizingMaskIntoConstraints = false
-////			yp.topAnchor.constraint(equalTo: stackView.topAnchor).isActive = true
-////			yp.leadingAnchor.constraint(equalTo: stackView.leadingAnchor).isActive = true
-////			yp.trailingAnchor.constraint(equalTo: stackView.trailingAnchor).isActive = true
-////			yp.bottomAnchor.constraint(equalTo: stackView.bottomAnchor).isActive = true
-//
-//
 	}
 	
 	lazy var mainView: UIView = {
@@ -192,8 +158,7 @@ class DetailView:UIView, YTPlayerViewDelegate {
 
 		v.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(movieView(_:))))
 		[
-			segmentedControl,
-			segmentView
+			segmentedView
 			
 		].forEach {
 			$0.translatesAutoresizingMaskIntoConstraints = false
@@ -201,6 +166,10 @@ class DetailView:UIView, YTPlayerViewDelegate {
 		}
 		
 		return v
+	}()
+	lazy var segmentedView: UIView = {
+		let sv = DetailSegmentedView()
+		return sv
 	}()
 	
 	var oldYPos:CGFloat = 0.0
@@ -241,22 +210,6 @@ class DetailView:UIView, YTPlayerViewDelegate {
 	
 	
 	
-	lazy var segmentView:UIView = {
-		let v = UIView()
-
-		segmentData.forEach {
-			$0.view.translatesAutoresizingMaskIntoConstraints = false
-			v.addSubview($0.view)
-			
-			$0.view.topAnchor.constraint(equalTo: v.topAnchor).isActive = true
-			$0.view.leadingAnchor.constraint(equalTo: v.leadingAnchor).isActive = true
-			$0.view.trailingAnchor.constraint(equalTo: v.trailingAnchor).isActive = true
-			$0.view.bottomAnchor.constraint(equalTo: v.bottomAnchor).isActive = true
-		}
-		v.bringSubviewToFront(segmentData[0].view)
-		
-		return v
-	}()
 	
 	// MARK: - detail UI obj
 	lazy var posterViewShadow:UIView = {
@@ -358,93 +311,7 @@ class DetailView:UIView, YTPlayerViewDelegate {
 		return vi
 	}()
 	
-	lazy var infoView:UIView = {
-		let iv = UIView()
-		iv.backgroundColor = ColorMode.background
-		iv.addSubview(overviewLabel)
-		
-		overviewLabel.translatesAutoresizingMaskIntoConstraints = false
-		overviewLabel.topAnchor.constraint(equalTo: iv.topAnchor).isActive = true
-		overviewLabel.leadingAnchor.constraint(equalTo: iv.leadingAnchor).isActive = true
-		overviewLabel.trailingAnchor.constraint(equalTo: iv.trailingAnchor).isActive = true
-		overviewLabel.bottomAnchor.constraint(lessThanOrEqualTo: iv.bottomAnchor).isActive = true
 
-		return iv
-	}()
-
-	lazy var overviewLabel: UILabel = {
-		var l = UILabel()
-		l.numberOfLines = 0
-		l.text = "q"
-//		l.backgroundColor = .red//ColorMode.background
-		return l
-	}()
-	lazy var trailerScrollView: UIScrollView = {
-		var l = UIScrollView()
-		l.backgroundColor = .white
-		stackView.translatesAutoresizingMaskIntoConstraints = false
-		l.addSubview(stackView)
-		stackView.topAnchor.constraint(equalTo: l.topAnchor).isActive = true
-		stackView.leadingAnchor.constraint(equalTo: l.leadingAnchor).isActive = true
-		stackView.trailingAnchor.constraint(equalTo: l.trailingAnchor).isActive = true
-		stackView.bottomAnchor.constraint(equalTo: l.bottomAnchor).isActive = true
-		return l
-	}()
-	
-	lazy var stackView: UIStackView = {
-		let sv = UIStackView()
-//		sv.backgroundColor = .gray
-		sv.axis = .vertical
-		sv.distribution = .fillProportionally
-		sv.alignment = .center
-		sv.spacing = Space.single
-		return sv
-	}()
-	// MARK: -- fix
-	private func addVideoView(_ videoModel:[VideoModel], widthSizeVideo:CGFloat) {
-		videoModel.forEach {
-			lastVideoId = $0.key
-			var yp = YTPlayerView()
-//			yp.delegate = self
-
-			yp.load(withVideoId: $0.key)
-			
-	//			yp.clipsToBounds = true
-			yp.widthAnchor.constraint(equalToConstant: widthSizeVideo).isActive = true
-			yp.heightAnchor.constraint(equalToConstant: widthSizeVideo*0.5).isActive = true
-
-			stackView.addArrangedSubview(yp)
-//			yp.translatesAutoresizingMaskIntoConstraints = false
-//			yp.topAnchor.constraint(equalTo: stackView.topAnchor).isActive = true
-//			yp.leadingAnchor.constraint(equalTo: stackView.leadingAnchor).isActive = true
-//			yp.trailingAnchor.constraint(equalTo: stackView.trailingAnchor).isActive = true
-//			yp.bottomAnchor.constraint(equalTo: stackView.bottomAnchor).isActive = true
-
-		}
-		
-	}
-	
-	lazy var playButton: UIButton = {
-		let b = UIButton()
-		b.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(playVideo)))
-		b.setTitle("play video", for: .normal)
-		b.setTitleColor(.brown, for: .normal)
-		return b
-	}()
-	
-	@objc func playVideo() {
-		guard let delegateOpenLink = delegate?.openLink else {return}
-		delegateOpenLink()
-	}
-	lazy var segmentedControl:UISegmentedControl = {
-		let sc = UISegmentedControl(items: segmentData.map { $0.name })
-		sc.selectedSegmentIndex = 0
-		sc.addTarget(self, action: #selector(valueChanged(_:)), for: .valueChanged)
-		return sc
-	}()
-	@objc func valueChanged(_ selector:UISegmentedControl) {
-		segmentView.bringSubviewToFront(segmentData[selector.selectedSegmentIndex].view)
-	}
 	// MARK: - Constraints
 	var constr: NSLayoutConstraint?
 	func setupLayout() {
@@ -487,15 +354,11 @@ class DetailView:UIView, YTPlayerViewDelegate {
 			bottomViews.trailingAnchor.constraint(equalTo: self.trailingAnchor),
 			bottomViews.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
 			
-			segmentedControl.topAnchor.constraint(equalTo: bottomViews.topAnchor, constant: Space.single),
-			segmentedControl.leadingAnchor.constraint(equalTo: bottomViews.leadingAnchor),
-			segmentedControl.trailingAnchor.constraint(equalTo: bottomViews.trailingAnchor),
-			
-			segmentView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: Space.single),
-			segmentView.leadingAnchor.constraint(equalTo: bottomViews.leadingAnchor, constant: Space.single),
-			segmentView.trailingAnchor.constraint(equalTo: bottomViews.trailingAnchor, constant: -Space.single),
-			segmentView.bottomAnchor.constraint(equalTo: bottomViews.bottomAnchor, constant: -Space.single),
-			
+			segmentedView.topAnchor.constraint(equalTo: bottomViews.topAnchor),
+			segmentedView.leadingAnchor.constraint(equalTo: bottomViews.leadingAnchor),
+			segmentedView.trailingAnchor.constraint(equalTo: bottomViews.trailingAnchor),
+			segmentedView.bottomAnchor.constraint(equalTo: bottomViews.bottomAnchor),
+
 			// equalTo lessThanOrEqualTo greaterThanOrEqualTo
 			titleLabel.topAnchor.constraint(greaterThanOrEqualTo: posterImage.topAnchor, constant: -Space.quadruple),
 			titleLabel.leadingAnchor.constraint(equalTo: posterImage.trailingAnchor, constant: Space.single),
@@ -534,14 +397,6 @@ class DetailView:UIView, YTPlayerViewDelegate {
 		NSLayoutConstraint.activate(array)
 	}
 	
-	//	func setNewLayout() {
-	//
-	//	}
-	// FIXME: - move to another module.
-	//
-	// bad API, have to send a second request
-	
-	
 }
 
 extension DetailView: MovieDetailViewDelegateInput {
@@ -551,20 +406,19 @@ extension DetailView: MovieDetailViewDelegateInput {
 		titleLabel.text = model.title
 		origTitleLabel.text = model.originalTitle
 		let reliseLoc = "Movie.\(model.status.rawValue)".localized
-		dateReliseAndStatusLabel.text = "\(Date(fromString: model.releaseDate).toString), \(reliseLoc)" //"2020-07-31"
+		dateReliseAndStatusLabel.text = "\(Date(fromString: model.releaseDate).toString), \(reliseLoc)"
 		genresLabel.text = model.genres.compactMap({$0.name}).joined(separator: ", ")
 	
 		voteAverageLabel.text = model.voteAverage.description
+		
 		backgroundURL = Url.getBackPosterURL(path:model.backdropPath)
 		if let posterPath = model.posterPath {
 			posterURL = Url.getPosterURLWithSize(path: posterPath, size: .w185)
 		}
-		addVideoView(model.videos.results, widthSizeVideo: trailerScrollView.frame.size.width)
-		overviewLabel.text = model.overview
+		
+		if let segmentedViewInput = segmentedView as? DetailSegmentedViewInput {
+			segmentedViewInput.fillSegmentViewFromModel(model: model)
+		}
 	}
 }
 
-struct SegmentDetailModel {
-	var name: String
-	var view: UIView
-}
