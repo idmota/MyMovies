@@ -7,15 +7,25 @@
 
 import UIKit
 
-class SearchController: UIViewController {
+class SearchController: UISearchController, UISearchControllerDelegate {
 	var presenter: SearchPresenterInput!
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-
+		self.searchResultsUpdater = self
+		// 2
+		self.obscuresBackgroundDuringPresentation = false
+		// 3
+		self.searchBar.placeholder = "Search movie"
+//		self.isModalInPresentation = true
+//		self.searchBar.scopeButtonTitles = ["Title", "Genre"]
+		self.searchBar.showsSearchResultsButton = true
+//		self.delegate = self
+		self.searchBar.delegate = self
+		self.searchResultsUpdater = self
         // Do any additional setup after loading the view.
     }
-    
+
 
     /*
     // MARK: - Navigation
@@ -29,6 +39,10 @@ class SearchController: UIViewController {
 
 }
 extension SearchController: SearchProtocol {
+//	var presenter: SearchPresenterInput {
+//		
+//	}
+	
 
 	func succes() {
 		
@@ -40,3 +54,26 @@ extension SearchController: SearchProtocol {
 	
 	
 }
+
+extension SearchController: UISearchResultsUpdating {
+  func updateSearchResults(for searchController: UISearchController) {
+//	let searchBar = searchController.searchBar
+//	let category = Candy.Category(rawValue:
+//	  searchBar.scopeButtonTitles![searchBar.selectedScopeButtonIndex])
+//	filterContentForSearchText(searchBar.text!, category: category)
+	
+  }
+}
+
+extension SearchController: UISearchBarDelegate {
+	@objc(setToketForIndexWithIndex:) func setToketForIndex(index:Int){
+		searchBar.searchTextField.tokens.removeAll()
+		guard let scopeTitles = self.searchBar.scopeButtonTitles else {return}
+		let textToken = scopeTitles[index]
+	
+		let shopToken = UISearchToken (icon: nil, text: textToken)
+		searchBar.searchTextField.insertToken (shopToken, at: 0)
+	}
+}
+
+

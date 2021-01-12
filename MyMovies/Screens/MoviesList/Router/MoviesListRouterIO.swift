@@ -9,6 +9,7 @@ import Foundation
 protocol MoviesListRouterInput: class {
 	func openMovieDetail(id:Int, animated:Bool)
 	func openCommonMenu(animated:Bool)
+	func openSearchController(animated:Bool)
 }
 protocol MoviesListRouterOutput: class {
 	func showCommonMenu(animated:Bool)

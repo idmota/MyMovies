@@ -17,6 +17,8 @@ class MoviesListTableViewCell: UITableViewCell {
 
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
+		contentView.backgroundColor = UIColor(named: "mainBackground")
+
 		setupView()
 	}
 	
@@ -78,16 +80,17 @@ class MoviesListTableViewCell: UITableViewCell {
 	// MARK: - first level
 	lazy var mainView:UIView = {
 		let v = UIView()
-		v.backgroundColor = .clear
+		v.backgroundColor = UIColor(named: "mainBackground")
+
 		v.translatesAutoresizingMaskIntoConstraints = false
 		return v
 	}()
 	lazy var customContentView:UIView = {
 		let v = UIView()
-		v.backgroundColor = .white
+		v.backgroundColor = ColorMode.background
 		v.layer.cornerRadius = 5
 		
-		v.layer.shadowColor = UIColor.black.cgColor
+		v.layer.shadowColor = ColorMode.titleColor.cgColor
 		v.layer.shadowOpacity = 0.1
 		v.layer.shadowOffset = CGSize(width: 0, height: 0)
 		v.layer.shadowRadius = 4
@@ -101,7 +104,7 @@ class MoviesListTableViewCell: UITableViewCell {
 		v.addSubview(activityIndicator)
 		
 		v.layer.cornerRadius = 5
-		v.layer.shadowColor = UIColor.black.cgColor
+		v.layer.shadowColor = ColorMode.titleColor.cgColor
 		v.layer.shadowOpacity = 0.4
 		v.layer.shadowOffset = CGSize(width: 2, height: 2)
 		v.layer.shadowRadius = 4
@@ -317,8 +320,11 @@ extension MoviesListTableViewCell {
 		}
 		ratinglabel.text = String(model.voteAverage)
 		genreslabel.text = model.genre.compactMap({String($0.name)}).joined(separator: ", ")
-//
-		dutationLabel.text = "Release date: \(Date(fromString: model.releaseDate).toString)"
+		var dutationtext = "Release date: unknown"
+		if let reliseDate = model.releaseDate, !reliseDate.isEmpty {
+			dutationtext = "Release date: \(Date(fromString: reliseDate).toString)"
+		}
+		dutationLabel.text = dutationtext
 		overView.text = model.overview
 	}
 }

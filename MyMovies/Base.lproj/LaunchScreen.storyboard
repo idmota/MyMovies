@@ -19,8 +19,8 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg" translatesAutoresizingMaskIntoConstraints="NO" id="tfK-bm-auo">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" misplaced="YES" image="LogoGroup" translatesAutoresizingMaskIntoConstraints="NO" id="Ibg-9X-Z5W">
-                                <rect key="frame" x="152.5" y="264.5" width="109" height="133"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="LogoGroup" translatesAutoresizingMaskIntoConstraints="NO" id="Ibg-9X-Z5W">
+                                <rect key="frame" x="156" y="264.5" width="103" height="133"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My Movies" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xda-Qh-Wxm">
                                 <rect key="frame" x="164" y="376" width="86.5" height="21"/>

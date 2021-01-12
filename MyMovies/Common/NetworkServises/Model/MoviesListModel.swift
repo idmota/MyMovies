@@ -23,10 +23,12 @@ struct MoviesListModel:Codable {
 struct MovieModel: Codable {
 	let voteAverage, popularity: Double
 	let voteCount: Int
-	let releaseDate, title: String
+	let releaseDate: String?
+	let title: String
 	let adult: Bool
 	let backdropPath: String?
 	let genreIDS: [Int]
+//	let genresStr:String
 	var genre: [MovieGenreModel] = []
 	let overview: String
 	let id: Int

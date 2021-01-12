@@ -19,7 +19,16 @@ class MoviesListRouter: MoviesListRouterInput {
 	func openCommonMenu(animated:Bool) {
 		presenter?.showCommonMenu(animated: animated)
 	}
-	
+	func openSearchController(animated:Bool) {
+		
+		let rootViewController = UINavigationController()
+
+		let childRouter = RouterImp(rootController: rootViewController)
+		let projectDetails = SearchModelFactory.make(router:childRouter)
+		
+		router.push(projectDetails, animated: true)
+
+	}
 	func openMovieDetail(id:Int, animated:Bool) {
 		
 		let rootViewController = UINavigationController()

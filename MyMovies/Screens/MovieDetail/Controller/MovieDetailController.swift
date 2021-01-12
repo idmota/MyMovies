@@ -7,9 +7,9 @@
 
 import UIKit
 import Foundation
-import youtube_ios_player_helper
+//import youtube_ios_player_helper
 
-class MovieDetailController: UIViewController, YTPlayerViewDelegate {
+class MovieDetailController: UIViewController {
 	var presenter: MovieDetailPresenter!
 	
 	
@@ -109,17 +109,6 @@ class MovieDetailController: UIViewController, YTPlayerViewDelegate {
 		let activityViewController = UIActivityViewController(activityItems: [presenter.movie!.originalTitle], applicationActivities: .none)
 		self.present(activityViewController, animated: true, completion: nil)
 	}
-	@objc func playVideo() {
-		
-//		guard let url = URL(string: "https://www.youtube.com/watch?v=2_N3VDK_dJQ") else { return }
-//		let player = AVPlayer(url: url)
-//		let controller = AVPlayerViewController()
-//		controller.player = player
-//		present(controller, animated: true){
-//			player.play()
-//		}
-	}
-
 	
 }
 

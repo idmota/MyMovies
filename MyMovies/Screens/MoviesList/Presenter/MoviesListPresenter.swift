@@ -10,6 +10,7 @@ import Foundation
 protocol MoviesListInput: class {
 	func didPressOpenDetail(at index: Int)
 	func didOpenCommonMenu()
+	func didOpenSearchController()
 }
 
 
@@ -37,15 +38,17 @@ class MoviesListPresenter: MoviesListPresenterProtocol {
 //	let urlModel: CommonsMenuModel
 	
 	var menuIsShow:Bool = false
-	weak var view:MoviesListProtocol!
+	unowned var view:MoviesListProtocol!
 	var networkService:NetworkService
 	let router: MoviesListRouterInput
 	var commonMenu: CommonsMenuController!
 
 	let urlModel: CommonsMenuModel
+	
 
 	private var moviesList: [MovieModel] = []
 	private var genresList: [MovieGenreModel] = []
+	private var filterList: [MovieModel] = []
 	private var currentPage:Int = 1
 	private var total:Int = 1
 	private var isFetchInProgress = false
@@ -91,7 +94,7 @@ class MoviesListPresenter: MoviesListPresenterProtocol {
 				case .failure(let error):
 					print(url)
 //					self.isFetchInProgress = false
-					self.view?.failure(error: error)
+					self.view.failure(error: error)
 				}
 			}
 			
@@ -108,6 +111,7 @@ class MoviesListPresenter: MoviesListPresenterProtocol {
 		}
 		
 		self.isFetchInProgress = true
+		print(urlModel.category)
 		let url = Url.getUrlFromCategory(urlModel.category, page: currentPage)
 		networkService.getResponser(url:url,
 									model: MoviesListModel.self) { [weak self] result in
@@ -130,11 +134,11 @@ class MoviesListPresenter: MoviesListPresenterProtocol {
 						}
 						self.moviesList[index].genre.append(contentsOf: genres)
 					}
-					self.view?.succes()
+					self.view.succes()
 				case .failure(let error):
 					print(url)
 					self.isFetchInProgress = false
-					self.view?.failure(error: error)
+					self.view.failure(error: error)
 				}
 			}
 			
@@ -145,6 +149,10 @@ class MoviesListPresenter: MoviesListPresenterProtocol {
 	
 }
 extension MoviesListPresenter: MoviesListInput {
+	func didOpenSearchController() {
+		router.openSearchController(animated: true)
+	}
+	
 	func didOpenCommonMenu() {
 		router.openCommonMenu(animated: true)
 	}

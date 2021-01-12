@@ -8,8 +8,6 @@
 import Foundation
 class SearchRouter: SearchRouterInput {
 
-	
-	
 	let router: RouterImp
 	weak var presenter: SearchPresenter?
 	

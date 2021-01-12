@@ -51,6 +51,15 @@ enum Url {
 	}
 	static func getUrlFromCategory(_ category:Category,page:Int)->String {
 		return "\(urlDetail)\(typeData.movie)/\(category.rawValue)?api_key=\(token)&language=\(Locale.preferredLanguages.first!)&page=\(page)"
+		
+	}
+	static func getUrlForSearch(searchString:String, page:Int)->String {
+		return "\(urlDetail)search/\(typeData.movie)?api_key=\(token)&language=\(Locale.preferredLanguages.first!)&page=\(page)&query=\(searchString)"
+
+	}
+	
+	enum typeStatus {
+		case Released
 	}
 	static func getTrailerFromId(_ idMovie:Int)->String {
 		return "\(urlDetail)\(typeData.movie)/\(idMovie)/videos?api_key=\(token)"
@@ -73,6 +82,7 @@ enum Category:String {
 	case popular
 	case top_rated
 	case upcoming
+	case search
 }
 
 enum apiImg {

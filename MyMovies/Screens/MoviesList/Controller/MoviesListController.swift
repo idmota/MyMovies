@@ -12,57 +12,39 @@ class MoviesListController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-
 		navigationItem.title = presenter?.urlModel.name
+//		navigationItem.searchController = SearchController()
+//		navigationController?.navigationBar.isTranslucent = true
 		setupView()
 	}
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		navigationController?.hidesBarsOnSwipe = true
+		navigationController?.hidesBarsOnSwipe = false
 		navigationController?.isNavigationBarHidden = false
 	}
 	
-//	func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//		let height = view.safeAreaLayoutGuide.layoutFrame.size.height
-//		let scrolled = scrollView.panGestureRecognizer.translation(in: scrollView).y
-////		print(scrolled)
-////		print(height)
-////		print(scrollView.visibleSize.height)
-//		navigationController?.navigationBar.frame.offsetBy(dx: 0, dy: scrolled)
-////		if (frameNC.origin.y > 0.0 && frameNC.origin.y <= 44.0) {
-////			frameNC.origin.y += scrolled
-////			print(frameNC.origin.y)
-////
-////		}
-//		//		frameNC.offsetBy(dx: 0, dy: scrolled)
-////		frameNC.origin.y = scrolled
-////		if !(scrollView.visibleSize.height - height >= 90) {
-////			if  scrolled < 0 {
-////				frameNC.origin.y = scrolled
-//////				navigationController?.setNavigationBarHidden(true, animated: true)
-////			} else {
-//////				navigationController?.setNavigationBarHidden(false, animated: true)
-////				navigationController?.view.frame.offsetBy(dx: 0, dy: CGFloat(scrolled))
-////			}
-////		}
-//	}
-//
+	var isFiltering: Bool {
+		let searchBarScopeIsFiltering = navigationItem.searchController?.searchBar.selectedScopeButtonIndex != 0
+		return navigationItem.searchController!.isActive && (!isSearchBarEmpty || searchBarScopeIsFiltering)
+	}
+	var isSearchBarEmpty: Bool {
+		return navigationItem.searchController?.searchBar.text?.isEmpty ?? true
+	}
 	private func setupView() {
 
 		let refreshc = UIRefreshControl.init(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
 		refreshc.addTarget(self, action: #selector(actionReflesh), for: .valueChanged)
 		refreshc.tintColor = .green
 //		tableView.refreshControl = refreshc
-		
 		let bBis = UIBarButtonItem(image: UIImage(systemName: "list.bullet")?.withTintColor(ColorMode.colorButton, renderingMode: .alwaysOriginal), style: .done, target: self, action: #selector(openMenu))
 		navigationItem.leftBarButtonItems = [bBis]
 		
-		let rSearch = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(openMenu))
+		let rSearch = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(showSearchBar))
 		rSearch.tintColor = ColorMode.colorButton
 		
 		
-		navigationItem.rightBarButtonItems = [gridButton,rSearch]
+		navigationItem.rightBarButtonItems = [rSearch, gridButton]
 //		view = tableView
 
 		[
@@ -74,7 +56,18 @@ class MoviesListController: UIViewController {
 		}
 		setupLayout()
 	}
-	
+	@objc func showSearchBar() {
+
+//		navigationItem.searchController!.showsSearchResultsController = true
+//		navigationItem.hidesSearchBarWhenScrolling = !navigationItem.hidesSearchBarWhenScrolling
+//		navigationItem.searchController!.hidesNavigationBarDuringPresentation = true
+//		UIView.animate(withDuration: 2) {
+//			self.navigationItem.searchController!.searchBar.becomeFirstResponder()
+//		}
+//		self.navigationItem.searchController!.isActive = true
+		presenter?.didOpenSearchController()
+
+	}
 	lazy var gridButton:UIBarButtonItem = {
 		let changePreview = UIBarButtonItem(image: UIImage(systemName: "square.grid.2x2")?.withTintColor(ColorMode.colorButton, renderingMode: .alwaysOriginal), style: .done, target: self, action: #selector(changeButton))
 		// rectangle.grid.1x2
@@ -114,11 +107,11 @@ class MoviesListController: UIViewController {
 	lazy var tableView: UITableView = {
 		let tv = UITableView()
 		tv.register(MoviesListTableViewCell.self)
-		
 		tv.prefetchDataSource = self // top update indicator
 		tv.delegate = self
 		tv.dataSource = self
 		tv.separatorStyle = .none
+		
 		return tv
 	}()
 	

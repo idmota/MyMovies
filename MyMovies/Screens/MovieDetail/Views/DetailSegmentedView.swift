@@ -146,7 +146,11 @@ class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 			yp.heightAnchor.constraint(equalToConstant: widthSizeVideo*0.5).isActive = true
 			stackView.addArrangedSubview(yp)
 		}
-		
+	}
+	deinit {
+		stackView.subviews.forEach{
+			($0 as? YTPlayerView)?.stopVideo()
+		}
 	}
 	
 }

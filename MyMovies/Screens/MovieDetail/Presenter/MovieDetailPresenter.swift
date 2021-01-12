@@ -27,7 +27,7 @@ class MovieDetailPresenter:MovieDetailPresenterProtocol {
 	weak var view: MovieDetailProtocol?
 	
 	required init(view: MovieDetailProtocol, networkService: NetworkService, idMovie: Int ) {
-		// mb call get network
+		
 		self.idMovie = idMovie
 		self.view = view
 		self.networkService = networkService
