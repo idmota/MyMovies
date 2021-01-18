@@ -13,15 +13,17 @@ class MoviesListController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		navigationItem.title = presenter?.urlModel.name
-//		navigationController?.hidesBarsOnSwipe = true
 		navigationController?.isNavigationBarHidden = false
-//		navigationController?.navigationBar.isTranslucent = true
+//		navigationController?.navigationBar.prefersLargeTitles = true
+//		navigationControll
+//		navigationController!.navigationBar.alpha = 0.1
+		navigationController?.hidesBarsOnSwipe = true
 		setupView()
 	}
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		navigationController?.hidesBarsOnSwipe = true
+//		navigationController?.hidesBarsOnSwipe = true
 		navigationController?.isNavigationBarHidden = false
 	}
 	
@@ -58,10 +60,10 @@ class MoviesListController: UIViewController {
 		presenter?.didOpenSearchController()
 
 	}
-	override func viewDidLayoutSubviews() {
-		super.viewDidLayoutSubviews()
-//		colViewLayout.itemSize = collectionView.frame.size
-	}
+//	override func viewDidLayoutSubviews() {
+//		super.viewDidLayoutSubviews()
+////		colViewLayout.itemSize = collectionView.frame.size
+//	}
 
 	lazy var gridButton:UIBarButtonItem = {
 		let changePreview = UIBarButtonItem(image: UIImage(systemName: "square.grid.2x2")?.withTintColor(ColorMode.colorButton, renderingMode: .alwaysOriginal), style: .done, target: self, action: #selector(changeButton))
@@ -69,10 +71,10 @@ class MoviesListController: UIViewController {
 		// square.grid.2x2
 		return changePreview
 	}()
-	var gb2x2: Bool = true
+//	var gb2x2: Bool = true
 	func changeGrid() {
-		gb2x2 = !gb2x2
-		if gb2x2 {
+//		gb2x2 = !gb2x2
+		if !oneColumn {
 			gridButton.image = UIImage(systemName: "square.grid.2x2")?.withTintColor(ColorMode.colorButton, renderingMode: .alwaysOriginal)
 			
 			oneColumn = true
@@ -93,7 +95,7 @@ class MoviesListController: UIViewController {
 	}
 	private func setupLayout() {
 		let constraints = [
-			collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+			collectionView.topAnchor.constraint(equalTo: view.topAnchor),
 			collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 			collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 			collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
@@ -127,16 +129,16 @@ class MoviesListController: UIViewController {
 //	  let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
 //											 heightDimension: .fractionalWidth(0.5))
 //	  let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-		let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalHeight(1), heightDimension: .fractionalHeight(1))
+		let groupHeight:NSCollectionLayoutDimension = oneColumn ? .absolute(204) :.absolute(231)
+		let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: groupHeight)
 		let item = NSCollectionLayoutItem(layoutSize: itemSize)
 //		item.contentInsets = NSDirectionalEdgeInsets(top: Space.half, leading: Space.single, bottom: Space.half, trailing: Space.single)
 		var countColumn = 1
 		if !oneColumn {
 			countColumn = 2
 		}
-		let groupHeight:NSCollectionLayoutDimension = oneColumn ? .absolute(204) :.absolute(231)
 
-		let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: groupHeight)//fractionalHeight(0.4))
+		let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(1))//fractionalHeight(0.4))
 
 		let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: countColumn)
 		print("set colum")

@@ -28,7 +28,7 @@ class SearchTableViewController: UIViewController {
 	
 		
 
-		navigationItem.titleView = searchTitleView
+//		navigationItem.titleView = searchTitleView
 //		navigationItem.titleView = searchView
 
 		setupLayout()
@@ -105,7 +105,7 @@ class SearchTableViewController: UIViewController {
 	}()
 	
 	@objc func actionBack() {
-		navigationController?.popViewController(animated: true)
+//		navigationController?.popViewController(animated: true)
 	}
 }
 

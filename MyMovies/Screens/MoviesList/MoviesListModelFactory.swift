@@ -22,7 +22,7 @@ enum MoviesListModelFactory {
 		
 		moviesListRouter.presenter = presenter
 		
-//		router.setRoot(view, animated: false)
+		router.setRoot(view, animated: false)
 		view.presenter = presenter
 		return view
 	}
