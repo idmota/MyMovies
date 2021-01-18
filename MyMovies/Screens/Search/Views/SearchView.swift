@@ -12,7 +12,7 @@ class SearchView: UITextField {
 		super.init(frame: frame)
 		self.backgroundColor = .systemGray6
 		self.placeholder = "Search movie"
-		self.attributedPlaceholder =  NSAttributedString(string: self.placeholder!, attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+		self.attributedPlaceholder =  NSAttributedString(string: self.placeholder!, attributes: [NSAttributedString.Key.foregroundColor: ColorMode.colorButton])
 		self.returnKeyType = .search
 
 		self.layer.cornerRadius = 8.0
@@ -20,8 +20,7 @@ class SearchView: UITextField {
 
 		translatesAutoresizingMaskIntoConstraints = false
 
-		let searchIcon = UIImage(systemName: "magnifyingglass")?.withTintColor(.gray, renderingMode: .alwaysOriginal)
-//		searchIcon?.withTintColor(.gray, renderingMode: .alwaysOriginal)
+		let searchIcon = UIImage(systemName: "magnifyingglass")?.withTintColor(ColorMode.colorButton, renderingMode: .alwaysOriginal)
 		let imageView = UIImageView(image: searchIcon)
 		leftView = imageView
 		leftViewMode = .always

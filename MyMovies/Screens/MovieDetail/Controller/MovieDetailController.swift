@@ -18,25 +18,11 @@ class MovieDetailController: UIViewController {
 		
 		view.backgroundColor = ColorMode.background
 		
-		navigationController?.hidesBarsOnSwipe = false
+//		navigationController?.hidesBarsOnSwipe = false
 		navigationController?.isNavigationBarHidden = true
-		//		navigationItem.title = presenter.movie?.title
-//				navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-//				navigationController?.navigationBar.shadowImage = UIImage()
-		//		navigationController?.tabBarItem.badgeColor = .cyan
-		//		navigationController?.navigationI
-		//		navigationController?.navigationBar.isTranslucent = true
-//		navigationController?.navigationBar.backgroundColor = UIColor.gray.withAlphaComponent(0.2)
-//		navigationController?.navigationBar.tintColor = .white
+
 		view = DetailView(delegate: self)
 		setupView()
-		
-//		view.addSubview(backButton)
-//
-//		backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Space.single).isActive = true
-//		backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Space.single).isActive = true
-
-		
 	}
 
 	lazy var navigView:UIView = {

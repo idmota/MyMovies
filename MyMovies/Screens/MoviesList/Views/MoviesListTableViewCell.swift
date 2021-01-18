@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MoviesListTableViewCell: UITableViewCell {
+class MoviesListTableViewCell: UICollectionViewCell {
 	let circleRatingSize:CGFloat = 36
 	enum imageLogoSize {
 		static let width:CGFloat = 120  // 154
@@ -15,21 +15,26 @@ class MoviesListTableViewCell: UITableViewCell {
 
 	}
 
-	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-		super.init(style: style, reuseIdentifier: reuseIdentifier)
+//	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+//		super.init(style: style, reuseIdentifier: reuseIdentifier)
+//		contentView.backgroundColor = UIColor(named: "mainBackground")
+//
+//		setupView()
+//	}
+	override init(frame: CGRect) {
+		super.init(frame: frame)
 		contentView.backgroundColor = UIColor(named: "mainBackground")
 
 		setupView()
 	}
-	
+
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
-	override func layoutIfNeeded() {
-		super.layoutIfNeeded()
-		let gl = vGradientLayer
-		gl.frame = circleView.bounds
 
+	override func layoutSubviews() {
+		super.layoutSubviews()
+		vGradientLayer.frame = circleView.bounds
 	}
 	
 	private var imageURL: URL? {
@@ -309,7 +314,7 @@ class MoviesListTableViewCell: UITableViewCell {
 	}
 }
 // MARK: - fill cell
-extension MoviesListTableViewCell {
+extension MoviesListTableViewCell:MoviesListCellProtocol {
 	func fill(model:MovieModel) {
 		titlelabel.text = "\(model.title)"
 		if let posterPath = model.posterPath {

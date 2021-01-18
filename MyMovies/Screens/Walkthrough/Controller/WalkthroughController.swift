@@ -60,6 +60,7 @@ class WalkthroughController: UIViewController  {
 	}()
 
 	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
 		colViewLayout.itemSize = collectionView.frame.size
 	}
 	

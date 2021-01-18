@@ -20,8 +20,11 @@ class CommonsMenuRouter: CommonsMenuRouterInput {
 	}
 
 	func openScreen(openModel: CommonsMenuModel) {
+		let rootViewController = UINavigationController()
 
-		let projectDetails = MoviesListModelFactory.make(router: router, model:openModel)
-		router.setRoot(projectDetails, animated: true)
+		let childRouter = RouterImp(rootController: rootViewController)
+
+		let projectDetails = MoviesListModelFactory.make(router: childRouter, model:openModel)
+		childRouter.setRoot(projectDetails, animated: true)
 	}
 }

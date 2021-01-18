@@ -7,128 +7,140 @@
 
 import UIKit
 
-class SearchTableViewController: UITableViewController {
+class SearchTableViewController: UIViewController {
 
 	var presenter: SearchPresenterInput!
 	
     override func viewDidLoad() {
         super.viewDidLoad()
 		navigationItem.title = "Search movie"
-		tableView.register(MoviesListTableViewCell.self)
-//		tv.prefetchDataSource = self // top update indicator
-		tableView.delegate = self
-		tableView.prefetchDataSource = self
-		tableView.dataSource = self
-		tableView.separatorStyle = .none
-		navigationItem.searchController = SearchController()
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
 		
+		setupView()
+    }
+	private func setupView() {
+		[
+			collectionView
+		].forEach {
+			$0.translatesAutoresizingMaskIntoConstraints = false
+			view.addSubview($0)
+		}
+		
+	
+		
+
+		navigationItem.titleView = searchTitleView
+//		navigationItem.titleView = searchView
+
+		setupLayout()
+		
+	}
+	lazy var searchTitleView:UIView = {
+		let v = UIView()
+		[
+			searchView
+		].forEach {
+			$0.translatesAutoresizingMaskIntoConstraints = false
+			v.addSubview($0)
+		}
+		return v
+	}()
+	lazy var searchView:UIView = {
+
 		let searchView = SearchView()
 		searchView.delegate = self
 		searchView.becomeFirstResponder()
-		navigationItem.titleView = searchView
+		return searchView
+	}()
+	private func setupLayout() {
+		let array = [
+			collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+			collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+			collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+			collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+			
+			searchView.topAnchor.constraint(equalTo: searchTitleView.topAnchor, constant: Space.half),
+			searchView.leadingAnchor.constraint(equalTo: searchTitleView.leadingAnchor, constant: Space.single),
+			searchView.trailingAnchor.constraint(equalTo: searchTitleView.trailingAnchor, constant: -Space.half),
+			searchView.bottomAnchor.constraint(equalTo: searchTitleView.bottomAnchor, constant: -Space.single),
+			
 
-//		navigationItem.titleView?.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-    }
+		]
+		NSLayoutConstraint.activate(array)
+	}
+	func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
+
+		let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalHeight(1), heightDimension: .fractionalHeight(1))
+		let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//		item.contentInsets = NSDirectionalEdgeInsets(top: Space.half, leading: Space.single, bottom: Space.half, trailing: Space.single)
+
+		let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(204))//fractionalHeight(0.4))
+
+		let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+		print("set colum")
+	  let section = NSCollectionLayoutSection(group: group)
+		
+//		let section = NSCollectionLayoutSection(group: group)
+//		section.orthogonalScrollingBehavior = .paging
+//		section.interGroupSpacing = 16
+	
+	  let layout = UICollectionViewCompositionalLayout(section: section)
+//		layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+
+	  return layout
+	}
+	lazy var collectionView:UICollectionView = {
+		let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: createCompositionalLayout())
+		cv.register(MoviesListTableViewCell.self)
+		
+		cv.delegate = self
+		cv.dataSource = self
+		cv.prefetchDataSource = self
+		
+		cv.backgroundColor = ColorMode.background
+		cv.contentInsetAdjustmentBehavior = .never
+		cv.showsHorizontalScrollIndicator = false
+//		cv.collectionViewLayout = createCompositionalLayout
+
+		return cv
+	}()
 	
 	@objc func actionBack() {
 		navigationController?.popViewController(animated: true)
 	}
-	
-    // MARK: - Table view data source
-
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-//        // #warning Incomplete implementation, return the number of sections
-//		return presenter.
-//    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-		return presenter.currentCount
-    }
-
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell:MoviesListTableViewCell = tableView.dequeueReusableCell(for: indexPath)
-		let movie = presenter!.movie(at: indexPath.row)
-		
-		cell.fill(model:movie)
-
-		return cell
-    }
-    
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
-extension SearchTableViewController: UITableViewDataSourcePrefetching {
-	func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+
+extension SearchTableViewController: UICollectionViewDataSourcePrefetching, UICollectionViewDataSource, UICollectionViewDelegate {
+	
+	func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
 		if indexPaths.contains(where: isLoadingCell) {
 			presenter.getNextPage()
 		}
 	}
-}
-private extension SearchTableViewController {
-	func isLoadingCell(for indexPath: IndexPath) -> Bool {
-		return indexPath.row >= presenter.currentCount-1
+	
+	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+		presenter.currentCount
 	}
+	
+	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+		let movie = presenter!.movie(at: indexPath.row)
+		let cell:MoviesListTableViewCell = collectionView.dequeueReusableCell(for: indexPath)
+		cell.fill(model:movie)
+		return cell
+	}
+	
+	func isLoadingCell(for indexPath: IndexPath) -> Bool {
+		return indexPath.row >= presenter!.currentCount-1
+	}
+
 }
+
 extension SearchTableViewController: SearchProtocol {
 	func succes() {
-		print("succes")
-		tableView.reloadData()
+		collectionView.reloadData()
 	}
 	
 	func failure(error: Error) {
-		tableView.reloadData()
-		print(error)
+		Logger.handleError(error)
 	}
 	
 

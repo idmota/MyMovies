@@ -8,7 +8,7 @@
 import UIKit
 
 enum SearchModelFactory {
-	static func make (router:RouterImp) -> UITableViewController {
+	static func make (router:RouterImp) -> UIViewController {
 		let view = SearchTableViewController()
 		let networkService = NetworkService()
 		let searchRouter = SearchRouter(router: router)

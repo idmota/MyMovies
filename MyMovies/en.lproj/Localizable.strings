@@ -12,3 +12,6 @@
 "Movie.Production" = "Production";
 "Movie.Released" = "Released";
 "Movie.Canceled" = "Canceled";
+"Movie.ReliseDate.Title" = "Release date";
+
+"Sustem.unknown" = "unknown";
