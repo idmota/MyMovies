@@ -24,7 +24,16 @@ class MovieDetailController: UIViewController {
 		view = DetailView(delegate: self)
 		setupView()
 	}
+	override func viewDidDisappear(_ animated: Bool) {
+		navigationController?.isNavigationBarHidden = false
+		super.viewDidDisappear(animated)
+	}
 
+	override func viewWillDisappear(_ animated: Bool) {
+		navigationController?.isNavigationBarHidden = false
+		super.viewWillDisappear(animated)
+	}
+	
 	lazy var navigView:UIView = {
 		let v = UIView()
 		let color = UIColor.lightGray

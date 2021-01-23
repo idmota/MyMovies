@@ -17,6 +17,12 @@ extension Date {
 		let date = dateFormatter.date(from:fromString)!
 		self = date
 	}
+	var toYearString:String  {
+		let formatter1 = DateFormatter()
+		formatter1.dateFormat = "yyyy"
+		return formatter1.string(from: self)
+	}
+	
 	var toString:String  {
 		let formatter1 = DateFormatter()
 		formatter1.dateFormat = "dd MMMM yyyy"

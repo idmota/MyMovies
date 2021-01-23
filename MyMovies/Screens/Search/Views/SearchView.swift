@@ -10,14 +10,14 @@ import UIKit
 class SearchView: UITextField {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
-		self.backgroundColor = .systemGray6
+		self.backgroundColor = .systemGray5 //
 		self.placeholder = "Search movie"
 		self.attributedPlaceholder =  NSAttributedString(string: self.placeholder!, attributes: [NSAttributedString.Key.foregroundColor: ColorMode.colorButton])
 		self.returnKeyType = .search
 
 		self.layer.cornerRadius = 8.0
 		self.layer.masksToBounds = true
-
+		
 		translatesAutoresizingMaskIntoConstraints = false
 
 		let searchIcon = UIImage(systemName: "magnifyingglass")?.withTintColor(ColorMode.colorButton, renderingMode: .alwaysOriginal)

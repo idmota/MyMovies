@@ -54,7 +54,8 @@ enum Url {
 		
 	}
 	static func getUrlForSearch(searchString:String, page:Int)->String {
-		return "\(urlDetail)search/\(typeData.movie)?api_key=\(token)&language=\(Locale.preferredLanguages.first!)&page=\(page)&query=\(searchString)"
+		let escapedString = searchString.addingPercentEncoding(withAllowedCharacters:.urlQueryAllowed) ?? ""
+		return "\(urlDetail)search/\(typeData.movie)?api_key=\(token)&language=\(Locale.preferredLanguages.first!)&page=\(page)&query=\(escapedString)"
 
 	}
 	

@@ -14,7 +14,7 @@ class SearchTableViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		navigationItem.title = "Search movie"
-		
+		view.backgroundColor = ColorMode.background
 		setupView()
     }
 	private func setupView() {
@@ -25,11 +25,7 @@ class SearchTableViewController: UIViewController {
 			view.addSubview($0)
 		}
 		
-	
-		
-
-//		navigationItem.titleView = searchTitleView
-//		navigationItem.titleView = searchView
+		navigationItem.titleView = searchTitleView
 
 		setupLayout()
 		
@@ -44,10 +40,11 @@ class SearchTableViewController: UIViewController {
 		}
 		return v
 	}()
-	lazy var searchView:UIView = {
+	lazy var searchView:UITextField = {
 
 		let searchView = SearchView()
 		searchView.delegate = self
+		searchView.autocorrectionType = .no
 		searchView.becomeFirstResponder()
 		return searchView
 	}()
@@ -100,10 +97,15 @@ class SearchTableViewController: UIViewController {
 		cv.contentInsetAdjustmentBehavior = .never
 		cv.showsHorizontalScrollIndicator = false
 //		cv.collectionViewLayout = createCompositionalLayout
-
+		cv.backgroundView = placeholder
 		return cv
 	}()
-	
+	private lazy var placeholder: PlaceholderView = {
+		let view = PlaceholderView()
+		view.title = "placeholder.title".localized
+//		view.subtitle = "placeholder.subtitle".localized
+		return view
+	}()
 	@objc func actionBack() {
 //		navigationController?.popViewController(animated: true)
 	}
@@ -118,7 +120,10 @@ extension SearchTableViewController: UICollectionViewDataSourcePrefetching, UICo
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		presenter.currentCount
+
+		placeholder.isHidden = presenter.currentCount != 0
+		
+		return presenter.currentCount
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -151,6 +156,7 @@ extension SearchTableViewController: UITextFieldDelegate {
 	func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
 		if let searchText = textField.text {
 			presenter.didPressSearchButton(searchText: searchText)
+			placeholder.title = "placeholder.searchtitle".localized + " " + searchText
 		}
 	}
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {

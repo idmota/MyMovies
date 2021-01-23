@@ -9,7 +9,7 @@ import Foundation
 
 struct MoviesListModel:Codable {
 	let totalResults, page, totalPages: Int
-	let movies: [MovieModel]
+	let movies: [MovieModel]?
 	
 	enum CodingKeys: String, CodingKey {
 		case totalResults = "total_results"

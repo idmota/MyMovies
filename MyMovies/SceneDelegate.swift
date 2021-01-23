@@ -24,7 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		let rootViewController = UINavigationController()
 //		rootViewController.navigationBar.prefersLargeTitles = true
-		rootViewController.isNavigationBarHidden = true
+//		rootViewController.isNavigationBarHidden = true
 
 		
 		window?.rootViewController = rootViewController

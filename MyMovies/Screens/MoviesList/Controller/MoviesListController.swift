@@ -12,28 +12,12 @@ class MoviesListController: UIViewController {
 	var oneColumn = true
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		view.backgroundColor = ColorMode.background
 		navigationItem.title = presenter?.urlModel.name
 		navigationController?.isNavigationBarHidden = false
-//		navigationController?.navigationBar.prefersLargeTitles = true
-//		navigationControll
-//		navigationController!.navigationBar.alpha = 0.1
-		navigationController?.hidesBarsOnSwipe = true
 		setupView()
 	}
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-		
-//		navigationController?.hidesBarsOnSwipe = true
-		navigationController?.isNavigationBarHidden = false
-	}
-	
-//	var isFiltering: Bool {
-//		let searchBarScopeIsFiltering = navigationItem.searchController?.searchBar.selectedScopeButtonIndex != 0
-//		return navigationItem.searchController!.isActive && (!isSearchBarEmpty || searchBarScopeIsFiltering)
-//	}
-//	var isSearchBarEmpty: Bool {
-//		return navigationItem.searchController?.searchBar.text?.isEmpty ?? true
-//	}
+
 	private func setupView() {
 
 
@@ -60,10 +44,10 @@ class MoviesListController: UIViewController {
 		presenter?.didOpenSearchController()
 
 	}
-//	override func viewDidLayoutSubviews() {
-//		super.viewDidLayoutSubviews()
-////		colViewLayout.itemSize = collectionView.frame.size
-//	}
+	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
+//		.itemSize = collectionView.frame.size
+	}
 
 	lazy var gridButton:UIBarButtonItem = {
 		let changePreview = UIBarButtonItem(image: UIImage(systemName: "square.grid.2x2")?.withTintColor(ColorMode.colorButton, renderingMode: .alwaysOriginal), style: .done, target: self, action: #selector(changeButton))
@@ -95,7 +79,7 @@ class MoviesListController: UIViewController {
 	}
 	private func setupLayout() {
 		let constraints = [
-			collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+			collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
 			collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 			collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 			collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
@@ -107,21 +91,43 @@ class MoviesListController: UIViewController {
 
 	lazy var collectionView:UICollectionView = {
 		let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: createCompositionalLayout())
-		cv.register(MoviesListCollectionViewCell.self)
 		cv.register(MoviesListTableViewCell.self)
+		cv.register(MoviesListCollectionViewCell.self)
+	
 		
 		cv.delegate = self
 		cv.dataSource = self
 		cv.prefetchDataSource = self
-		
+//		cv.isPrefetchingEnabled = true
+		cv.isPrefetchingEnabled = true
 		cv.backgroundColor = ColorMode.background
 		cv.contentInsetAdjustmentBehavior = .never
 		cv.showsHorizontalScrollIndicator = false
 //		cv.collectionViewLayout = createCompositionalLayout
-
+	
 		return cv
 	}()
 	func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
+		var countColumn = 1
+		if !oneColumn {
+			countColumn = 2
+		}
+		let groupHeight:NSCollectionLayoutDimension = oneColumn ? .absolute(204) :.absolute(231)
+
+		let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalHeight(1), heightDimension: .fractionalHeight(1))
+		let item = NSCollectionLayoutItem(layoutSize: itemSize)
+		
+		let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: groupHeight)//.absolute(204))//fractionalHeight(0.4))
+
+		let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: countColumn)
+	  let section = NSCollectionLayoutSection(group: group)
+
+	  let layout = UICollectionViewCompositionalLayout(section: section)
+//		layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+
+	  return layout
+	}
+	func createCompositionalLayout2() -> UICollectionViewCompositionalLayout {
 //	  let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5),
 //										   heightDimension: .fractionalHeight(1.0))
 //	  let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -141,13 +147,12 @@ class MoviesListController: UIViewController {
 		let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(1))//fractionalHeight(0.4))
 
 		let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: countColumn)
-		print("set colum")
 	  let section = NSCollectionLayoutSection(group: group)
-		
+
 //		let section = NSCollectionLayoutSection(group: group)
 //		section.orthogonalScrollingBehavior = .paging
 //		section.interGroupSpacing = 16
-	
+
 	  let layout = UICollectionViewCompositionalLayout(section: section)
 //		layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 
@@ -164,45 +169,12 @@ class MoviesListController: UIViewController {
 		collectionView.refreshControl?.endRefreshing()
 	}
 	
-	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		tableView.deselectRow(at: indexPath, animated: true)
-		presenter!.didPressOpenDetail(at: indexPath.row)
-	}
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		collectionView.deselectItem(at: indexPath, animated: true)
 		presenter!.didPressOpenDetail(at: indexPath.row)
 		}
 
-}
-//extension MoviesListController: UITableViewDelegate, UITableViewDataSource {
-//	
-//	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//
-//		let cell:MoviesListTableViewCell = tableView.dequeueReusableCell(for: indexPath)
-//
-//		let movie = presenter!.movie(at: indexPath.row)
-//
-//		cell.fill(model:movie)
-//
-//		return cell
-//	}
-//	
-//	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//		return presenter?.currentCount ?? 0
-//	}
-//}
-extension MoviesListController: UITableViewDataSourcePrefetching {
-	func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-		if indexPaths.contains(where: isLoadingCell) {
-			presenter!.getMoviesList()
-		}
-	}
-}
-private extension MoviesListController {
-	func isLoadingCell(for indexPath: IndexPath) -> Bool {
-		return indexPath.row >= presenter!.currentCount-1
-	}
 }
 extension MoviesListController: MoviesListProtocol {
 	var menuView: UIView {
@@ -221,23 +193,22 @@ extension MoviesListController: MoviesListProtocol {
 	
 
 }
-extension MoviesListController: UICollectionViewDelegate, UICollectionViewDataSourcePrefetching, UICollectionViewDataSource {
+extension MoviesListController:UICollectionViewDataSourcePrefetching, UICollectionViewDelegate, UICollectionViewDataSource {
+	
 	func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
 		if indexPaths.contains(where: isLoadingCell) {
+			print(indexPaths)
 			presenter!.getMoviesList()
 		}
-		
-	}
-	
-	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return presenter!.currentCount
 	}
 	func numberOfSections(in collectionView: UICollectionView) -> Int {
 		return 1
 	}
+	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+		return presenter!.currentCount
+	}
+	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		
-		
 		let movie = presenter!.movie(at: indexPath.row)
 		if oneColumn {
 			let cell:MoviesListTableViewCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -249,9 +220,11 @@ extension MoviesListController: UICollectionViewDelegate, UICollectionViewDataSo
 			return cell
 			
 		}
-		
-		
 	}
 	
-	
+	func isLoadingCell(for indexPath: IndexPath) -> Bool {
+		return indexPath.row >= presenter!.currentCount-1
+	}
+
 }
+

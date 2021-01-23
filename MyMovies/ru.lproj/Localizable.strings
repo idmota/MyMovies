@@ -13,3 +13,8 @@
 "Movie.Production" = "Продолжается";
 "Movie.Released" = "Выпущен";
 "Movie.Canceled" = "Отменено";
+
+"Sustem.unknown" = "Неизвестно";
+
+"placeholder.searchtitle" = "Не найден, фильм:";
+"placeholder.title" = "Введите текст для поиска";

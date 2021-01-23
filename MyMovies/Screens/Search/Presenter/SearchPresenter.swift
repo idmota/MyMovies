@@ -36,7 +36,7 @@ class SearchPresenter:SearchPresenterInput {
 	private var isFetchInProgress = false
 	private var searchText:String!
 	
-	unowned var view:SearchProtocol
+	weak var view:SearchProtocol?
 	let networkService: NetworkService
 	let router: SearchRouter
 	
@@ -56,9 +56,6 @@ class SearchPresenter:SearchPresenterInput {
 		self.networkService = networkService
 		self.router = router
 	}
-	//	required init(view: MoviesListProtocol, networkService: NetworkService,
-	//				  urlModel:CommonsMenuModel, router: MoviesListRouter) {
-	//		self.view = view
 	
 	func didOpenMovieDetail(id: Int, animated: Bool) {
 		router.openMovieDetail(id: id, animated: animated)
@@ -98,14 +95,17 @@ class SearchPresenter:SearchPresenterInput {
 				case .success(let resultMovies):
 					self.isFetchInProgress = false
 					self.total = resultMovies.totalPages
-					self.currentPage += 1
-					self.moviesList.append(contentsOf: resultMovies.movies)
+					if let movies = resultMovies.movies {
+						self.currentPage += 1
+						self.moviesList.append(contentsOf: movies)
+					}
 					
-					self.view.succes()
+					self.view?.succes()
 				case .failure(let error):
 					print(url)
 					self.isFetchInProgress = false
-					self.view.failure(error: error)
+//					self.moviesList.removeAll()
+					self.view?.failure(error: error)
 				}
 			}
 		}

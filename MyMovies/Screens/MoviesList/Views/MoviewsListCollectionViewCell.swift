@@ -24,7 +24,9 @@ class MoviesListCollectionViewCell: UICollectionViewCell {
 	
 	override func layoutSubviews() {
 		super.layoutSubviews()
+		
 		vGradientLayer.frame = circleView.bounds
+		titleGradientLayer.frame = titleView.bounds
 	}
 	private var imageURL: URL? {
 		didSet {
@@ -50,7 +52,7 @@ class MoviesListCollectionViewCell: UICollectionViewCell {
 	lazy var mainView:UIView = {
 		let v = UIView()
 	
-		v.backgroundColor = .red
+		v.backgroundColor = ColorMode.background
 		v.layer.cornerRadius = 5
 		
 		v.layer.shadowColor = ColorMode.titleColor.cgColor
@@ -84,16 +86,18 @@ class MoviesListCollectionViewCell: UICollectionViewCell {
 	}()
 	lazy var circleView: UIView = {
 		let v = UIView()
+//		v.backgroundColor = .red
 		v.layer.cornerRadius = circleRatingSize/2
 		v.clipsToBounds = true
 		v.layer.insertSublayer(vGradientLayer, at: 1)
+		v.addSubview(ratinglabel)
 		return v
 	}()
 	lazy var ratinglabel:UILabel = {
 		let v = UILabel()
 		v.textColor = .white
 		v.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-
+		v.translatesAutoresizingMaskIntoConstraints = false
 		return v
 	}()
 	// MARK: - second level
@@ -108,9 +112,23 @@ class MoviesListCollectionViewCell: UICollectionViewCell {
 
 		return gradient
 	}()
+	lazy var titleGradientLayer: CAGradientLayer = {
+		let gradient = CAGradientLayer()
+		let l1 = ColorMode.titleColor.withAlphaComponent(0)
+		let l2 = ColorMode.titleColor.withAlphaComponent(1)
+
+		gradient.colors = [l1.cgColor,l2.cgColor]
+		gradient.startPoint = CGPoint(x:  0.5, y: 0)
+
+		gradient.endPoint = CGPoint(x: 0.5, y: 1)
+//		gradient.locations = [0, 0.4, 1]
+		return gradient
+	}()
 	
 	lazy var titleView:UIView = {
 		let v = UIView()
+		v.layer.insertSublayer(titleGradientLayer, at: 3)
+
 		[
 			yearLabel,
 			titleLabel
@@ -118,16 +136,21 @@ class MoviesListCollectionViewCell: UICollectionViewCell {
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			v.addSubview($0)
 		}
+
+
 		return v
 	}()
 	lazy var titleLabel: UILabel = {
 		let l = UILabel()
 		l.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+		l.numberOfLines = 0
+		l.textColor = ColorMode.background
 		return l
 	}()
 	lazy var yearLabel: UILabel = {
 		let l = UILabel()
 		l.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+		l.textColor = ColorMode.background
 		return l
 	}()
 	required init?(coder: NSCoder) {
@@ -190,10 +213,10 @@ class MoviesListCollectionViewCell: UICollectionViewCell {
 	}
 	func setupLayout() {
 		let arrayConstraints = [
-			mainView.topAnchor.constraint(equalTo: contentView.topAnchor),
-			mainView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-			mainView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-			mainView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+			mainView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Space.half),
+			mainView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Space.single),
+			mainView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Space.single),
+			mainView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Space.half),
 
 			imageView.topAnchor.constraint(equalTo: mainView.topAnchor),
 			imageView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor),
@@ -204,14 +227,20 @@ class MoviesListCollectionViewCell: UICollectionViewCell {
 			activityIndicator.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
 			activityIndicator.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
 			// circleView
-			circleView.topAnchor.constraint(equalTo: mainView.topAnchor, constant: -Space.single),
-			circleView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -Space.single),
 			
+			circleView.topAnchor.constraint(equalTo: mainView.topAnchor, constant: Space.single),
+			circleView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -Space.single),
+			circleView.heightAnchor.constraint(equalToConstant: circleRatingSize),
+			circleView.widthAnchor.constraint(equalToConstant: circleRatingSize),
+
+			ratinglabel.centerXAnchor.constraint(equalTo: circleView.centerXAnchor),
+			ratinglabel.centerYAnchor.constraint(equalTo: circleView.centerYAnchor),
+
 			titleView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor),
 			titleView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor),
 			titleView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor),
 			
-			yearLabel.topAnchor.constraint(equalTo: titleView.topAnchor),
+			yearLabel.topAnchor.constraint(equalTo: titleView.topAnchor, constant: Space.double),
 			yearLabel.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: Space.half),
 			yearLabel.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -Space.half),
 
@@ -237,6 +266,11 @@ extension MoviesListCollectionViewCell:MoviesListCellProtocol {
 
 		}
 		ratinglabel.text = String(model.voteAverage)
+		if let reliseDate = model.releaseDate, !reliseDate.isEmpty {
+			yearLabel.text = Date(fromString: reliseDate).toYearString
+		}
+		
+		
 //		genreslabel.text = model.genre.compactMap({String($0.name)}).joined(separator: ", ")
 //		let reliseTitle = "Movie.ReliseDate.Title".localized
 //		var dutationtext = "\(reliseTitle): \("Sustem.unknown".localized)"

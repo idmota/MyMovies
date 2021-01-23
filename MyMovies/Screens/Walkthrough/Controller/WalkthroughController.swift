@@ -15,10 +15,9 @@ class WalkthroughController: UIViewController  {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-//		navigationController?.isNavigationBarHidden = true
+		navigationController?.isNavigationBarHidden = true
 		setupView()
 	}
-	
 	private func setupView() {
 		
 		[
@@ -60,7 +59,7 @@ class WalkthroughController: UIViewController  {
 	}()
 
 	override func viewDidLayoutSubviews() {
-//		super.viewDidLayoutSubviews()
+		super.viewDidLayoutSubviews()
 		colViewLayout.itemSize = collectionView.frame.size
 	}
 	

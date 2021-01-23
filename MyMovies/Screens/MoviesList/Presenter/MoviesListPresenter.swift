@@ -31,14 +31,18 @@ protocol MoviesListPresenterProtocol: class {
 	var currentCount: Int { get }
 	func movie(at index: Int) -> MovieModel
 	var urlModel: CommonsMenuModel { get }
+
+
 }
 
 class MoviesListPresenter: MoviesListPresenterProtocol {
+
+	
 	
 //	let urlModel: CommonsMenuModel
 	
 	var menuIsShow:Bool = false
-	unowned var view:MoviesListProtocol!
+	weak var view:MoviesListProtocol!
 	var networkService:NetworkService
 	let router: MoviesListRouterInput
 	var commonMenu: CommonsMenuController!
@@ -48,7 +52,7 @@ class MoviesListPresenter: MoviesListPresenterProtocol {
 
 	private var moviesList: [MovieModel] = []
 	private var genresList: [MovieGenreModel] = []
-	private var filterList: [MovieModel] = []
+//	private var filterList: [MovieModel] = []
 	private var currentPage:Int = 1
 	private var total:Int = 1
 	private var isFetchInProgress = false
@@ -122,8 +126,13 @@ class MoviesListPresenter: MoviesListPresenterProtocol {
 				case .success(let resultMovies):
 					self.isFetchInProgress = false
 					
-					self.currentPage += 1
-					self.moviesList.append(contentsOf: resultMovies.movies)
+
+					if let movies = resultMovies.movies {
+						self.currentPage += 1
+						self.moviesList.append(contentsOf: movies)
+					}
+
+					//self.moviesList.append(contentsOf: resultMovies.movies)
 					
 					self.total = resultMovies.totalPages
 					//
@@ -144,11 +153,11 @@ class MoviesListPresenter: MoviesListPresenterProtocol {
 			
 		}
 	}
-	
-	
+
 	
 }
 extension MoviesListPresenter: MoviesListInput {
+
 	func didOpenSearchController() {
 		router.openSearchController(animated: true)
 	}
