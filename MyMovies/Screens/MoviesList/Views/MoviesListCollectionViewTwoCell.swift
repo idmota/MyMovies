@@ -1,5 +1,5 @@
 //
-//  MoviewsListCollectionViewCell.swift
+//  MoviesListCollectionViewTwoCell.swift
 //  MyMovies
 //
 //  Created by link on 1/13/21.
@@ -9,7 +9,7 @@ import UIKit
 protocol MoviesListCellProtocol {
 	func fill(model:MovieModel)
 }
-class MoviesListCollectionViewCell: UICollectionViewCell {
+class MoviesListCollectionViewTwoCell: UICollectionViewCell {
 	let circleRatingSize:CGFloat = 36
 	enum imageLogoSize {
 		static let width:CGFloat = 120  // 154
@@ -24,10 +24,14 @@ class MoviesListCollectionViewCell: UICollectionViewCell {
 	
 	override func layoutSubviews() {
 		super.layoutSubviews()
-		
+		CATransaction.begin()
+		CATransaction.setDisableActions(true)
+
 		vGradientLayer.frame = circleView.bounds
 		titleGradientLayer.frame = titleView.bounds
-	}
+
+		CATransaction.commit()
+		}
 	private var imageURL: URL? {
 		didSet {
 			self.downloadItemImageForSearchResult(imageURL: imageURL)
@@ -121,14 +125,13 @@ class MoviesListCollectionViewCell: UICollectionViewCell {
 		gradient.startPoint = CGPoint(x:  0.5, y: 0)
 
 		gradient.endPoint = CGPoint(x: 0.5, y: 1)
-//		gradient.locations = [0, 0.4, 1]
+
 		return gradient
 	}()
 	
 	lazy var titleView:UIView = {
 		let v = UIView()
-		v.layer.insertSublayer(titleGradientLayer, at: 3)
-
+		v.layer.insertSublayer(titleGradientLayer, at: 1)
 		[
 			yearLabel,
 			titleLabel
@@ -136,7 +139,6 @@ class MoviesListCollectionViewCell: UICollectionViewCell {
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			v.addSubview($0)
 		}
-
 
 		return v
 	}()
@@ -256,7 +258,7 @@ class MoviesListCollectionViewCell: UICollectionViewCell {
 }
 
 // MARK: - fill cell
-extension MoviesListCollectionViewCell:MoviesListCellProtocol {
+extension MoviesListCollectionViewTwoCell:MoviesListCellProtocol {
 	func fill(model:MovieModel) {
 		titleLabel.text = "\(model.title)"
 		if let posterPath = model.posterPath {

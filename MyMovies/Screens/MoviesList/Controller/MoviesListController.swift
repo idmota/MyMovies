@@ -91,16 +91,15 @@ class MoviesListController: UIViewController {
 
 	lazy var collectionView:UICollectionView = {
 		let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: createCompositionalLayout())
-		cv.register(MoviesListTableViewCell.self)
-		cv.register(MoviesListCollectionViewCell.self)
+		cv.register(MoviesListCollectionViewOneCell.self)
+		cv.register(MoviesListCollectionViewTwoCell.self)
 	
 		
 		cv.delegate = self
 		cv.dataSource = self
 		cv.prefetchDataSource = self
-//		cv.isPrefetchingEnabled = true
-		cv.isPrefetchingEnabled = true
-		cv.backgroundColor = ColorMode.background
+
+		cv.backgroundColor = .white//ColorMode.background
 		cv.contentInsetAdjustmentBehavior = .never
 		cv.showsHorizontalScrollIndicator = false
 //		cv.collectionViewLayout = createCompositionalLayout
@@ -211,11 +210,11 @@ extension MoviesListController:UICollectionViewDataSourcePrefetching, UICollecti
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let movie = presenter!.movie(at: indexPath.row)
 		if oneColumn {
-			let cell:MoviesListTableViewCell = collectionView.dequeueReusableCell(for: indexPath)
+			let cell:MoviesListCollectionViewOneCell = collectionView.dequeueReusableCell(for: indexPath)
 			cell.fill(model:movie)
 			return cell
 		} else {
-			let cell:MoviesListCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+			let cell:MoviesListCollectionViewTwoCell = collectionView.dequeueReusableCell(for: indexPath)
 			cell.fill(model:movie)
 			return cell
 			

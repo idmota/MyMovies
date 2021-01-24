@@ -97,7 +97,7 @@ class DetailView:UIView {
 		}
 		setupLayout()
 	}
-
+	
 	private func setupFrame() {
 		super.layoutSubviews()
 		CATransaction.begin()
@@ -115,7 +115,7 @@ class DetailView:UIView {
 		iv.contentMode = .scaleAspectFill
 		iv.isUserInteractionEnabled = false
 		iv.clipsToBounds = true
-
+		
 		return iv
 	}()
 	// MARK: - fix
@@ -123,15 +123,15 @@ class DetailView:UIView {
 		
 		let b = UIButton(type: .custom)
 		let i = UIImage(named: "playButton")
-//		i?.accessibilityRespondsToUserInteraction = true
+		//		i?.accessibilityRespondsToUserInteraction = true
 		b.setBackgroundImage(i, for: .normal)
 		b.addTarget(self, action: #selector(playLast(_:)), for: .touchUpInside)
-
-//		b.setTitle("sss", for: .normal)
+		
+		//		b.setTitle("sss", for: .normal)
 		b.translatesAutoresizingMaskIntoConstraints = false
 		return b
 	}()
-
+	
 	@objc func playLast(_ sender: Any) {
 		if let sDV = (segmentedView as? DetailSegmentedViewInput) {
 			sDV.playLastTrailler()
@@ -147,7 +147,7 @@ class DetailView:UIView {
 		mv.layer.shadowOffset = CGSize(width: 0, height: 2)
 		mv.layer.rasterizationScale = UIScreen.main.scale
 		mv.layer.shouldRasterize = true
-
+		
 		mv.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(movieView(_:))))
 		
 		return mv
@@ -155,7 +155,7 @@ class DetailView:UIView {
 	lazy var bottomViews:UIView = {
 		let v = UIView()
 		v.backgroundColor = ColorMode.background
-
+		
 		v.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(movieView(_:))))
 		[
 			segmentedView
@@ -252,7 +252,7 @@ class DetailView:UIView {
 		return gradient
 	}()
 	
-
+	
 	
 	
 	//
@@ -311,7 +311,7 @@ class DetailView:UIView {
 		return vi
 	}()
 	
-
+	
 	// MARK: - Constraints
 	var constr: NSLayoutConstraint?
 	func setupLayout() {
@@ -325,7 +325,7 @@ class DetailView:UIView {
 			
 			playLastTrailerView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 100),
 			playLastTrailerView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-		
+			
 			mainView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
 			mainView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
 			
@@ -358,7 +358,7 @@ class DetailView:UIView {
 			segmentedView.leadingAnchor.constraint(equalTo: bottomViews.leadingAnchor),
 			segmentedView.trailingAnchor.constraint(equalTo: bottomViews.trailingAnchor),
 			segmentedView.bottomAnchor.constraint(equalTo: bottomViews.bottomAnchor),
-
+			
 			// equalTo lessThanOrEqualTo greaterThanOrEqualTo
 			titleLabel.topAnchor.constraint(greaterThanOrEqualTo: posterImage.topAnchor, constant: -Space.quadruple),
 			titleLabel.leadingAnchor.constraint(equalTo: posterImage.trailingAnchor, constant: Space.single),
@@ -408,7 +408,7 @@ extension DetailView: MovieDetailViewDelegateInput {
 		let reliseLoc = "Movie.\(model.status.rawValue)".localized
 		dateReliseAndStatusLabel.text = "\(Date(fromString: model.releaseDate).toString), \(reliseLoc)"
 		genresLabel.text = model.genres.compactMap({$0.name}).joined(separator: ", ")
-	
+		
 		voteAverageLabel.text = model.voteAverage.description
 		
 		backgroundURL = Url.getBackPosterURL(path:model.backdropPath)

@@ -23,8 +23,8 @@ class MovieDetailPresenter:MovieDetailPresenterProtocol {
 	
 	var movie: MovieDetailModel?
 	private var idMovie: Int
-	var networkService:NetworkService?
-	weak var view: MovieDetailProtocol?
+	var networkService:NetworkService
+	var view: MovieDetailProtocol?
 	
 	required init(view: MovieDetailProtocol, networkService: NetworkService, idMovie: Int ) {
 		
@@ -34,7 +34,7 @@ class MovieDetailPresenter:MovieDetailPresenterProtocol {
 		getInfoMovie()
 	}
 	func getInfoMovie() {
-		networkService?.getResponser(url:Url.getMovieFromId(self.idMovie),
+		networkService.getResponser(url:Url.getMovieFromId(self.idMovie),
 									model: MovieDetailModel.self) { [weak self] result in
 			guard let self = self else {return}
 			DispatchQueue.main.async {
@@ -52,7 +52,7 @@ class MovieDetailPresenter:MovieDetailPresenterProtocol {
 	
 	func dowloadPictures(pathURL: URL?, completion: @escaping (UIImage?) -> Void) {
 		if let pathURL = pathURL {
-			networkService?.downloadItemImageForSearchResult(imageURL: pathURL, Repeated: true, completion: completion)
+			networkService.downloadItemImageForSearchResult(imageURL: pathURL, Repeated: true, completion: completion)
 		}
 	}
 	

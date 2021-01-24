@@ -61,6 +61,7 @@ class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 			segmentedControl.topAnchor.constraint(equalTo: self.topAnchor, constant: Space.single),
 			segmentedControl.leadingAnchor.constraint(equalTo: self.leadingAnchor),
 			segmentedControl.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+			segmentedControl.heightAnchor.constraint(equalToConstant: Space.quadruple),
 			
 			segmentView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: Space.single),
 			segmentView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Space.single),
@@ -115,12 +116,13 @@ class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 		var l = UILabel()
 		l.numberOfLines = 0
 		l.text = "q"
+		l.backgroundColor = ColorMode.background
 //		l.backgroundColor = .red//ColorMode.background
 		return l
 	}()
 	lazy var trailerScrollView: UIScrollView = {
 		var l = UIScrollView()
-		l.backgroundColor = .white
+		l.backgroundColor = ColorMode.background
 		stackView.translatesAutoresizingMaskIntoConstraints = false
 		l.addSubview(stackView)
 		stackView.topAnchor.constraint(equalTo: l.topAnchor).isActive = true
@@ -132,6 +134,7 @@ class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 	
 	lazy var stackView: UIStackView = {
 		let sv = UIStackView()
+		sv.backgroundColor = ColorMode.background
 		sv.axis = .vertical
 		sv.distribution = .fillProportionally
 		sv.alignment = .center

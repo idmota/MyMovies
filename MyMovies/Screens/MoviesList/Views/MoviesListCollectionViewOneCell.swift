@@ -1,5 +1,5 @@
 //
-//  MoviesListTableViewCell.swift
+//  MoviesListCollectionViewOneCell.swift
 //  MyMovies
 //
 //  Created by link on 11/19/20.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MoviesListTableViewCell: UICollectionViewCell {
+class MoviesListCollectionViewOneCell: UICollectionViewCell {
 	let circleRatingSize:CGFloat = 36
 	enum imageLogoSize {
 		static let width:CGFloat = 120  // 154
@@ -23,7 +23,7 @@ class MoviesListTableViewCell: UICollectionViewCell {
 //	}
 	override init(frame: CGRect) {
 		super.init(frame: frame)
-		contentView.backgroundColor = UIColor(named: "mainBackground")
+//		contentView.backgroundColor = .green//UIColor(named: "mainBackground")
 
 		setupView()
 	}
@@ -34,7 +34,13 @@ class MoviesListTableViewCell: UICollectionViewCell {
 
 	override func layoutSubviews() {
 		super.layoutSubviews()
+
+		CATransaction.begin()
+		CATransaction.setDisableActions(true)
+
 		vGradientLayer.frame = circleView.bounds
+		
+		CATransaction.commit()
 	}
 	
 	private var imageURL: URL? {
@@ -85,7 +91,7 @@ class MoviesListTableViewCell: UICollectionViewCell {
 	// MARK: - first level
 	lazy var mainView:UIView = {
 		let v = UIView()
-		v.backgroundColor = UIColor(named: "mainBackground")
+		v.backgroundColor = .clear//UIColor(named: "mainBackground")
 
 		v.translatesAutoresizingMaskIntoConstraints = false
 		return v
@@ -120,9 +126,12 @@ class MoviesListTableViewCell: UICollectionViewCell {
 	}()
 	lazy var circleView: UIView = {
 		let v = UIView()
+		
+		v.backgroundColor = ColorMode.color1
 		v.layer.cornerRadius = circleRatingSize/2
 		v.clipsToBounds = true
-		v.layer.insertSublayer(vGradientLayer, at: 1)
+		v.layer.insertSublayer(vGradientLayer, at: 2)
+
 		return v
 	}()
 	// MARK: - second level
@@ -314,7 +323,7 @@ class MoviesListTableViewCell: UICollectionViewCell {
 	}
 }
 // MARK: - fill cell
-extension MoviesListTableViewCell:MoviesListCellProtocol {
+extension MoviesListCollectionViewOneCell:MoviesListCellProtocol {
 	func fill(model:MovieModel) {
 		titlelabel.text = "\(model.title)"
 		if let posterPath = model.posterPath {

@@ -5,21 +5,27 @@
 //  Created by link on 1/7/21.
 //
 
-import Foundation
+import UIKit
+
 class SearchRouter: SearchRouterInput {
 
-	let router: RouterImp
+	let routers: RouterImp
 	weak var presenter: SearchPresenter?
 	
 	init(router: RouterImp) {
-		self.router = router
+		self.routers = router
 	}
 
-	func openMovieDetail(id: Int, animated: Bool) {
-		print("openMovieDetail")
+	func openMovieDetail(id:Int, animated:Bool) {
+		
+		let rootViewController = UINavigationController()
+
+		let childRouter = RouterImp(rootController: rootViewController)
+		let projectDetails = MovieDetailBuilder.make(router: childRouter, idMovie: id)
+		print("push")
+		let vc = MainViewController(0)
+		routers.push(projectDetails, animated: true)
+//		(presenter?.view as? UIViewController)?.navigationController?.pushViewController(vc, animated: true)
 	}
 	
-	func showFilterView(animated: Bool) {
-		print("showFilterView")
-	}
 }

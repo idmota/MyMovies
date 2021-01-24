@@ -87,7 +87,7 @@ class SearchTableViewController: UIViewController {
 	}
 	lazy var collectionView:UICollectionView = {
 		let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: createCompositionalLayout())
-		cv.register(MoviesListTableViewCell.self)
+		cv.register(MoviesListCollectionViewOneCell.self)
 		
 		cv.delegate = self
 		cv.dataSource = self
@@ -118,7 +118,11 @@ extension SearchTableViewController: UICollectionViewDataSourcePrefetching, UICo
 			presenter.getNextPage()
 		}
 	}
-	
+	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//		collectionView.deselectItem(at: indexPath, animated: true)
+		presenter.didPressOpenDetail(at: indexPath.row)
+	}
+
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 
 		placeholder.isHidden = presenter.currentCount != 0
@@ -128,7 +132,7 @@ extension SearchTableViewController: UICollectionViewDataSourcePrefetching, UICo
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let movie = presenter!.movie(at: indexPath.row)
-		let cell:MoviesListTableViewCell = collectionView.dequeueReusableCell(for: indexPath)
+		let cell:MoviesListCollectionViewOneCell = collectionView.dequeueReusableCell(for: indexPath)
 		cell.fill(model:movie)
 		return cell
 	}

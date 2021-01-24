@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SearchPresenterInput: class {
-	func didOpenMovieDetail(id:Int, animated:Bool)
+	func didPressOpenDetail(at index: Int)
 	func didPressSearchButton(searchText:String)
 	func getNextPage()
 	var currentCount:Int {get}
@@ -18,10 +18,7 @@ protocol SearchPresenterInput: class {
 
 
 protocol SearchProtocol: class { // for controller
-	
-	//	var menuView: UIView {get}
-	//	var presenter: SearchPresenterInput {get}
-	
+
 	func succes()
 	func failure(error:Error)
 	
@@ -38,7 +35,7 @@ class SearchPresenter:SearchPresenterInput {
 	
 	weak var view:SearchProtocol?
 	let networkService: NetworkService
-	let router: SearchRouter
+	let router: SearchRouterInput
 	
 	var totalCount: Int {
 		return total
@@ -51,14 +48,15 @@ class SearchPresenter:SearchPresenterInput {
 	func movie(at index: Int) -> MovieModel {
 		return moviesList[index]
 	}
-	required init(view:SearchProtocol, networkService: NetworkService, router: SearchRouter) {
+	required init(view:SearchProtocol, networkService: NetworkService, router: SearchRouterInput) {
 		self.view = view
 		self.networkService = networkService
 		self.router = router
 	}
 	
-	func didOpenMovieDetail(id: Int, animated: Bool) {
-		router.openMovieDetail(id: id, animated: animated)
+	func didPressOpenDetail(at index: Int) {
+		let id = moviesList[index].id
+		router.openMovieDetail(id: id, animated: true)
 	}
 
 	func didPressSearchButton(searchText:String) {

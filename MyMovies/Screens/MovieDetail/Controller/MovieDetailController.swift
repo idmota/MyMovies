@@ -18,7 +18,6 @@ class MovieDetailController: UIViewController {
 		
 		view.backgroundColor = ColorMode.background
 		
-//		navigationController?.hidesBarsOnSwipe = false
 		navigationController?.isNavigationBarHidden = true
 
 		view = DetailView(delegate: self)
