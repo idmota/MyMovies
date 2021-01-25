@@ -12,4 +12,4 @@
 
 > Сделано без использования Storyboard
 > Поддержка темной и светлой темы
-[![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://youtu.be/vt5fpE0bzSY)
+[![Watch the video](https://i.imgur.com/vKb2F1B.png)](readmeInfo/demoMyDiary.MP4)
