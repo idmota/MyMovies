@@ -6,10 +6,8 @@
 //
 
 import UIKit
-//import Foundation
-//import youtube_ios_player_helper
 
-class DetailView:UIView {
+final class DetailView:UIView {
 	enum imageSize {
 		static var backHeight:CGFloat = 280.0
 		static var posterHeight:CGFloat = 180
@@ -17,9 +15,7 @@ class DetailView:UIView {
 		static var posterDelta: CGFloat {
 			return posterHeight * 0.4
 		}
-		
 	}
-	
 	
 	weak var delegate: MovieDetailViewDelegateOutput?
 	
@@ -56,7 +52,7 @@ class DetailView:UIView {
 		}
 	}
 	
-	func setupView() {
+	private func setupView() {
 		backgroundColor = ColorMode.background
 		
 		[
@@ -75,22 +71,13 @@ class DetailView:UIView {
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			mainView.addSubview($0)
 		}
-		
-		
 		[
 			titleLabel,
 			origTitleLabel,
 			genresLabel,
 			dateReliseAndStatusLabel,
-			//runtime продолжительность
 			voteImage,
 			voteAverageLabel
-			//
-			//			statusLabel,
-			
-			//			playButton
-			
-			
 		].forEach {
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			mainView.addSubview($0)
@@ -108,7 +95,7 @@ class DetailView:UIView {
 	}
 	
 	// MARK: - main UI obj
-	lazy var backgroundImage: UIImageView = {
+	private lazy var backgroundImage: UIImageView = {
 		let iv = UIImageView()
 		
 		iv.backgroundColor = .systemGray
@@ -118,27 +105,24 @@ class DetailView:UIView {
 		
 		return iv
 	}()
-	// MARK: - fix
-	lazy var playLastTrailerView: UIButton = {
+
+	private lazy var playLastTrailerView: UIButton = {
 		
 		let b = UIButton(type: .custom)
 		let i = UIImage(named: "playButton")
-		//		i?.accessibilityRespondsToUserInteraction = true
 		b.setBackgroundImage(i, for: .normal)
 		b.addTarget(self, action: #selector(playLast(_:)), for: .touchUpInside)
-		
-		//		b.setTitle("sss", for: .normal)
 		b.translatesAutoresizingMaskIntoConstraints = false
 		return b
 	}()
 	
-	@objc func playLast(_ sender: Any) {
+	@objc private func playLast(_ sender: Any) {
 		if let sDV = (segmentedView as? DetailSegmentedViewInput) {
 			sDV.playLastTrailler()
 		}
 	}
 	
-	lazy var mainView: UIView = {
+	private lazy var mainView: UIView = {
 		let mv = UIView()
 		mv.backgroundColor = ColorMode.background
 		mv.layer.shadowColor = UIColor.black.cgColor
@@ -152,7 +136,7 @@ class DetailView:UIView {
 		
 		return mv
 	}()
-	lazy var bottomViews:UIView = {
+	private lazy var bottomViews:UIView = {
 		let v = UIView()
 		v.backgroundColor = ColorMode.background
 		
@@ -167,13 +151,13 @@ class DetailView:UIView {
 		
 		return v
 	}()
-	lazy var segmentedView: UIView = {
+	private lazy var segmentedView: UIView = {
 		let sv = DetailSegmentedView()
 		return sv
 	}()
 	
-	var oldYPos:CGFloat = 0.0
-	@objc func movieView(_ sender: UIPanGestureRecognizer) {
+	private var oldYPos:CGFloat = 0.0
+	@objc private func movieView(_ sender: UIPanGestureRecognizer) {
 		
 		switch sender.state {
 		
@@ -212,7 +196,7 @@ class DetailView:UIView {
 	
 	
 	// MARK: - detail UI obj
-	lazy var posterViewShadow:UIView = {
+	private lazy var posterViewShadow:UIView = {
 		let v = UIView()
 		v.layer.shadowColor = UIColor.black.cgColor
 		v.layer.shadowRadius = 4
@@ -225,7 +209,7 @@ class DetailView:UIView {
 		v.addSubview(posterImage)
 		return v
 	}()
-	lazy var posterImage: UIImageView = {
+	private lazy var posterImage: UIImageView = {
 		let i = UIImage(named: "ImageNotFound")
 		let iv = UIImageView(image: i)
 		iv.layer.cornerRadius = 4.56
@@ -233,14 +217,14 @@ class DetailView:UIView {
 		iv.addSubview(backGradientView)
 		return iv
 	}()
-	lazy var backGradientView: UIView = {
+	private lazy var backGradientView: UIView = {
 		let v = UIView()
 		
 		v.layer.addSublayer(gradientLayer)
 		v.translatesAutoresizingMaskIntoConstraints = false
 		return v
 	}()
-	lazy var gradientLayer: CAGradientLayer = {
+	private lazy var gradientLayer: CAGradientLayer = {
 		let gradient = CAGradientLayer()
 		let l1 = UIColor.black.withAlphaComponent(0)
 		let l2 = UIColor.black.withAlphaComponent(1)
@@ -252,11 +236,7 @@ class DetailView:UIView {
 		return gradient
 	}()
 	
-	
-	
-	
-	//
-	lazy var titleLabel: UILabel = {
+	private lazy var titleLabel: UILabel = {
 		let l = UILabel()
 		
 		l.font = UIFont.systemFont(ofSize: 24)
@@ -267,7 +247,7 @@ class DetailView:UIView {
 		
 		return l
 	}()
-	lazy var origTitleLabel: UILabel = {
+	private lazy var origTitleLabel: UILabel = {
 		let l = UILabel()
 		l.textColor = .systemGray
 		l.textAlignment = .left
@@ -276,7 +256,7 @@ class DetailView:UIView {
 		
 		return l
 	}()
-	lazy var genresLabel: UILabel = {
+	private lazy var genresLabel: UILabel = {
 		let l = UILabel()
 		l.numberOfLines = 0
 		l.font = UIFont.systemFont(ofSize: 12)
@@ -285,25 +265,25 @@ class DetailView:UIView {
 		return l
 	}()
 	
-	lazy var dateReliseAndStatusLabel: UILabel = {
+	private lazy var dateReliseAndStatusLabel: UILabel = {
 		let l = UILabel()
 		l.font = UIFont.systemFont(ofSize: 12)
 		l.textColor = .gray
 		
 		return l
 	}()
-	lazy var statusLabel: UILabel = {
+	private lazy var statusLabel: UILabel = {
 		let l = UILabel()
 		return l
 	}()
-	lazy var voteAverageLabel: UILabel = {
+	private lazy var voteAverageLabel: UILabel = {
 		let l = UILabel()
 		l.textColor = .systemRed
 		return l
 	}()
 	
 	
-	lazy var voteImage: UIImageView = {
+	private lazy var voteImage: UIImageView = {
 		let vi = UIImageView()
 		
 		vi.image = UIImage(systemName: "star.fill")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal)
@@ -313,8 +293,8 @@ class DetailView:UIView {
 	
 	
 	// MARK: - Constraints
-	var constr: NSLayoutConstraint?
-	func setupLayout() {
+	private var constr: NSLayoutConstraint?
+	private func setupLayout() {
 		constr = mainView.topAnchor.constraint(equalTo: backgroundImage.bottomAnchor, constant: 0)
 		constr?.isActive = true
 		let array = [
@@ -331,8 +311,8 @@ class DetailView:UIView {
 			
 			posterViewShadow.topAnchor.constraint(equalTo: mainView.topAnchor, constant: -imageSize.posterDelta),
 			posterViewShadow.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: Space.triple),
-			posterViewShadow.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -Space.single),//greaterThanOrEqualTo lessThanOrEqualTo
-			// size
+			posterViewShadow.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -Space.single),
+			
 			posterViewShadow.widthAnchor.constraint(equalToConstant: imageSize.posterWigth),
 			posterViewShadow.heightAnchor.constraint(equalToConstant: imageSize.posterHeight),
 			
@@ -346,9 +326,6 @@ class DetailView:UIView {
 			backGradientView.bottomAnchor.constraint(equalTo: posterImage.bottomAnchor),
 			backGradientView.heightAnchor.constraint(equalToConstant: 50),
 			
-			
-			
-			//lessThanOrEqualTo
 			bottomViews.topAnchor.constraint(equalTo: mainView.bottomAnchor, constant: Space.half),
 			bottomViews.leadingAnchor.constraint(equalTo: self.leadingAnchor),
 			bottomViews.trailingAnchor.constraint(equalTo: self.trailingAnchor),
@@ -359,7 +336,6 @@ class DetailView:UIView {
 			segmentedView.trailingAnchor.constraint(equalTo: bottomViews.trailingAnchor),
 			segmentedView.bottomAnchor.constraint(equalTo: bottomViews.bottomAnchor),
 			
-			// equalTo lessThanOrEqualTo greaterThanOrEqualTo
 			titleLabel.topAnchor.constraint(greaterThanOrEqualTo: posterImage.topAnchor, constant: -Space.quadruple),
 			titleLabel.leadingAnchor.constraint(equalTo: posterImage.trailingAnchor, constant: Space.single),
 			titleLabel.trailingAnchor.constraint(equalTo: backgroundImage.trailingAnchor, constant: -Space.single),
@@ -377,9 +353,6 @@ class DetailView:UIView {
 			dateReliseAndStatusLabel.leadingAnchor.constraint(equalTo: posterImage.trailingAnchor, constant: Space.single),
 			dateReliseAndStatusLabel.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -Space.single),
 			
-			
-			
-			//
 			voteImage.topAnchor.constraint(equalTo: dateReliseAndStatusLabel.bottomAnchor),
 			voteImage.leadingAnchor.constraint(equalTo: posterImage.trailingAnchor, constant: Space.single),
 			voteImage.bottomAnchor.constraint(lessThanOrEqualTo: mainView.bottomAnchor),
@@ -391,7 +364,6 @@ class DetailView:UIView {
 			voteAverageLabel.leadingAnchor.constraint(equalTo: voteImage.trailingAnchor, constant: Space.half),
 			voteAverageLabel.trailingAnchor.constraint(lessThanOrEqualTo: mainView.trailingAnchor, constant: -Space.single),
 			voteAverageLabel.bottomAnchor.constraint(lessThanOrEqualTo: mainView.bottomAnchor, constant: -Space.single)
-			
 		]
 		
 		NSLayoutConstraint.activate(array)
@@ -402,23 +374,28 @@ class DetailView:UIView {
 extension DetailView: MovieDetailViewDelegateInput {
 	
 	func fillViewFromModel(model:MovieDetailModel) {
-		setupFrame()
-		titleLabel.text = model.title
-		origTitleLabel.text = model.originalTitle
+
 		let reliseLoc = "Movie.\(model.status.rawValue)".localized
 		dateReliseAndStatusLabel.text = "\(Date(fromString: model.releaseDate).toString), \(reliseLoc)"
 		genresLabel.text = model.genres.compactMap({$0.name}).joined(separator: ", ")
 		
-		voteAverageLabel.text = model.voteAverage.description
-		
-		backgroundURL = Url.getBackPosterURL(path:model.backdropPath)
-		if let posterPath = model.posterPath {
-			posterURL = Url.getPosterURLWithSize(path: posterPath, size: .w185)
-		}
-		
 		if let segmentedViewInput = segmentedView as? DetailSegmentedViewInput {
 			segmentedViewInput.fillSegmentViewFromModel(model: model)
 		}
+	}
+	func fillViewFromModel(_ model:MovieModel) {
+		titleLabel.text = model.title
+		origTitleLabel.text = model.originalTitle
+		voteAverageLabel.text = model.voteAverage.description
+		
+		if let posterPath = model.posterPath {
+			posterURL = Url.getPosterURLWithSize(path: posterPath, size: .w185)
+		}
+		if let backdropPath = model.backdropPath {
+			backgroundURL = Url.getBackPosterURL(path:backdropPath)
+		}
+		setupFrame()
+
 	}
 }
 

@@ -6,8 +6,7 @@
 //
 
 import Foundation
-import class UIKit.UIViewController
-
+import UIKit.UIViewController
 
 enum MoviesListModelFactory {
 	static func make (router:RouterImp, model: CommonsMenuModel) -> UIViewController {

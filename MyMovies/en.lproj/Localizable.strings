@@ -16,7 +16,20 @@
 "Movie.Canceled" = "Canceled";
 "Movie.ReliseDate.Title" = "Release date";
 
-"Sustem.unknown" = "unknown";
+"System.unknown" = "unknown";
+"System.Next" = "Next";
+"System.Back" = "Back";
+"System.GetStared" = "Get Stared";
 
 "placeholder.searchtitle" = "No found, movie:";
 "placeholder.title" = "Enter search text";
+"Search.InputField" = "Search movie";
+
+"Menu.TodayInCinema" = "Today in cinema";
+"Menu.Popular" = "Popular";
+"Menu.TopRated" = "Top Rated";
+"Menu.Upcoming" = "Upcoming";
+
+
+
+

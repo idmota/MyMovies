@@ -8,17 +8,9 @@
 import XCTest
 
 class MyMoviesTests: XCTestCase {
-	var view:WalkthroughController!
-	var presenter:WalkthroughPresenter!
-	var router:WalkthroughRouter!
-	
+
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
-		let view = WalkthroughController()
-
-		let moviesListRouter = WalkthroughRouter(router: router)
-		let presenter = WalkthroughPresenter(view: view, router: moviesListRouter)
-
     }
 
     override func tearDownWithError() throws {
@@ -29,13 +21,7 @@ class MyMoviesTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
-	func testIsNotNill() {
-		XCTAssertNotNil(view, "view not nill")
-		XCTAssertNotNil(presenter, "view not presenter")
-		XCTAssertNotNil(router, "view not router")
-	
 
-	}
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
         measure {

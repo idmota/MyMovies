@@ -7,16 +7,17 @@
 
 import UIKit
 
-class SearchTableViewController: UIViewController {
-
+final class SearchTableViewController: UIViewController {
+	
 	var presenter: SearchPresenterInput!
 	
-    override func viewDidLoad() {
-        super.viewDidLoad()
+	override func viewDidLoad() {
+		super.viewDidLoad()
 		navigationItem.title = "Search movie"
 		view.backgroundColor = ColorMode.background
 		setupView()
-    }
+	}
+	
 	private func setupView() {
 		[
 			collectionView
@@ -26,11 +27,11 @@ class SearchTableViewController: UIViewController {
 		}
 		
 		navigationItem.titleView = searchTitleView
-
 		setupLayout()
 		
 	}
-	lazy var searchTitleView:UIView = {
+	
+	private lazy var searchTitleView:UIView = {
 		let v = UIView()
 		[
 			searchView
@@ -40,14 +41,16 @@ class SearchTableViewController: UIViewController {
 		}
 		return v
 	}()
-	lazy var searchView:UITextField = {
-
+	
+	private lazy var searchView:UITextField = {
+		
 		let searchView = SearchView()
 		searchView.delegate = self
 		searchView.autocorrectionType = .no
 		searchView.becomeFirstResponder()
 		return searchView
 	}()
+	
 	private func setupLayout() {
 		let array = [
 			collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -60,32 +63,26 @@ class SearchTableViewController: UIViewController {
 			searchView.trailingAnchor.constraint(equalTo: searchTitleView.trailingAnchor, constant: -Space.half),
 			searchView.bottomAnchor.constraint(equalTo: searchTitleView.bottomAnchor, constant: -Space.single),
 			
-
+			
 		]
 		NSLayoutConstraint.activate(array)
 	}
+	
 	func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
-
+		
 		let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalHeight(1), heightDimension: .fractionalHeight(1))
 		let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//		item.contentInsets = NSDirectionalEdgeInsets(top: Space.half, leading: Space.single, bottom: Space.half, trailing: Space.single)
-
-		let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(204))//fractionalHeight(0.4))
-
-		let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
-		print("set colum")
-	  let section = NSCollectionLayoutSection(group: group)
 		
-//		let section = NSCollectionLayoutSection(group: group)
-//		section.orthogonalScrollingBehavior = .paging
-//		section.interGroupSpacing = 16
-	
-	  let layout = UICollectionViewCompositionalLayout(section: section)
-//		layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-
-	  return layout
+		let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(204))
+		
+		let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+		let section = NSCollectionLayoutSection(group: group)
+		
+		let layout = UICollectionViewCompositionalLayout(section: section)
+		
+		return layout
 	}
-	lazy var collectionView:UICollectionView = {
+	private lazy var collectionView:UICollectionView = {
 		let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: createCompositionalLayout())
 		cv.register(MoviesListCollectionViewOneCell.self)
 		
@@ -96,19 +93,15 @@ class SearchTableViewController: UIViewController {
 		cv.backgroundColor = ColorMode.background
 		cv.contentInsetAdjustmentBehavior = .never
 		cv.showsHorizontalScrollIndicator = false
-//		cv.collectionViewLayout = createCompositionalLayout
 		cv.backgroundView = placeholder
+		
 		return cv
 	}()
 	private lazy var placeholder: PlaceholderView = {
 		let view = PlaceholderView()
 		view.title = "placeholder.title".localized
-//		view.subtitle = "placeholder.subtitle".localized
 		return view
 	}()
-	@objc func actionBack() {
-//		navigationController?.popViewController(animated: true)
-	}
 }
 
 extension SearchTableViewController: UICollectionViewDataSourcePrefetching, UICollectionViewDataSource, UICollectionViewDelegate {
@@ -119,12 +112,12 @@ extension SearchTableViewController: UICollectionViewDataSourcePrefetching, UICo
 		}
 	}
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//		collectionView.deselectItem(at: indexPath, animated: true)
+		collectionView.deselectItem(at: indexPath, animated: true)
 		presenter.didPressOpenDetail(at: indexPath.row)
 	}
-
+	
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-
+		
 		placeholder.isHidden = presenter.currentCount != 0
 		
 		return presenter.currentCount
@@ -140,7 +133,7 @@ extension SearchTableViewController: UICollectionViewDataSourcePrefetching, UICo
 	func isLoadingCell(for indexPath: IndexPath) -> Bool {
 		return indexPath.row >= presenter!.currentCount-1
 	}
-
+	
 }
 
 extension SearchTableViewController: SearchProtocol {
@@ -152,7 +145,7 @@ extension SearchTableViewController: SearchProtocol {
 		Logger.handleError(error)
 	}
 	
-
+	
 	
 	
 }

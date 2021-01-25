@@ -8,8 +8,7 @@
 import Foundation
 import UIKit
 
-class MyCache: NSCache <NSString, UIImage> // for example
-{
+class MyCache: NSCache <NSString, UIImage> {
 	static let sharedInstance:MyCache = {
 		let l = MyCache ()
 		l.countLimit = 25

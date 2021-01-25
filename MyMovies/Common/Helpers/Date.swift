@@ -8,8 +8,6 @@
 import Foundation
 extension Date {
 	init(fromString:String) {
-//		super.init()
-		//let isoDate = "2016-04-14T10:44:00+0000"
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX

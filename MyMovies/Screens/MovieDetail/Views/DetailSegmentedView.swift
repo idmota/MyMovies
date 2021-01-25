@@ -17,10 +17,10 @@ protocol DetailSegmentedViewOutput:class {
 }
 
 
-class DetailSegmentedView: UIView, DetailSegmentedViewInput {
+final class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 	
 	
-	var segmentData: [SegmentDetailModel]!
+	private var segmentData: [SegmentDetailModel]!
 	
 	func fillSegmentViewFromModel(model: MovieDetailModel) {
 		
@@ -31,20 +31,20 @@ class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 	func playLastTrailler() {
 		if let lastTrailler = stackView.subviews.last as? YTPlayerView {
 			lastTrailler.playVideo()
+			playLast = true
 		}
 	}
+	private var playLast:Bool = false
 	
 	init() {
 		super.init(frame: CGRect.zero)
 		segmentData = [
 			SegmentDetailModel(name: "Info", view: infoView),
 			SegmentDetailModel(name: "Trailer", view: trailerScrollView)
-			//Actors, Posters
 		]
 		[
 			segmentedControl,
 			segmentView
-			
 		].forEach {
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			self.addSubview($0)
@@ -56,7 +56,7 @@ class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
-	func setupLayout() {
+	private func setupLayout() {
 		let array = [
 			segmentedControl.topAnchor.constraint(equalTo: self.topAnchor, constant: Space.single),
 			segmentedControl.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -70,19 +70,19 @@ class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 		]
 		NSLayoutConstraint.activate(array)
 	}
-	lazy var segmentedControl:UISegmentedControl = {
+	private lazy var segmentedControl:UISegmentedControl = {
 		let sc = UISegmentedControl(items: segmentData.map { $0.name })
 		sc.selectedSegmentIndex = 0
 		sc.addTarget(self, action: #selector(valueChanged(_:)), for: .valueChanged)
 		return sc
 	}()
 	
-	@objc func valueChanged(_ selector:UISegmentedControl) {
+	@objc private func valueChanged(_ selector:UISegmentedControl) {
 		segmentView.bringSubviewToFront(segmentData[selector.selectedSegmentIndex].view)
 	}
-	lazy var segmentView:UIView = {
+	private lazy var segmentView:UIView = {
 		let v = UIView()
-
+		
 		segmentData.forEach {
 			$0.view.translatesAutoresizingMaskIntoConstraints = false
 			v.addSubview($0.view)
@@ -96,9 +96,9 @@ class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 		
 		return v
 	}()
-
-
-	lazy var infoView:UIView = {
+	
+	
+	private lazy var infoView:UIView = {
 		let iv = UIView()
 		iv.backgroundColor = ColorMode.background
 		iv.addSubview(overviewLabel)
@@ -108,19 +108,17 @@ class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 		overviewLabel.leadingAnchor.constraint(equalTo: iv.leadingAnchor).isActive = true
 		overviewLabel.trailingAnchor.constraint(equalTo: iv.trailingAnchor).isActive = true
 		overviewLabel.bottomAnchor.constraint(lessThanOrEqualTo: iv.bottomAnchor).isActive = true
-
+		
 		return iv
 	}()
-
-	lazy var overviewLabel: UILabel = {
+	
+	private lazy var overviewLabel: UILabel = {
 		var l = UILabel()
 		l.numberOfLines = 0
-		l.text = "q"
 		l.backgroundColor = ColorMode.background
-//		l.backgroundColor = .red//ColorMode.background
 		return l
 	}()
-	lazy var trailerScrollView: UIScrollView = {
+	private lazy var trailerScrollView: UIScrollView = {
 		var l = UIScrollView()
 		l.backgroundColor = ColorMode.background
 		stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -132,7 +130,7 @@ class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 		return l
 	}()
 	
-	lazy var stackView: UIStackView = {
+	private lazy var stackView: UIStackView = {
 		let sv = UIStackView()
 		sv.backgroundColor = ColorMode.background
 		sv.axis = .vertical
@@ -145,6 +143,7 @@ class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 		videoModel.forEach {
 			let yp = YTPlayerView()
 			yp.load(withVideoId: $0.key)
+			yp.delegate = self
 			yp.widthAnchor.constraint(equalToConstant: widthSizeVideo).isActive = true
 			yp.heightAnchor.constraint(equalToConstant: widthSizeVideo*0.5).isActive = true
 			stackView.addArrangedSubview(yp)
@@ -156,4 +155,14 @@ class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 		}
 	}
 	
+}
+
+extension DetailSegmentedView: YTPlayerViewDelegate{
+	func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
+		if let lastTrailler = stackView.subviews.last as? YTPlayerView, lastTrailler == playerView {
+			if playLast {
+				lastTrailler.playVideo()
+			}
+		}
+	}
 }

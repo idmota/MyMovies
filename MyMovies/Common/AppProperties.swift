@@ -11,7 +11,6 @@ struct AppProperties {
 	enum language:String {
 		case ru = "ru-RU"
 		case en = "en-EN"
-	
 	}
 }
 

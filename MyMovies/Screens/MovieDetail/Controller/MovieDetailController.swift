@@ -6,82 +6,93 @@
 //
 
 import UIKit
-import Foundation
-//import youtube_ios_player_helper
 
-class MovieDetailController: UIViewController {
+final class MovieDetailController: UIViewController {
 	var presenter: MovieDetailPresenter!
 	
+	init(model:MovieModel) {
+		super.init(nibName: nil, bundle: nil)
+		
+	}
+	init() {
+		super.init(nibName: nil, bundle: nil)
+		
+	}
 	
-    override func viewDidLoad() {
-        super.viewDidLoad()
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
+	override func viewDidLoad() {
+		super.viewDidLoad()
 		
 		view.backgroundColor = ColorMode.background
 		
 		navigationController?.isNavigationBarHidden = true
-
-		view = DetailView(delegate: self)
+		
+		let dView = DetailView(delegate: self)
+		dView.fillViewFromModel(presenter.model!)
+		view = dView
+		
 		setupView()
 	}
 	override func viewDidDisappear(_ animated: Bool) {
 		navigationController?.isNavigationBarHidden = false
 		super.viewDidDisappear(animated)
 	}
-
+	
 	override func viewWillDisappear(_ animated: Bool) {
 		navigationController?.isNavigationBarHidden = false
 		super.viewWillDisappear(animated)
 	}
 	
-	lazy var navigView:UIView = {
+	private lazy var navigView:UIView = {
 		let v = UIView()
 		let color = UIColor.lightGray
 		
 		v.backgroundColor = color.withAlphaComponent(0.2)
 		v.translatesAutoresizingMaskIntoConstraints = false
-
+		
 		return v
 	}()
 	
-	lazy var backButton:UIButton = {
+	private lazy var backButton:UIButton = {
 		let bb = UIButton()
 		bb.addTarget(self, action: #selector(backAction), for: .touchUpInside)
-		bb.setTitle(" Back", for: .normal)
+		bb.setTitle(" \("System.Back".localized)", for: .normal)
 		let img = UIImage(systemName: "arrow.uturn.left")
-
+		
 		bb.setImage(img?.withTintColor(ColorMode.background, renderingMode: .alwaysOriginal), for: .normal)
 		bb.setTitleColor(ColorMode.background, for: .normal)
 		return bb
 	}()
 	
-	lazy var shareButton:UIButton = {
+	private lazy var shareButton:UIButton = {
 		let sb = UIButton()
 		sb.setImage(UIImage(named: "shareico")?.withTintColor(ColorMode.background, renderingMode: .alwaysOriginal), for: .normal)
 		sb.addTarget(self, action: #selector(shareAction), for: .touchUpInside)
-//		sb.setTitle("", for: .normal)
-//		sb.setTitleColor(ColorMode.titleColor, for: .normal)
 		return sb
 	}()
 	
-	func setupView() {
+	private func setupView() {
 		[
-		backButton,
-		shareButton
+			backButton,
+			shareButton
 		].forEach {
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			navigView.addSubview($0)
 		}
 		view.addSubview(navigView)
-
+		
 		setupLayout()
 	}
-	func setupLayout() {
+	private func setupLayout() {
 		let constraints = [
 			
 			navigView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
 			navigView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
 			navigView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
+			
 			backButton.topAnchor.constraint(equalTo: navigView.topAnchor, constant: Space.single),
 			backButton.leadingAnchor.constraint(equalTo: navigView.leadingAnchor, constant: Space.single),
 			backButton.bottomAnchor.constraint(equalTo: navigView.bottomAnchor, constant: -Space.single),
@@ -95,11 +106,11 @@ class MovieDetailController: UIViewController {
 		
 	}
 	
-	@objc func backAction() {
+	@objc private func backAction() {
 		navigationController?.popViewController(animated: true)
+		
 	}
-	@objc func shareAction() {
-		// mb youtube link
+	@objc private func shareAction() {
 		let activityViewController = UIActivityViewController(activityItems: [presenter.movie!.originalTitle], applicationActivities: .none)
 		self.present(activityViewController, animated: true, completion: nil)
 	}
@@ -112,7 +123,7 @@ extension MovieDetailController: MovieDetailViewDelegateOutput {
 		presenter.dowloadPictures(pathURL: pathURL, completion: completion)
 	}
 }
-	
+
 extension MovieDetailController: MovieDetailProtocol {
 	func succes() {
 		guard let vv = view as? MovieDetailViewDelegateInput else {

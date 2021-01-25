@@ -14,38 +14,36 @@ class MoviesListCollectionViewTwoCell: UICollectionViewCell {
 	enum imageLogoSize {
 		static let width:CGFloat = 120  // 154
 		static let height:CGFloat = 180 // 231
-
+		
 	}
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		setupView()
 	}
-	
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		CATransaction.begin()
 		CATransaction.setDisableActions(true)
-
-		vGradientLayer.frame = circleView.bounds
+		
 		titleGradientLayer.frame = titleView.bounds
-
+		vGradientLayer.frame = circleView.bounds
+		
 		CATransaction.commit()
-		}
+	}
+	
 	private var imageURL: URL? {
 		didSet {
 			self.downloadItemImageForSearchResult(imageURL: imageURL)
 		}
 	}
-	func setupView() {
-		// add main view
+	private func setupView() {
 		contentView.backgroundColor = ColorMode.background
 		contentView.addSubview(mainView)
 		[
 			imageView,
 			circleView,
-			titleView,
-			
+			titleView
 		].forEach {
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			mainView.addSubview($0)
@@ -53,9 +51,9 @@ class MoviesListCollectionViewTwoCell: UICollectionViewCell {
 		setupLayout()
 	}
 	
-	lazy var mainView:UIView = {
+	private lazy var mainView:UIView = {
 		let v = UIView()
-	
+		
 		v.backgroundColor = ColorMode.background
 		v.layer.cornerRadius = 5
 		
@@ -66,7 +64,7 @@ class MoviesListCollectionViewTwoCell: UICollectionViewCell {
 		v.translatesAutoresizingMaskIntoConstraints = false
 		return v
 	}()
-	lazy var imageView: UIImageView = {
+	private lazy var imageView: UIImageView = {
 		let imgV = UIImageView()
 		imgV.image = UIImage(named: "ImageNotFound")
 		imgV.backgroundColor = .lightGray
@@ -83,21 +81,20 @@ class MoviesListCollectionViewTwoCell: UICollectionViewCell {
 		return imgV
 	}()
 	
-	lazy var activityIndicator: UIActivityIndicatorView = {
+	private lazy var activityIndicator: UIActivityIndicatorView = {
 		let g = UIActivityIndicatorView(style: .large)
 		g.translatesAutoresizingMaskIntoConstraints = false
 		return g
 	}()
-	lazy var circleView: UIView = {
+	private lazy var circleView: UIView = {
 		let v = UIView()
-//		v.backgroundColor = .red
 		v.layer.cornerRadius = circleRatingSize/2
 		v.clipsToBounds = true
 		v.layer.insertSublayer(vGradientLayer, at: 1)
 		v.addSubview(ratinglabel)
 		return v
 	}()
-	lazy var ratinglabel:UILabel = {
+	private lazy var ratinglabel:UILabel = {
 		let v = UILabel()
 		v.textColor = .white
 		v.font = UIFont.systemFont(ofSize: 18, weight: .bold)
@@ -105,33 +102,34 @@ class MoviesListCollectionViewTwoCell: UICollectionViewCell {
 		return v
 	}()
 	// MARK: - second level
-	lazy var vGradientLayer: CAGradientLayer = {
+	private lazy var vGradientLayer: CAGradientLayer = {
 		let gradient = CAGradientLayer()
 		let l1 = ColorMode.color1.withAlphaComponent(1)
 		let l2 = ColorMode.color2.withAlphaComponent(1)
-
+		
 		gradient.colors = [l1.cgColor,l2.cgColor]
 		gradient.startPoint = CGPoint(x:  0.25, y: 0)
 		gradient.endPoint = CGPoint(x: 0.75, y: 0.9)
-
+		
 		return gradient
 	}()
-	lazy var titleGradientLayer: CAGradientLayer = {
+	private lazy var titleGradientLayer: CAGradientLayer = {
 		let gradient = CAGradientLayer()
 		let l1 = ColorMode.titleColor.withAlphaComponent(0)
 		let l2 = ColorMode.titleColor.withAlphaComponent(1)
-
+		
 		gradient.colors = [l1.cgColor,l2.cgColor]
 		gradient.startPoint = CGPoint(x:  0.5, y: 0)
-
+		
 		gradient.endPoint = CGPoint(x: 0.5, y: 1)
-
+		
 		return gradient
 	}()
 	
-	lazy var titleView:UIView = {
+	private lazy var titleView:UIView = {
 		let v = UIView()
-		v.layer.insertSublayer(titleGradientLayer, at: 1)
+		v.layer.insertSublayer(titleGradientLayer, at: 3)
+		
 		[
 			yearLabel,
 			titleLabel
@@ -139,17 +137,19 @@ class MoviesListCollectionViewTwoCell: UICollectionViewCell {
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			v.addSubview($0)
 		}
-
+		v.clipsToBounds = true
+		v.layer.cornerRadius = 5
+		v.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
 		return v
 	}()
-	lazy var titleLabel: UILabel = {
+	private lazy var titleLabel: UILabel = {
 		let l = UILabel()
 		l.font = UIFont.systemFont(ofSize: 15, weight: .bold)
 		l.numberOfLines = 0
 		l.textColor = ColorMode.background
 		return l
 	}()
-	lazy var yearLabel: UILabel = {
+	private lazy var yearLabel: UILabel = {
 		let l = UILabel()
 		l.font = UIFont.systemFont(ofSize: 15, weight: .bold)
 		l.textColor = ColorMode.background
@@ -159,8 +159,7 @@ class MoviesListCollectionViewTwoCell: UICollectionViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	
-	public func downloadItemImageForSearchResult(imageURL: URL?) {
+	func downloadItemImageForSearchResult(imageURL: URL?) {
 		
 		if let urlOfImage = imageURL {
 			if let cachedImage = imageCache.object(forKey: urlOfImage.absoluteString as NSString){
@@ -171,8 +170,8 @@ class MoviesListCollectionViewTwoCell: UICollectionViewCell {
 				self.downloadTask = session.downloadTask(
 					with: urlOfImage as URL, completionHandler: { [weak self] url, response, error in
 						DispatchQueue.main.async() {
-						if error == nil, let url = url, let data = NSData(contentsOf: url), let image = UIImage(data: data as Data) {
-													
+							if error == nil, let url = url, let data = NSData(contentsOf: url), let image = UIImage(data: data as Data) {
+								
 								let imageToCache = image
 								
 								if let strongSelf = self{
@@ -183,61 +182,58 @@ class MoviesListCollectionViewTwoCell: UICollectionViewCell {
 									strongSelf.activityIndicator.stopAnimating()
 								}
 								
-							
-						} else {
-							if let strongSelf = self{
-								strongSelf.activityIndicator.stopAnimating()
-							}
-						}}
+								
+							} else {
+								if let strongSelf = self{
+									strongSelf.activityIndicator.stopAnimating()
+								}
+							}}
 					})
 				self.downloadTask!.resume()
 			}
 		}
 	}
 	private var downloadTask: URLSessionDownloadTask?
-
+	
 	let imageCache = MyCache.sharedInstance
 	
-
+	
 	
 	override func prepareForReuse() {
-
+		
 		self.downloadTask?.cancel()
 		self.activityIndicator.stopAnimating()
 		imageView.image = nil
 	}
-
+	
 	deinit {
-		//imageCache.removeObject(forKey: imageURL!.absoluteString as NSString)
 		self.downloadTask?.cancel()
 		self.activityIndicator.stopAnimating()
 		imageView.image = nil
 	}
-	func setupLayout() {
+	private func setupLayout() {
 		let arrayConstraints = [
 			mainView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Space.half),
 			mainView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Space.single),
 			mainView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Space.single),
 			mainView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Space.half),
-
+			
 			imageView.topAnchor.constraint(equalTo: mainView.topAnchor),
 			imageView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor),
 			imageView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor),
 			imageView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor),
-
-
+			
 			activityIndicator.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
 			activityIndicator.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
-			// circleView
 			
 			circleView.topAnchor.constraint(equalTo: mainView.topAnchor, constant: Space.single),
 			circleView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -Space.single),
 			circleView.heightAnchor.constraint(equalToConstant: circleRatingSize),
 			circleView.widthAnchor.constraint(equalToConstant: circleRatingSize),
-
+			
 			ratinglabel.centerXAnchor.constraint(equalTo: circleView.centerXAnchor),
 			ratinglabel.centerYAnchor.constraint(equalTo: circleView.centerYAnchor),
-
+			
 			titleView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor),
 			titleView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor),
 			titleView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor),
@@ -245,13 +241,11 @@ class MoviesListCollectionViewTwoCell: UICollectionViewCell {
 			yearLabel.topAnchor.constraint(equalTo: titleView.topAnchor, constant: Space.double),
 			yearLabel.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: Space.half),
 			yearLabel.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -Space.half),
-
+			
 			titleLabel.topAnchor.constraint(equalTo: yearLabel.bottomAnchor, constant: Space.half),
 			titleLabel.leadingAnchor.constraint(equalTo: titleView.leadingAnchor, constant: Space.half),
 			titleLabel.trailingAnchor.constraint(equalTo: titleView.trailingAnchor, constant: -Space.half),
-			titleLabel.bottomAnchor.constraint(equalTo: titleView.bottomAnchor, constant: -Space.single),
-
-
+			titleLabel.bottomAnchor.constraint(equalTo: titleView.bottomAnchor, constant: -Space.single)
 		]
 		NSLayoutConstraint.activate(arrayConstraints)
 	}
@@ -265,21 +259,11 @@ extension MoviesListCollectionViewTwoCell:MoviesListCellProtocol {
 			imageURL = Url.getPosterURL(path: posterPath)
 		} else {
 			imageView.image = UIImage(named: "ImageNotFound")
-
+			
 		}
 		ratinglabel.text = String(model.voteAverage)
 		if let reliseDate = model.releaseDate, !reliseDate.isEmpty {
 			yearLabel.text = Date(fromString: reliseDate).toYearString
 		}
-		
-		
-//		genreslabel.text = model.genre.compactMap({String($0.name)}).joined(separator: ", ")
-//		let reliseTitle = "Movie.ReliseDate.Title".localized
-//		var dutationtext = "\(reliseTitle): \("Sustem.unknown".localized)"
-//		if let reliseDate = model.releaseDate, !reliseDate.isEmpty {
-//			dutationtext = "Release date: \(Date(fromString: reliseDate).toString)"
-//		}
-//		dutationLabel.text = dutationtext
-//		overView.text = model.overview
 	}
 }

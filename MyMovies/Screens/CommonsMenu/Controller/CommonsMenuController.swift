@@ -7,14 +7,14 @@
 
 import UIKit
 
-class CommonsMenuController: UIViewController {
+final class CommonsMenuController: UIViewController {
 	
 	var presenter: CommonsMenuPresenter!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+	
+	override func viewDidLoad() {
+		super.viewDidLoad()
 		setipView()
-    }
+	}
 	
 	private func setipView() {
 		[
@@ -23,7 +23,7 @@ class CommonsMenuController: UIViewController {
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			view.addSubview($0)
 		}
-
+		
 		setypLayout()
 	}
 	
@@ -36,7 +36,7 @@ class CommonsMenuController: UIViewController {
 		]
 		NSLayoutConstraint.activate(array)
 	}
-	lazy var menuTable:UITableView = {
+	private lazy var menuTable:UITableView = {
 		let t = UITableView(frame: CGRect.zero, style: .plain)
 		t.register(CommonsMenuTableViewCell.self)
 		t.delegate = self
@@ -46,12 +46,8 @@ class CommonsMenuController: UIViewController {
 		return t
 	}()
 	
-	@objc func didHideMenu() {
-		presenter.didHideMenu(animation: true)
-	}
-
 }
-extension CommonsMenuController: UITableViewDelegate, UITableViewDataSource {
+extension CommonsMenuController:CommonsMenuControllerProtocol, UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return presenter.totalCount
 	}
@@ -67,14 +63,11 @@ extension CommonsMenuController: UITableViewDelegate, UITableViewDataSource {
 		presenter.didOpenScreen(at: indexPath.row)
 	}
 	func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		return "Movie"
+		return "MyMovie"
 	}
 	func numberOfSections(in tableView: UITableView) -> Int {
 		return 1
 	}
-}
-extension CommonsMenuController: CommonsMenuControllerProtocol {
-	
 }
 
 

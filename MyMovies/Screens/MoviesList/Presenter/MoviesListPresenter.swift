@@ -23,36 +23,27 @@ protocol MoviesListProtocol: class { // input
 }
 
 protocol MoviesListPresenterProtocol: class {
-	init(view: MoviesListProtocol, networkService:NetworkService, urlModel:CommonsMenuModel, router: MoviesListRouter)
 	func getMoviesList()
-//	var genresList: [GenresModel] {get}
-	//	var moviesList:MoviesListModel? {get set}
 	var totalCount:Int { get }
 	var currentCount: Int { get }
 	func movie(at index: Int) -> MovieModel
 	var urlModel: CommonsMenuModel { get }
-
-
+	
+	
 }
 
-class MoviesListPresenter: MoviesListPresenterProtocol {
-
-	
-	
-//	let urlModel: CommonsMenuModel
+final class MoviesListPresenter:NSObject, MoviesListPresenterProtocol {
 	
 	var menuIsShow:Bool = false
-	weak var view:MoviesListProtocol!
+	unowned var view:MoviesListProtocol
 	var networkService:NetworkService
 	let router: MoviesListRouterInput
 	var commonMenu: CommonsMenuController!
-
 	let urlModel: CommonsMenuModel
 	
-
+	
 	private var moviesList: [MovieModel] = []
 	private var genresList: [MovieGenreModel] = []
-//	private var filterList: [MovieModel] = []
 	private var currentPage:Int = 1
 	private var total:Int = 1
 	private var isFetchInProgress = false
@@ -69,35 +60,28 @@ class MoviesListPresenter: MoviesListPresenterProtocol {
 		return moviesList[index]
 	}
 	
-	required init(view: MoviesListProtocol, networkService: NetworkService,
-				  urlModel:CommonsMenuModel, router: MoviesListRouter) {
+	init(view: MoviesListProtocol, networkService: NetworkService,
+		 urlModel:CommonsMenuModel, router: MoviesListRouter) {
 		self.view = view
 		self.networkService = networkService
 		self.urlModel = urlModel
 		self.router = router
-
+		super.init()
+		
 		getGenresList()
 		getMoviesList()
-	//		print("init MoviesListPresenter")
-
+		
 	}
-	func getGenresList() {
-//		let gm:GenresListModel
+	private func getGenresList() {
 		let url = Url.getFenresList()
 		networkService.getResponser(url:url,
 									model: GenresListModel.self) { [weak self] result in
 			guard let self = self else {return}
 			DispatchQueue.main.async {
-				
 				switch result {
 				case .success(let resultGenres):
-	
 					self.genresList = resultGenres.genres
-					
-//					self.view?.succes()
 				case .failure(let error):
-					print(url)
-//					self.isFetchInProgress = false
 					self.view.failure(error: error)
 				}
 			}
@@ -115,7 +99,6 @@ class MoviesListPresenter: MoviesListPresenterProtocol {
 		}
 		
 		self.isFetchInProgress = true
-		print(urlModel.category)
 		let url = Url.getUrlFromCategory(urlModel.category, page: currentPage)
 		networkService.getResponser(url:url,
 									model: MoviesListModel.self) { [weak self] result in
@@ -126,16 +109,14 @@ class MoviesListPresenter: MoviesListPresenterProtocol {
 				case .success(let resultMovies):
 					self.isFetchInProgress = false
 					
-
+					
 					if let movies = resultMovies.movies {
 						self.currentPage += 1
 						self.moviesList.append(contentsOf: movies)
 					}
-
-					//self.moviesList.append(contentsOf: resultMovies.movies)
 					
 					self.total = resultMovies.totalPages
-					//
+					
 					for (index, value) in self.moviesList.enumerated() {
 						self.moviesList[index].genre.removeAll()
 						let genres = self.genresList.filter { list in
@@ -145,19 +126,16 @@ class MoviesListPresenter: MoviesListPresenterProtocol {
 					}
 					self.view.succes()
 				case .failure(let error):
-					print(url)
 					self.isFetchInProgress = false
 					self.view.failure(error: error)
 				}
 			}
-			
 		}
 	}
-
-	
 }
-extension MoviesListPresenter: MoviesListInput {
 
+extension MoviesListPresenter: MoviesListInput {
+	
 	func didOpenSearchController() {
 		router.openSearchController(animated: true)
 	}
@@ -166,8 +144,7 @@ extension MoviesListPresenter: MoviesListInput {
 		router.openCommonMenu(animated: true)
 	}
 	func didPressOpenDetail(at index: Int) {
-		let id = moviesList[index].id
-		router.openMovieDetail(id: id, animated: true)
+		router.openMovieDetail(model: moviesList[index], animated: true)
 	}
 	
 	
@@ -196,11 +173,11 @@ extension MoviesListPresenter: MoviesListRouterOutput {
 		}
 		
 		menuIsShow = true
-
+		
 		let menuVC : UIViewController = commonMenu
-
-		view!.menuView.addSubview(menuVC.view)
-
+		
+		view.menuView.addSubview(menuVC.view)
+		
 		menuVC.view.translatesAutoresizingMaskIntoConstraints = false
 		menuVC.view.topAnchor.constraint(equalTo: view.menuView.safeAreaLayoutGuide.topAnchor).isActive = true
 		menuVC.view.leadingAnchor.constraint(equalTo: view.menuView.leadingAnchor).isActive = true
@@ -208,11 +185,11 @@ extension MoviesListPresenter: MoviesListRouterOutput {
 		menuVC.view.bottomAnchor.constraint(equalTo: view.menuView.bottomAnchor).isActive = true
 		menuVC.view.frame.origin.x = -UIScreen.main.bounds.size.width
 		menuVC.view.layoutIfNeeded()
-
+		
 		let color = UIColor.systemGray
 		menuVC.view.backgroundColor = color.withAlphaComponent(0)
 		UIView.animate(withDuration: 0.3, animations: { () -> Void in
-
+			
 			menuVC.view.frame.origin.x = 0
 			
 		},completion: {_ in
@@ -224,11 +201,11 @@ extension MoviesListPresenter: MoviesListRouterOutput {
 		lSwipe.direction = .left
 		menuVC.view.addGestureRecognizer(lSwipe)
 	}
-	@objc func leftSwipe() {
+	@objc private func leftSwipe() {
 		showCommonMenu(animated: true)
 	}
 	
 }
-	
-	
+
+
 

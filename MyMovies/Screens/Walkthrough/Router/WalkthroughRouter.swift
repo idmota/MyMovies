@@ -5,12 +5,11 @@
 //  Created by link on 12/21/20.
 //
 
-import Foundation
 import UIKit
 
-class WalkthroughRouter: WalkthroughRouterInput {
-
-
+final class WalkthroughRouter: WalkthroughRouterInput {
+	
+	
 	let router: RouterImp
 	
 	internal init(router: RouterImp) {
@@ -18,10 +17,10 @@ class WalkthroughRouter: WalkthroughRouterInput {
 	}
 	
 	func openMainViewController() {
-
-		let projectDetails = MoviesListModelFactory.make(router: router, model: CommonsMenuModel(name: "Top Movies", icon: nil, category: .now_playing))
+		
+		let projectDetails = MoviesListModelFactory.make(router: router, model: CommonsMenuModel(name: "Menu.TodayInCinema".localized, icon: nil, category: .now_playing))
 		router.setRoot(projectDetails, animated: true)
-
+		
 	}
 }
 

@@ -6,26 +6,26 @@
 //
 import UIKit
 
-class WalkthroughCollectionViewCell: UICollectionViewCell {
-
+final class WalkthroughCollectionViewCell: UICollectionViewCell {
+	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		setupView()
-
+		
 	}
-
-	lazy var bgImage:UIImageView = {
+	
+	private lazy var bgImage:UIImageView = {
 		let iv = UIImageView()
 		iv.contentMode = .scaleAspectFill
 		return iv
 	}()
-	lazy var gradientLayer: CAGradientLayer = {
+	private lazy var gradientLayer: CAGradientLayer = {
 		let gL = CAGradientLayer()
 		
 		return gL
 	}()
 	
-	lazy var gradientView: UIView = {
+	private lazy var gradientView: UIView = {
 		let v = UIView()
 		return v
 	}()
@@ -35,7 +35,7 @@ class WalkthroughCollectionViewCell: UICollectionViewCell {
 	}
 	func make(model:WalkthroughModel) {
 		contentView.backgroundColor = model.bGColor
-
+		
 		bgImage.image = model.bgImage
 		textLabel.text = model.title
 		textSubLabel.text = model.subTitle
@@ -46,19 +46,19 @@ class WalkthroughCollectionViewCell: UICollectionViewCell {
 		gradientLayer.colors?.removeAll()
 		gradientLayer.colors =  model.gradient.colors.map({ $0.cgColor })
 		gradientLayer.locations = model.gradient.location
-
+		
 		gradientView.layer.sublayers?.removeAll(where: {$0 is CAGradientLayer})
 		gradientView.layer.insertSublayer(gradientLayer, at: 1)
 		
-
+		
 	}
-	lazy var textLabel: UILabel = {
+	private lazy var textLabel: UILabel = {
 		let l = UILabel()
 		l.font = UIFont.systemFont(ofSize: 30, weight: .bold)
 		l.textColor = .white
 		return l
 	}()
-	lazy var textSubLabel: UILabel = {
+	private lazy var textSubLabel: UILabel = {
 		let l = UILabel()
 		l.font = UIFont.systemFont(ofSize: 30)
 		l.textColor = .white
@@ -91,14 +91,14 @@ class WalkthroughCollectionViewCell: UICollectionViewCell {
 			gradientView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
 			gradientView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 			gradientView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-
+			
 			
 			textLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: Space.quadruple+Space.double),
 			textLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
 			
 			textSubLabel.topAnchor.constraint(equalTo: textLabel.bottomAnchor, constant: Space.single),
 			textSubLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-
+			
 		]
 		NSLayoutConstraint.activate(array)
 	}

@@ -7,25 +7,18 @@
 
 import UIKit
 
-class SearchRouter: SearchRouterInput {
-
+final class SearchRouter: NSObject {
+	
 	let routers: RouterImp
 	weak var presenter: SearchPresenter?
 	
 	init(router: RouterImp) {
 		self.routers = router
 	}
-
-	func openMovieDetail(id:Int, animated:Bool) {
-		
-		let rootViewController = UINavigationController()
-
-		let childRouter = RouterImp(rootController: rootViewController)
-		let projectDetails = MovieDetailBuilder.make(router: childRouter, idMovie: id)
-		print("push")
-		let vc = MainViewController(0)
+}
+extension SearchRouter: SearchRouterInput{
+	func openMovieDetail(model:MovieModel, animated:Bool) {
+		let projectDetails = MovieDetailBuilder.make(router: routers, model: model)
 		routers.push(projectDetails, animated: true)
-//		(presenter?.view as? UIViewController)?.navigationController?.pushViewController(vc, animated: true)
 	}
-	
 }

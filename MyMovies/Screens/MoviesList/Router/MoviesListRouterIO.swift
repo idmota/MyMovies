@@ -6,8 +6,10 @@
 //
 
 import Foundation
+
 protocol MoviesListRouterInput: class {
 	func openMovieDetail(id:Int, animated:Bool)
+	func openMovieDetail(model:MovieModel, animated:Bool)
 	func openCommonMenu(animated:Bool)
 	func openSearchController(animated:Bool)
 }

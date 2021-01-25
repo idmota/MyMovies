@@ -16,26 +16,35 @@ protocol SearchPresenterInput: class {
 	func movie(at index: Int) -> MovieModel 
 }
 
-
-protocol SearchProtocol: class { // for controller
-
+protocol SearchProtocol: class {
+	
 	func succes()
 	func failure(error:Error)
 	
-	
 }
 
-class SearchPresenter:SearchPresenterInput {
-
+final class SearchPresenter:NSObject {
 	private var moviesList: [MovieModel] = []
 	private var currentPage:Int = 1
 	private var total:Int = 1
 	private var isFetchInProgress = false
 	private var searchText:String!
 	
-	weak var view:SearchProtocol?
+	unowned var view:SearchProtocol
 	let networkService: NetworkService
 	let router: SearchRouterInput
+	
+	
+	init(view:SearchProtocol, networkService: NetworkService, router: SearchRouterInput) {
+		self.view = view
+		self.networkService = networkService
+		self.router = router
+		super.init()
+	}
+	
+}
+extension SearchPresenter: SearchPresenterInput {
+	
 	
 	var totalCount: Int {
 		return total
@@ -48,17 +57,11 @@ class SearchPresenter:SearchPresenterInput {
 	func movie(at index: Int) -> MovieModel {
 		return moviesList[index]
 	}
-	required init(view:SearchProtocol, networkService: NetworkService, router: SearchRouterInput) {
-		self.view = view
-		self.networkService = networkService
-		self.router = router
-	}
 	
 	func didPressOpenDetail(at index: Int) {
-		let id = moviesList[index].id
-		router.openMovieDetail(id: id, animated: true)
+		router.openMovieDetail(model: moviesList[index], animated: true)
 	}
-
+	
 	func didPressSearchButton(searchText:String) {
 		self.searchText = searchText
 		getMovies(newRequest: true)
@@ -98,12 +101,10 @@ class SearchPresenter:SearchPresenterInput {
 						self.moviesList.append(contentsOf: movies)
 					}
 					
-					self.view?.succes()
+					self.view.succes()
 				case .failure(let error):
-					print(url)
 					self.isFetchInProgress = false
-//					self.moviesList.removeAll()
-					self.view?.failure(error: error)
+					self.view.failure(error: error)
 				}
 			}
 		}

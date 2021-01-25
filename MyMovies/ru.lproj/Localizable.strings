@@ -13,8 +13,18 @@
 "Movie.Production" = "Продолжается";
 "Movie.Released" = "Выпущен";
 "Movie.Canceled" = "Отменено";
+"Movie.ReliseDate.Title" = "Дата выхода";
 
-"Sustem.unknown" = "Неизвестно";
+"System.unknown" = "Неизвестно";
+"System.Next" = "Дальше";
+"System.Back" = "Назад";
+"System.GetStared" = "Начать";
 
 "placeholder.searchtitle" = "Не найден, фильм:";
 "placeholder.title" = "Введите текст для поиска";
+"Search.InputField" = "Поиск фильма";
+
+"Menu.TodayInCinema" = "Сегодня в кино";
+"Menu.Popular" = "Популярное";
+"Menu.TopRated" = "Топ рейтинга";
+"Menu.Upcoming" = "Скоро в прокате";

@@ -7,27 +7,12 @@
 
 import UIKit
 
-class SearchView: UITextField {
+final class SearchView: UITextField {
+	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
-		self.backgroundColor = .systemGray5 //
-		self.placeholder = "Search movie"
-		self.attributedPlaceholder =  NSAttributedString(string: self.placeholder!, attributes: [NSAttributedString.Key.foregroundColor: ColorMode.colorButton])
-		self.returnKeyType = .search
-
-		self.layer.cornerRadius = 8.0
-		self.layer.masksToBounds = true
-		
-		translatesAutoresizingMaskIntoConstraints = false
-
-		let searchIcon = UIImage(systemName: "magnifyingglass")?.withTintColor(ColorMode.colorButton, renderingMode: .alwaysOriginal)
-		let imageView = UIImageView(image: searchIcon)
-		leftView = imageView
-		leftViewMode = .always
-		clearButtonMode = .whileEditing
-
+		setupView()
 	}
-
 	override var intrinsicContentSize: CGSize {
 		return UIView.layoutFittingExpandedSize
 	}
@@ -35,7 +20,7 @@ class SearchView: UITextField {
 		fatalError("init(coder:) has not been implemented")
 	}
 	override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
-		 let rect = super.leftViewRect(forBounds: bounds)
+		let rect = super.leftViewRect(forBounds: bounds)
 		return rect.offsetBy(dx: Space.single, dy: 0)
 	}
 	override func textRect(forBounds bounds: CGRect) -> CGRect {
@@ -46,5 +31,22 @@ class SearchView: UITextField {
 		let rect = super.editingRect(forBounds: bounds)
 		return rect.offsetBy(dx: Space.single, dy: 0)
 	}
-	
+	private func setupView() {
+		self.backgroundColor = .systemGray5
+		self.placeholder = "Search.InputField".localized
+		self.attributedPlaceholder =  NSAttributedString(string: self.placeholder!, attributes: [NSAttributedString.Key.foregroundColor: ColorMode.colorButton])
+		self.returnKeyType = .search
+		
+		self.layer.cornerRadius = 8.0
+		self.layer.masksToBounds = true
+		
+		translatesAutoresizingMaskIntoConstraints = false
+		
+		let searchIcon = UIImage(systemName: "magnifyingglass")?.withTintColor(ColorMode.colorButton, renderingMode: .alwaysOriginal)
+		let imageView = UIImageView(image: searchIcon)
+		leftView = imageView
+		leftViewMode = .always
+		clearButtonMode = .whileEditing
+		
+	}
 }

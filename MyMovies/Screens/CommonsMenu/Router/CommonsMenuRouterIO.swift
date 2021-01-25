@@ -4,7 +4,6 @@
 //
 //  Created by link on 12/21/20.
 //
-
 import Foundation
 
 protocol CommonsMenuRouterInput {

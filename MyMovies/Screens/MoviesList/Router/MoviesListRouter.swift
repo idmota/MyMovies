@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MoviesListRouter: MoviesListRouterInput {
+final class MoviesListRouter: MoviesListRouterInput {
 	
 	let router: RouterImp
 	weak var presenter: MoviesListPresenter?
@@ -21,24 +21,18 @@ class MoviesListRouter: MoviesListRouterInput {
 	}
 	func openSearchController(animated:Bool) {
 		
-		let rootViewController = UINavigationController()
-
-		let childRouter = RouterImp(rootController: rootViewController)
-		let projectDetails = SearchModelFactory.make(router:childRouter)
-		
+		let projectDetails = SearchModelFactory.make(router:router)
 		router.push(projectDetails, animated: true)
-
+		
 	}
 	func openMovieDetail(id:Int, animated:Bool) {
 		
-		let rootViewController = UINavigationController()
-
-		let childRouter = RouterImp(rootController: rootViewController)
-		let projectDetails = MovieDetailBuilder.make(router: childRouter, idMovie: id)
-		
+		let projectDetails = MovieDetailBuilder.make(router: router, idMovie: id)
 		router.push(projectDetails, animated: animated)
-
+		
 	}
-
-	
+	func openMovieDetail(model: MovieModel, animated: Bool) {
+		let projectDetails = MovieDetailBuilder.make(router: router, model: model)
+		router.push(projectDetails, animated: animated)
+	}
 }

@@ -22,7 +22,6 @@ class NetworkService:NetworkServiseProtocol {
 			if let error = error {
 				completion(.failure(error))
 			}
-			
 			do {
 				let retData:T =  try JSONDecoder().decode(T.self,
 														  from: data!)
@@ -35,7 +34,7 @@ class NetworkService:NetworkServiseProtocol {
 		
 	}
 	func downloadItemImageForSearchResult(imageURL: URL?, Repeated: Bool,
-												  completion: @escaping (_ result:UIImage?) -> Void) {
+										  completion: @escaping (_ result:UIImage?) -> Void) {
 		
 		if let urlOfImage = imageURL {
 			
@@ -43,8 +42,6 @@ class NetworkService:NetworkServiseProtocol {
 				with: urlOfImage as URL, completionHandler: { [weak self] url, response, error in
 					DispatchQueue.main.async() {
 						if error == nil, let url = url, let data = NSData(contentsOf: url), let image = UIImage(data: data as Data) {
-							
-							//							let imageToCache = image
 							completion(image)
 							
 						} else {
@@ -54,10 +51,9 @@ class NetworkService:NetworkServiseProtocol {
 									self.downloadItemImageForSearchResult(imageURL: imageURL, Repeated: false, completion: completion)
 								}
 							} else {
-								print(urlOfImage.description)
 								completion(nil)
 							}
-
+							
 						}
 					}
 					

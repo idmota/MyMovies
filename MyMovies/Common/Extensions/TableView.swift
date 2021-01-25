@@ -11,7 +11,7 @@ extension UITableView {
 		let identifier = String(describing: T.self)
 		self.register(T.self, forCellReuseIdentifier: identifier)
 	}
-
+	
 	func dequeueReusableCell<T>(for indexPath: IndexPath) -> T where T: UITableViewCell {
 		let identifier = String(describing: T.self)
 		let defaultCell = dequeueReusableCell(withIdentifier: identifier, for: indexPath)
@@ -27,7 +27,7 @@ extension UICollectionView {
 		let identifier = String(describing: T.self)
 		self.register(T.self, forCellWithReuseIdentifier: identifier)
 	}
-
+	
 	func dequeueReusableCell<T>(for indexPath: IndexPath) -> T where T: UICollectionViewCell {
 		let identifier = String(describing: T.self)
 		let defaultCell = dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
