@@ -7,7 +7,7 @@
 - Realm (добавить сохранение фаворитов)
 - URLSession, JSONDecoder
 - AutoLayout
-- MVP
+- MVP + Router
 - SOLID
 
 > Сделано без использования Storyboard
