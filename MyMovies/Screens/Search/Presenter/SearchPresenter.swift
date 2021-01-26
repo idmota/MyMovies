@@ -13,14 +13,13 @@ protocol SearchPresenterInput: class {
 	func getNextPage()
 	var currentCount:Int {get}
 	var totalCount: Int {get}
-	func movie(at index: Int) -> MovieModel 
+	func movie(at index: Int) -> MovieModel
 }
 
 protocol SearchProtocol: class {
 	
 	func succes()
 	func failure(error:Error)
-	
 }
 
 final class SearchPresenter:NSObject {
@@ -28,7 +27,7 @@ final class SearchPresenter:NSObject {
 	private var currentPage:Int = 1
 	private var total:Int = 1
 	private var isFetchInProgress = false
-	private var searchText:String!
+	private var searchText:String = ""
 	
 	unowned var view:SearchProtocol
 	let networkService: NetworkService
@@ -44,7 +43,6 @@ final class SearchPresenter:NSObject {
 	
 }
 extension SearchPresenter: SearchPresenterInput {
-	
 	
 	var totalCount: Int {
 		return total

@@ -12,8 +12,13 @@ extension Date {
 		let dateFormatter = DateFormatter()
 		dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
 		dateFormatter.dateFormat = "yyyy-MM-dd"
-		let date = dateFormatter.date(from:fromString)!
-		self = date
+		if let date = dateFormatter.date(from:fromString) {
+			self = date
+		} else {
+			self.init()
+		}
+		
+	
 	}
 	var toYearString:String  {
 		let formatter1 = DateFormatter()

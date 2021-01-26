@@ -30,7 +30,7 @@ final class PlaceholderView: UIView {
 	// MARK: UI properties
 	private lazy var titleLabel: UILabel = {
 		let label = UILabel()
-		label.numberOfLines = 5
+		label.numberOfLines = 0
 		label.textAlignment = .center
 		label.font = UIFont.preferredFont(forTextStyle: .title1)
 		label.adjustsFontForContentSizeCategory = true
@@ -68,12 +68,13 @@ final class PlaceholderView: UIView {
 		}
 		
 		NSLayoutConstraint.activate([
-			titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Space.triple),
-			titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Space.triple),
-			titleLabel.bottomAnchor.constraint(equalTo: centerYAnchor),
-			
-			subtitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Space.triple),
-			subtitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Space.triple),
+			titleLabel.leadingAnchor.constraint(lessThanOrEqualTo: leadingAnchor, constant: Space.triple),
+			titleLabel.trailingAnchor.constraint(greaterThanOrEqualTo: trailingAnchor, constant: -Space.triple),
+			titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+			titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+		
+			subtitleLabel.leadingAnchor.constraint(lessThanOrEqualTo: leadingAnchor, constant: Space.triple),
+			subtitleLabel.trailingAnchor.constraint(greaterThanOrEqualTo: trailingAnchor, constant: -Space.triple),
 			subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Space.single)
 		])
 	}

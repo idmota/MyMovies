@@ -20,7 +20,7 @@ protocol DetailSegmentedViewOutput:class {
 final class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 	
 	
-	private var segmentData: [SegmentDetailModel]!
+	private var segmentData: [SegmentDetailModel] = []
 	
 	func fillSegmentViewFromModel(model: MovieDetailModel) {
 		
@@ -82,7 +82,7 @@ final class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 	}
 	private lazy var segmentView:UIView = {
 		let v = UIView()
-		
+		v.backgroundColor = ColorMode.background
 		segmentData.forEach {
 			$0.view.translatesAutoresizingMaskIntoConstraints = false
 			v.addSubview($0.view)
@@ -142,6 +142,7 @@ final class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 	private func addVideoView(_ videoModel:[VideoModel], widthSizeVideo:CGFloat) {
 		videoModel.forEach {
 			let yp = YTPlayerView()
+			yp.backgroundColor = ColorMode.background
 			yp.load(withVideoId: $0.key)
 			yp.delegate = self
 			yp.widthAnchor.constraint(equalToConstant: widthSizeVideo).isActive = true
@@ -152,6 +153,9 @@ final class DetailSegmentedView: UIView, DetailSegmentedViewInput {
 	deinit {
 		stackView.subviews.forEach{
 			($0 as? YTPlayerView)?.stopVideo()
+		}
+		stackView.subviews.forEach{
+			$0.removeFromSuperview()
 		}
 	}
 	

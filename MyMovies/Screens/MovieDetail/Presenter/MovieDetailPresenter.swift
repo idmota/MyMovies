@@ -17,9 +17,9 @@ protocol MovieDetailPresenterProtocol:class {
 	var movie: MovieDetailModel? { get }
 	init(view: MovieDetailProtocol, networkService: NetworkService, idMovie: Int)
 	func dowloadPictures(pathURL:URL?, completion: @escaping (_ result:UIImage?) -> Void)
+	func didLoadView()
 }
 class MovieDetailPresenter:MovieDetailPresenterProtocol {
-	
 	
 	var movie: MovieDetailModel?
 	private var idMovie: Int
@@ -32,17 +32,18 @@ class MovieDetailPresenter:MovieDetailPresenterProtocol {
 		self.idMovie = idMovie
 		self.view = view
 		self.networkService = networkService
-		
-		getInfoMovie()
 	}
 	required init(view: MovieDetailProtocol, networkService: NetworkService, model: MovieModel) {
 		self.idMovie = model.id
 		self.model = model
 		self.view = view
 		self.networkService = networkService
-		
+	}
+	
+	func didLoadView() {
 		getInfoMovie()
 	}
+	
 	private func getInfoMovie() {
 		networkService?.getResponser(url:Url.getMovieFromId(self.idMovie),
 									 model: MovieDetailModel.self) { [weak self] result in

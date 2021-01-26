@@ -18,7 +18,7 @@ final class WalkthroughRouter: WalkthroughRouterInput {
 	
 	func openMainViewController() {
 		
-		let projectDetails = MoviesListModelFactory.make(router: router, model: CommonsMenuModel(name: "Menu.TodayInCinema".localized, icon: nil, category: .now_playing))
+		let projectDetails = MoviesListModelFactory.make(router: router, model: .now_playing)
 		router.setRoot(projectDetails, animated: true)
 		
 	}

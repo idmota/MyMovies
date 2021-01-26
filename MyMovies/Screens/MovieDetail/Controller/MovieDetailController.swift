@@ -8,7 +8,7 @@
 import UIKit
 
 final class MovieDetailController: UIViewController {
-	var presenter: MovieDetailPresenter!
+	var presenter: MovieDetailPresenter?
 	
 	init(model:MovieModel) {
 		super.init(nibName: nil, bundle: nil)
@@ -30,12 +30,11 @@ final class MovieDetailController: UIViewController {
 		
 		navigationController?.isNavigationBarHidden = true
 		
-		let dView = DetailView(delegate: self)
-		dView.fillViewFromModel(presenter.model!)
-		view = dView
-		
 		setupView()
+		presenter?.didLoadView()
+		
 	}
+	
 	override func viewDidDisappear(_ animated: Bool) {
 		navigationController?.isNavigationBarHidden = false
 		super.viewDidDisappear(animated)
@@ -75,6 +74,12 @@ final class MovieDetailController: UIViewController {
 	}()
 	
 	private func setupView() {
+		let dView = DetailView(delegate: self)
+		if let model = presenter?.model {
+			dView.fillViewFromModel(model)
+		}
+		view = dView
+		
 		[
 			backButton,
 			shareButton
@@ -111,7 +116,9 @@ final class MovieDetailController: UIViewController {
 		
 	}
 	@objc private func shareAction() {
-		let activityViewController = UIActivityViewController(activityItems: [presenter.movie!.originalTitle], applicationActivities: .none)
+		guard let model = presenter?.movie else {return}
+		
+		let activityViewController = UIActivityViewController(activityItems: [model.originalTitle], applicationActivities: .none)
 		self.present(activityViewController, animated: true, completion: nil)
 	}
 	
@@ -120,16 +127,16 @@ final class MovieDetailController: UIViewController {
 extension MovieDetailController: MovieDetailViewDelegateOutput {
 	
 	func dowloadPictures(pathURL: URL?, completion: @escaping (UIImage?) -> Void) {
-		presenter.dowloadPictures(pathURL: pathURL, completion: completion)
+		presenter?.dowloadPictures(pathURL: pathURL, completion: completion)
 	}
 }
 
 extension MovieDetailController: MovieDetailProtocol {
 	func succes() {
-		guard let vv = view as? MovieDetailViewDelegateInput else {
+		guard let vv = view as? MovieDetailViewDelegateInput, let movie = presenter?.movie else {
 			return
 		}
-		vv.fillViewFromModel(model:presenter.movie!)
+		vv.fillViewFromModel(model:movie)
 		
 	}
 	

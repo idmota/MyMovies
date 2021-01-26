@@ -9,7 +9,7 @@ import UIKit
 
 final class SearchTableViewController: UIViewController {
 	
-	var presenter: SearchPresenterInput!
+	var presenter: SearchPresenterInput?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -108,30 +108,38 @@ extension SearchTableViewController: UICollectionViewDataSourcePrefetching, UICo
 	
 	func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
 		if indexPaths.contains(where: isLoadingCell) {
-			presenter.getNextPage()
+			presenter?.getNextPage()
 		}
 	}
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		collectionView.deselectItem(at: indexPath, animated: true)
-		presenter.didPressOpenDetail(at: indexPath.row)
+		presenter?.didPressOpenDetail(at: indexPath.row)
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		
-		placeholder.isHidden = presenter.currentCount != 0
-		
-		return presenter.currentCount
+		guard let lPresenter = presenter else {
+			placeholder.isHidden = false
+			return 0
+			
+		}
+		placeholder.isHidden = lPresenter.currentCount != 0
+		return lPresenter.currentCount
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		let movie = presenter!.movie(at: indexPath.row)
+		
 		let cell:MoviesListCollectionViewOneCell = collectionView.dequeueReusableCell(for: indexPath)
+		guard let lPresenter = presenter else {return cell}
+		let movie = lPresenter.movie(at: indexPath.row)
+
 		cell.fill(model:movie)
 		return cell
 	}
 	
 	func isLoadingCell(for indexPath: IndexPath) -> Bool {
-		return indexPath.row >= presenter!.currentCount-1
+		guard let lPresenter = presenter else {return false}
+		return indexPath.row >= lPresenter.currentCount-1
 	}
 	
 }
@@ -152,7 +160,7 @@ extension SearchTableViewController: SearchProtocol {
 extension SearchTableViewController: UITextFieldDelegate {
 	func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
 		if let searchText = textField.text {
-			presenter.didPressSearchButton(searchText: searchText)
+			presenter?.didPressSearchButton(searchText: searchText)
 			placeholder.title = "placeholder.searchtitle".localized + " " + searchText
 		}
 	}
