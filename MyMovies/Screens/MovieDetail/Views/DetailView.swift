@@ -214,6 +214,8 @@ final class DetailView:UIView {
 		let iv = UIImageView(image: i)
 		iv.layer.cornerRadius = 4.56
 		iv.clipsToBounds = true
+		iv.backgroundColor = ColorMode.background
+
 		iv.addSubview(backGradientView)
 		return iv
 	}()
@@ -238,7 +240,6 @@ final class DetailView:UIView {
 	
 	private lazy var titleLabel: UILabel = {
 		let l = UILabel()
-		
 		l.font = UIFont.systemFont(ofSize: 24)
 		l.numberOfLines = 0
 		l.textAlignment = .center
@@ -249,6 +250,7 @@ final class DetailView:UIView {
 	}()
 	private lazy var origTitleLabel: UILabel = {
 		let l = UILabel()
+		l.backgroundColor = ColorMode.background
 		l.textColor = .systemGray
 		l.textAlignment = .left
 		l.numberOfLines = 0
@@ -258,6 +260,7 @@ final class DetailView:UIView {
 	}()
 	private lazy var genresLabel: UILabel = {
 		let l = UILabel()
+		l.backgroundColor = ColorMode.background
 		l.numberOfLines = 0
 		l.font = UIFont.systemFont(ofSize: 12)
 		l.textColor = .gray
@@ -267,6 +270,7 @@ final class DetailView:UIView {
 	
 	private lazy var dateReliseAndStatusLabel: UILabel = {
 		let l = UILabel()
+		l.backgroundColor = ColorMode.background
 		l.font = UIFont.systemFont(ofSize: 12)
 		l.textColor = .gray
 		
@@ -274,10 +278,12 @@ final class DetailView:UIView {
 	}()
 	private lazy var statusLabel: UILabel = {
 		let l = UILabel()
+		l.backgroundColor = ColorMode.background
 		return l
 	}()
 	private lazy var voteAverageLabel: UILabel = {
 		let l = UILabel()
+		l.backgroundColor = ColorMode.background
 		l.textColor = .systemRed
 		return l
 	}()
@@ -285,7 +291,7 @@ final class DetailView:UIView {
 	
 	private lazy var voteImage: UIImageView = {
 		let vi = UIImageView()
-		
+		vi.backgroundColor = ColorMode.background
 		vi.image = UIImage(systemName: "star.fill")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal)
 		vi.tintColor = .systemGray2
 		return vi

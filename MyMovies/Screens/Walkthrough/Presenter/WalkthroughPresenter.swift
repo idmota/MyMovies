@@ -10,23 +10,35 @@ protocol WalkthroughPresenterProtocol: class {
 	var totalCount:Int { get }
 	func walkthrough(at index: Int) -> WalkthroughModel
 	func didOpenMainViewController()
+	func didLoadView()
 }
 
 final class WalkthroughPresenter: NSObject {
 	
-	let router: WalkthroughRouterInput!
+	let router: WalkthroughRouterInput
 	unowned var view:WalkthroughController
-	private var cellsModels:[WalkthroughModel]!
+	private var cellsModels:[WalkthroughModel] = []
 	
 	init(view:WalkthroughController, router:WalkthroughRouterInput) {
 		self.view = view
 		self.router = router
 		
 		super.init()
-		
-		fillModel()
 	}
-	private func fillModel() {
+
+}
+
+extension WalkthroughPresenter:WalkthroughPresenterProtocol {
+	
+	var totalCount: Int {
+		return self.cellsModels.count
+	}
+	
+	func walkthrough(at index: Int) -> WalkthroughModel {
+		return self.cellsModels[index]
+	}
+	
+	func didLoadView() {
 		self.cellsModels = [
 			WalkthroughModel(bGColor: .black, bgImage: UIImage(named: "bg1")!,
 							 title: "Get the first", subTitle: "Movie &TV information",
@@ -52,19 +64,6 @@ final class WalkthroughPresenter: NSObject {
 			
 		]
 	}
-}
-
-extension WalkthroughPresenter:WalkthroughPresenterProtocol {
-	
-	var totalCount: Int {
-		return self.cellsModels.count
-	}
-	
-	func walkthrough(at index: Int) -> WalkthroughModel {
-		return self.cellsModels[index]
-	}
-	
-	
 	func didOpenMainViewController() {
 		self.router.openMainViewController()
 	}

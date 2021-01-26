@@ -142,6 +142,7 @@ class MoviesListCollectionViewOneCell: UICollectionViewCell {
 		let v = UILabel()
 		v.numberOfLines = 1
 		v.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+		v.backgroundColor = ColorMode.background
 		v.translatesAutoresizingMaskIntoConstraints = false
 		return v
 	}()
@@ -150,6 +151,7 @@ class MoviesListCollectionViewOneCell: UICollectionViewCell {
 		v.font = UIFont.systemFont(ofSize: 9)
 		v.textColor = .gray
 		v.numberOfLines = 0
+		v.backgroundColor = ColorMode.background
 		v.translatesAutoresizingMaskIntoConstraints = false
 		return v
 	}()
@@ -157,6 +159,7 @@ class MoviesListCollectionViewOneCell: UICollectionViewCell {
 		let v = UILabel()
 		v.font = UIFont.systemFont(ofSize: 9)
 		v.numberOfLines = 0
+		v.backgroundColor = ColorMode.background
 		v.translatesAutoresizingMaskIntoConstraints = false
 		return v
 	}()
@@ -171,7 +174,6 @@ class MoviesListCollectionViewOneCell: UICollectionViewCell {
 		let v = UILabel()
 		v.textColor = .white
 		v.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-		
 		return v
 	}()
 	
@@ -180,7 +182,7 @@ class MoviesListCollectionViewOneCell: UICollectionViewCell {
 		l.numberOfLines = 0
 		l.textColor = .gray
 		l.font = UIFont.systemFont(ofSize: 10)
-		
+		l.backgroundColor = ColorMode.background
 		return l
 	}()
 	
@@ -275,7 +277,7 @@ class MoviesListCollectionViewOneCell: UICollectionViewCell {
 								}
 							}}
 					})
-				self.downloadTask!.resume()
+				self.downloadTask?.resume()
 			}
 		}
 	}

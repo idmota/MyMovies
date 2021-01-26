@@ -189,7 +189,7 @@ class MoviesListCollectionViewTwoCell: UICollectionViewCell {
 								}
 							}}
 					})
-				self.downloadTask!.resume()
+				self.downloadTask?.resume()
 			}
 		}
 	}

@@ -34,7 +34,7 @@ final class SearchView: UITextField {
 	private func setupView() {
 		self.backgroundColor = .systemGray5
 		self.placeholder = "Search.InputField".localized
-		self.attributedPlaceholder =  NSAttributedString(string: self.placeholder!, attributes: [NSAttributedString.Key.foregroundColor: ColorMode.colorButton])
+		self.attributedPlaceholder =  NSAttributedString(string: self.placeholder ?? "", attributes: [NSAttributedString.Key.foregroundColor: ColorMode.colorButton])
 		self.returnKeyType = .search
 		
 		self.layer.cornerRadius = 8.0

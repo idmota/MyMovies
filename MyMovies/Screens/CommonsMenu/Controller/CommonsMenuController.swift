@@ -9,11 +9,12 @@ import UIKit
 
 final class CommonsMenuController: UIViewController {
 	
-	var presenter: CommonsMenuPresenter!
+	var presenter: CommonsMenuPresenter?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setipView()
+		presenter?.didLoadView()
 	}
 	
 	private func setipView() {
@@ -49,18 +50,20 @@ final class CommonsMenuController: UIViewController {
 }
 extension CommonsMenuController:CommonsMenuControllerProtocol, UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return presenter.totalCount
+		guard let lPresenter = presenter else {return 0}
+		return lPresenter.totalCount
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell:CommonsMenuTableViewCell = tableView.dequeueReusableCell(for: indexPath)
-		cell.make(menuModel: presenter.itemMenu(at: indexPath.row))
+		guard let lPresenter = presenter else {return cell}
+		cell.make(menuModel: lPresenter.itemMenu(at: indexPath.row))
 		
 		return cell
 	}
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: true)
-		presenter.didOpenScreen(at: indexPath.row)
+		presenter?.didOpenScreen(at: indexPath.row)
 	}
 	func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 		return "MyMovie"

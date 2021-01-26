@@ -11,6 +11,8 @@ protocol MoviesListInput: class {
 	func didPressOpenDetail(at index: Int)
 	func didOpenCommonMenu()
 	func didOpenSearchController()
+	func didLoadView()
+
 }
 
 
@@ -38,7 +40,7 @@ final class MoviesListPresenter:NSObject, MoviesListPresenterProtocol {
 	unowned var view:MoviesListProtocol
 	var networkService:NetworkService
 	let router: MoviesListRouterInput
-	var commonMenu: CommonsMenuController!
+	var commonMenu: CommonsMenuController?
 	let urlModel: CommonsMenuModel
 	
 	
@@ -67,11 +69,9 @@ final class MoviesListPresenter:NSObject, MoviesListPresenterProtocol {
 		self.urlModel = urlModel
 		self.router = router
 		super.init()
-		
-		getGenresList()
-		getMoviesList()
-		
+				
 	}
+	
 	private func getGenresList() {
 		let url = Url.getFenresList()
 		networkService.getResponser(url:url,
@@ -99,7 +99,7 @@ final class MoviesListPresenter:NSObject, MoviesListPresenterProtocol {
 		}
 		
 		self.isFetchInProgress = true
-		let url = Url.getUrlFromCategory(urlModel.category, page: currentPage)
+		let url = Url.getUrlFromCategory(urlModel, page: currentPage)
 		networkService.getResponser(url:url,
 									model: MoviesListModel.self) { [weak self] result in
 			guard let self = self else {return}
@@ -135,6 +135,10 @@ final class MoviesListPresenter:NSObject, MoviesListPresenterProtocol {
 }
 
 extension MoviesListPresenter: MoviesListInput {
+	func didLoadView() {
+		getGenresList()
+		getMoviesList()
+	}
 	
 	func didOpenSearchController() {
 		router.openSearchController(animated: true)
@@ -174,8 +178,8 @@ extension MoviesListPresenter: MoviesListRouterOutput {
 		
 		menuIsShow = true
 		
-		let menuVC : UIViewController = commonMenu
-		
+		guard let menuVC = commonMenu else {return}
+	
 		view.menuView.addSubview(menuVC.view)
 		
 		menuVC.view.translatesAutoresizingMaskIntoConstraints = false

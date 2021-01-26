@@ -16,6 +16,7 @@ final class WalkthroughCollectionViewCell: UICollectionViewCell {
 	
 	private lazy var bgImage:UIImageView = {
 		let iv = UIImageView()
+		iv.backgroundColor = ColorMode.background
 		iv.contentMode = .scaleAspectFill
 		return iv
 	}()

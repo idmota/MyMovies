@@ -9,12 +9,13 @@ import UIKit
 
 final class WalkthroughController: UIViewController  {
 	
-	var presenter: WalkthroughPresenter!
+	var presenter: WalkthroughPresenter?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		navigationController?.isNavigationBarHidden = true
 		setupView()
+		presenter?.didLoadView()
 	}
 	
 	override func viewDidLayoutSubviews() {
@@ -106,7 +107,7 @@ final class WalkthroughController: UIViewController  {
 			
 		} else if pageControll.currentPage == pageControll.numberOfPages-1 {
 			// open main screen
-			presenter.didOpenMainViewController()
+			presenter?.didOpenMainViewController()
 		}
 		
 	}
@@ -141,13 +142,16 @@ final class WalkthroughController: UIViewController  {
 extension WalkthroughController: UICollectionViewDelegate, UICollectionViewDataSource {
 	
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		pageControll.numberOfPages = presenter.totalCount
-		return presenter.totalCount
+		guard let lPresenter = presenter else {return 0}
+
+		pageControll.numberOfPages = lPresenter.totalCount
+		return lPresenter.totalCount
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let cell:WalkthroughCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-		cell.make(model: presenter.walkthrough(at: indexPath.row))
+		guard let lPresenter = presenter else {return cell}
+		cell.make(model: lPresenter.walkthrough(at: indexPath.row))
 		
 		return cell
 	}

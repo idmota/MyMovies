@@ -17,6 +17,7 @@ final class MoviesListController: UIViewController {
 		navigationItem.title = presenter?.urlModel.name
 		navigationController?.isNavigationBarHidden = false
 		setupView()
+		presenter?.didLoadView()
 	}
 	
 	private func setupView() {
@@ -25,7 +26,7 @@ final class MoviesListController: UIViewController {
 		
 		let rSearch = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(showSearchBar))
 		rSearch.tintColor = ColorMode.colorButton
-		
+
 		
 		navigationItem.rightBarButtonItems = [rSearch, gridButton]
 		[
@@ -117,7 +118,7 @@ final class MoviesListController: UIViewController {
 	}
 	
 	@objc private func openMenu() {
-		presenter!.didOpenCommonMenu()
+		presenter?.didOpenCommonMenu()
 	}
 	
 	@objc private func clearCashe() {
@@ -129,7 +130,7 @@ final class MoviesListController: UIViewController {
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		collectionView.deselectItem(at: indexPath, animated: true)
-		presenter!.didPressOpenDetail(at: indexPath.row)
+		presenter?.didPressOpenDetail(at: indexPath.row)
 	}
 	
 }
@@ -154,24 +155,27 @@ extension MoviesListController:UICollectionViewDataSourcePrefetching, UICollecti
 	
 	func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
 		if indexPaths.contains(where: isLoadingCell) {
-			presenter!.getMoviesList()
+			presenter?.getMoviesList()
 		}
 	}
 	func numberOfSections(in collectionView: UICollectionView) -> Int {
 		return 1
 	}
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return presenter!.currentCount
+		guard let lPresenter = presenter else {return 0}
+		return lPresenter.currentCount
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		let movie = presenter!.movie(at: indexPath.row)
+		let movie = presenter?.movie(at: indexPath.row)
 		if oneColumn {
 			let cell:MoviesListCollectionViewOneCell = collectionView.dequeueReusableCell(for: indexPath)
+			guard let movie = movie else {return cell}
 			cell.fill(model:movie)
 			return cell
 		} else {
 			let cell:MoviesListCollectionViewTwoCell = collectionView.dequeueReusableCell(for: indexPath)
+			guard let movie = movie else {return cell}
 			cell.fill(model:movie)
 			return cell
 			
@@ -179,7 +183,8 @@ extension MoviesListController:UICollectionViewDataSourcePrefetching, UICollecti
 	}
 	
 	private func isLoadingCell(for indexPath: IndexPath) -> Bool {
-		return indexPath.row >= presenter!.currentCount-1
+		guard let lPresenter = presenter else {return false}
+		return indexPath.row >= lPresenter.currentCount-1
 	}
 	
 }
