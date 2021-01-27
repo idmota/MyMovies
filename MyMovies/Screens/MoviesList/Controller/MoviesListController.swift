@@ -148,7 +148,10 @@ extension MoviesListController: MoviesListProtocol {
 	func failure(error: Error) {
 		Logger.handleError(error)
 	}
-	
+	func downloadItemImageForSearchResult(imageURL: URL,
+										  completion: @escaping (_ result:Result<UIImage, Error>) -> Void) {
+		presenter?.downloadItemImageForSearchResult(imageURL: imageURL, completion: completion)
+	}
 	
 }
 extension MoviesListController:UICollectionViewDataSourcePrefetching, UICollectionViewDelegate, UICollectionViewDataSource {
@@ -171,17 +174,21 @@ extension MoviesListController:UICollectionViewDataSourcePrefetching, UICollecti
 		if oneColumn {
 			let cell:MoviesListCollectionViewOneCell = collectionView.dequeueReusableCell(for: indexPath)
 			guard let movie = movie else {return cell}
+			cell.delegate = self
 			cell.fill(model:movie)
+			cell.layoutSubviews()
 			return cell
 		} else {
 			let cell:MoviesListCollectionViewTwoCell = collectionView.dequeueReusableCell(for: indexPath)
 			guard let movie = movie else {return cell}
+			cell.delegate = self
 			cell.fill(model:movie)
+			cell.layoutSubviews()
 			return cell
 			
 		}
 	}
-	
+
 	private func isLoadingCell(for indexPath: IndexPath) -> Bool {
 		guard let lPresenter = presenter else {return false}
 		return indexPath.row >= lPresenter.currentCount-1

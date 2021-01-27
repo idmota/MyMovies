@@ -12,7 +12,8 @@ protocol MoviesListInput: class {
 	func didOpenCommonMenu()
 	func didOpenSearchController()
 	func didLoadView()
-
+	func downloadItemImageForSearchResult(imageURL: URL,
+										  completion: @escaping (_ result:Result<UIImage, Error>) -> Void)
 }
 
 
@@ -20,7 +21,8 @@ protocol MoviesListProtocol: class { // input
 	var menuView: UIView {get}
 	func succes()
 	func failure(error:Error)
-	
+	func downloadItemImageForSearchResult(imageURL: URL,
+										  completion: @escaping (_ result:Result<UIImage, Error>) -> Void)
 	
 }
 
@@ -150,7 +152,10 @@ extension MoviesListPresenter: MoviesListInput {
 	func didPressOpenDetail(at index: Int) {
 		router.openMovieDetail(model: moviesList[index], animated: true)
 	}
-	
+	func downloadItemImageForSearchResult(imageURL: URL,
+										  completion: @escaping (_ result:Result<UIImage, Error>) -> Void) {
+		networkService.downloadItemImageForSearchResult(imageURL: imageURL, completion: completion)
+	}
 	
 }
 extension MoviesListPresenter: MoviesListRouterOutput {

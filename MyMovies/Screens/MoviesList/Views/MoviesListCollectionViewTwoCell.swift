@@ -16,6 +16,8 @@ class MoviesListCollectionViewTwoCell: UICollectionViewCell {
 		static let height:CGFloat = 180 // 231
 		
 	}
+	weak var delegate: MoviesListProtocol?
+	private let imageCache = MyCache.sharedInstance
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -160,56 +162,35 @@ class MoviesListCollectionViewTwoCell: UICollectionViewCell {
 	}
 	
 	func downloadItemImageForSearchResult(imageURL: URL?) {
-		
 		if let urlOfImage = imageURL {
 			if let cachedImage = imageCache.object(forKey: urlOfImage.absoluteString as NSString){
 				self.imageView.image = cachedImage
 			} else {
-				let session = URLSession.shared
 				activityIndicator.startAnimating()
-				self.downloadTask = session.downloadTask(
-					with: urlOfImage as URL, completionHandler: { [weak self] url, response, error in
-						DispatchQueue.main.async() {
-							if error == nil, let url = url, let data = NSData(contentsOf: url), let image = UIImage(data: data as Data) {
-								
-								let imageToCache = image
-								
-								if let strongSelf = self{
-									
-									strongSelf.imageView.image = imageToCache
-									
-									strongSelf.imageCache.setObject(imageToCache, forKey: urlOfImage.absoluteString as NSString, cost: 1)
-									strongSelf.activityIndicator.stopAnimating()
-								}
-								
-								
-							} else {
-								if let strongSelf = self{
-									strongSelf.activityIndicator.stopAnimating()
-								}
-							}}
-					})
-				self.downloadTask?.resume()
+				delegate?.downloadItemImageForSearchResult(imageURL: urlOfImage, completion: { [weak self](result) in
+					DispatchQueue.main.async() {
+						switch result {
+						case .success(let image):
+							self?.imageView.image = image
+							self?.activityIndicator.stopAnimating()
+							self?.imageCache.setObject(image, forKey: urlOfImage.absoluteString as NSString, cost: 1)
+						case .failure(let error):
+							self?.activityIndicator.stopAnimating()
+							Logger.handleError(error)
+						}
+					}
+				})
 			}
 		}
+		
 	}
-	private var downloadTask: URLSessionDownloadTask?
-	
-	let imageCache = MyCache.sharedInstance
-	
-	
 	
 	override func prepareForReuse() {
-		
-		self.downloadTask?.cancel()
 		self.activityIndicator.stopAnimating()
-		imageView.image = nil
 	}
 	
 	deinit {
-		self.downloadTask?.cancel()
 		self.activityIndicator.stopAnimating()
-		imageView.image = nil
 	}
 	private func setupLayout() {
 		let arrayConstraints = [

@@ -14,7 +14,9 @@ class MoviesListCollectionViewOneCell: UICollectionViewCell {
 		static let height:CGFloat = 180 // 231
 		
 	}
-	
+	weak var delegate: MoviesListProtocol?
+	private let imageCache = MyCache.sharedInstance
+
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		contentView.backgroundColor = UIColor(named: "mainBackground")
@@ -240,59 +242,38 @@ class MoviesListCollectionViewOneCell: UICollectionViewCell {
 			
 		]
 		NSLayoutConstraint.activate(array)
-		layoutIfNeeded()
 	}
 	
-	private var downloadTask: URLSessionDownloadTask?
-	
-	private let imageCache = MyCache.sharedInstance
 	
 	func downloadItemImageForSearchResult(imageURL: URL?) {
-		
 		if let urlOfImage = imageURL {
 			if let cachedImage = imageCache.object(forKey: urlOfImage.absoluteString as NSString){
 				self.posterImage.image = cachedImage
 			} else {
-				let session = URLSession.shared
 				activityIndicator.startAnimating()
-				self.downloadTask = session.downloadTask(
-					with: urlOfImage as URL, completionHandler: { [weak self] url, response, error in
-						DispatchQueue.main.async() {
-							if error == nil, let url = url, let data = NSData(contentsOf: url), let image = UIImage(data: data as Data) {
-								
-								let imageToCache = image
-								
-								if let strongSelf = self{
-									
-									strongSelf.posterImage.image = imageToCache
-									
-									strongSelf.imageCache.setObject(imageToCache, forKey: urlOfImage.absoluteString as NSString, cost: 1)
-									strongSelf.activityIndicator.stopAnimating()
-								}
-								
-								
-							} else {
-								if let strongSelf = self{
-									strongSelf.activityIndicator.stopAnimating()
-								}
-							}}
-					})
-				self.downloadTask?.resume()
+				delegate?.downloadItemImageForSearchResult(imageURL: urlOfImage, completion: { [weak self](result) in
+					DispatchQueue.main.async() {
+						switch result {
+						case .success(let image):
+							self?.posterImage.image = image
+							self?.activityIndicator.stopAnimating()
+							self?.imageCache.setObject(image, forKey: urlOfImage.absoluteString as NSString, cost: 1)
+						case .failure(let error):
+							self?.activityIndicator.stopAnimating()
+							Logger.handleError(error)
+						}
+					}
+				})
 			}
 		}
-	}
-	
-	override func prepareForReuse() {
 		
-		self.downloadTask?.cancel()
+	}
+	override func prepareForReuse() {
 		self.activityIndicator.stopAnimating()
-		posterImage.image = nil
 	}
 	
 	deinit {
-		self.downloadTask?.cancel()
 		self.activityIndicator.stopAnimating()
-		posterImage.image = nil
 	}
 }
 // MARK: - fill cell
