@@ -30,11 +30,11 @@ final class SearchPresenter:NSObject {
 	private var searchText:String = ""
 	
 	unowned var view:SearchProtocol
-	let networkService: NetworkService
+	let networkService: NetworkServiseProtocol
 	let router: SearchRouterInput
 	
 	
-	init(view:SearchProtocol, networkService: NetworkService, router: SearchRouterInput) {
+	init(view:SearchProtocol, networkService: NetworkServiseProtocol, router: SearchRouterInput) {
 		self.view = view
 		self.networkService = networkService
 		self.router = router

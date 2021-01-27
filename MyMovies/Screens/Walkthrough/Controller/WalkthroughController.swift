@@ -138,6 +138,16 @@ final class WalkthroughController: UIViewController  {
 		return gradient
 	}()
 }
+extension WalkthroughController: WalkthroughControllerProtocol {
+	func succes() {
+		collectionView.reloadData()
+	}
+	
+	func failure(error: Error) {
+		Logger.handleError(error)
+	}
+	
+}
 
 extension WalkthroughController: UICollectionViewDelegate, UICollectionViewDataSource {
 	

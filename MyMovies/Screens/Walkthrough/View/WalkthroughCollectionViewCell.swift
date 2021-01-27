@@ -35,18 +35,18 @@ final class WalkthroughCollectionViewCell: UICollectionViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	func make(model:WalkthroughModel) {
-		contentView.backgroundColor = model.bGColor
+		contentView.backgroundColor = model.bGColor.value
 		
-		bgImage.image = model.bgImage
+		bgImage.image = UIImage(named: model.bgImage)
 		textLabel.text = model.title
 		textSubLabel.text = model.subTitle
 		
-		gradientLayer.startPoint = model.gradient.startPoint
-		gradientLayer.endPoint = model.gradient.endPoint
+		gradientLayer.startPoint = model.gradient.startPoint.value
+		gradientLayer.endPoint = model.gradient.endPoint.value
 		gradientLayer.frame = self.bounds
 		gradientLayer.colors?.removeAll()
-		gradientLayer.colors =  model.gradient.colors.map({ $0.cgColor })
-		gradientLayer.locations = model.gradient.location
+		gradientLayer.colors =  model.gradient.colors.map{ $0.value.cgColor }
+		gradientLayer.locations = model.gradient.location.map{NSNumber(value: $0)}
 		
 		gradientView.layer.sublayers?.removeAll(where: {$0 is CAGradientLayer})
 		gradientView.layer.insertSublayer(gradientLayer, at: 1)

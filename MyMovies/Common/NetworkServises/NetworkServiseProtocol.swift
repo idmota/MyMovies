@@ -9,6 +9,9 @@ import Foundation
 
 protocol NetworkServiseProtocol {
 	func getResponser<T:Codable>(url:String, model:T.Type, completion: @escaping (Result<T, Error>) -> Void)
+	func getWalkthroughModels(completion: @escaping (Result<[WalkthroughModel], Error>) -> Void)
+	func downloadItemImageForSearchResult(imageURL: URL?, Repeated: Bool,
+										  completion: @escaping (_ result:UIImage?) -> Void)
 }
 
 class NetworkService:NetworkServiseProtocol {
@@ -33,6 +36,24 @@ class NetworkService:NetworkServiseProtocol {
 		}.resume()
 		
 	}
+	func getResponser<T>(requestUrl:URL, model: T.Type, completion: @escaping (Result<T, Error>) -> Void) where T : Decodable {
+		
+		URLSession.shared.dataTask(with: requestUrl) { (data, response, error) in
+			if let error = error {
+				completion(.failure(error))
+			}
+			do {
+				let retData:T =  try JSONDecoder().decode(T.self,
+														  from: data!)
+				completion(.success(retData))
+			} catch {
+				completion(.failure(error))
+				
+			}
+		}.resume()
+		
+	}
+	// mark подчистить всюду
 	func downloadItemImageForSearchResult(imageURL: URL?, Repeated: Bool,
 										  completion: @escaping (_ result:UIImage?) -> Void) {
 		
@@ -61,5 +82,10 @@ class NetworkService:NetworkServiseProtocol {
 			
 		}
 	}
+	func getWalkthroughModels(completion: @escaping (Result<[WalkthroughModel], Error>) -> Void) {
+		let url = Bundle.main.url(forResource: "Walkthrough", withExtension: "json")!
+		getResponser(requestUrl: url, model: [WalkthroughModel].self, completion: completion)
+	}
 }
+
 

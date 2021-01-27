@@ -38,7 +38,7 @@ final class MoviesListPresenter:NSObject, MoviesListPresenterProtocol {
 	
 	var menuIsShow:Bool = false
 	unowned var view:MoviesListProtocol
-	var networkService:NetworkService
+	var networkService:NetworkServiseProtocol
 	let router: MoviesListRouterInput
 	var commonMenu: CommonsMenuController?
 	let urlModel: CommonsMenuModel
@@ -62,7 +62,7 @@ final class MoviesListPresenter:NSObject, MoviesListPresenterProtocol {
 		return moviesList[index]
 	}
 	
-	init(view: MoviesListProtocol, networkService: NetworkService,
+	init(view: MoviesListProtocol, networkService: NetworkServiseProtocol,
 		 urlModel:CommonsMenuModel, router: MoviesListRouter) {
 		self.view = view
 		self.networkService = networkService

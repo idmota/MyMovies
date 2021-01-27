@@ -13,7 +13,9 @@ struct WalkthroughBuilder {
 		let view = WalkthroughController() 
 		
 		let moviesListRouter = WalkthroughRouter(router: router)
-		let presenter = WalkthroughPresenter(view: view, router: moviesListRouter)
+		let networkService = NetworkService()
+		
+		let presenter = WalkthroughPresenter(view: view, router: moviesListRouter, networkService: networkService)
 		
 		view.presenter = presenter
 		
