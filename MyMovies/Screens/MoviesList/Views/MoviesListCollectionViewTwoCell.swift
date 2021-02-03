@@ -16,22 +16,19 @@ class MoviesListCollectionViewTwoCell: UICollectionViewCell {
 		static let height:CGFloat = 180 // 231
 		
 	}
-	weak var delegate: MoviesListProtocol?
+	weak var delegate: MoviesListCollectionViewInput?
 	private let imageCache = MyCache.sharedInstance
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		setupView()
 	}
-	override func layoutSubviews() {
-		super.layoutSubviews()
-		CATransaction.begin()
-		CATransaction.setDisableActions(true)
+	override func draw(_ rect: CGRect) {
+		super.draw(rect)
 		
 		titleGradientLayer.frame = titleView.bounds
 		vGradientLayer.frame = circleView.bounds
-		
-		CATransaction.commit()
+
 	}
 	
 	private var imageURL: URL? {

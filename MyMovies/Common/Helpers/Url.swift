@@ -35,10 +35,7 @@ enum Url {
 	static func getMovieFromId(_ idMovie:Int)->String {
 		return "\(urlDetail)\(typeData.movie)/\(idMovie)?api_key=\(token)&language=\(Locale.preferredLanguages.first!)&append_to_response=videos"
 	}
-//	static func getUrlFromCategory(_ category:Category,page:Int)->String {
-//		return "\(urlDetail)\(typeData.movie)/\(category.rawValue)?api_key=\(token)&language=\(Locale.preferredLanguages.first!)&page=\(page)"
-//
-//	}
+
 	static func getUrlFromCategory(_ category:CommonsMenuModel,page:Int)->String {
 		return "\(urlDetail)\(typeData.movie)/\(category.rawValue)?api_key=\(token)&language=\(Locale.preferredLanguages.first!)&page=\(page)"
 		

@@ -14,6 +14,8 @@ protocol SearchPresenterInput: class {
 	var currentCount:Int {get}
 	var totalCount: Int {get}
 	func movie(at index: Int) -> MovieModel
+	func downloadItemImageForSearchResult(imageURL: URL,
+																				completion: @escaping (_ result:Result<UIImage, Error>) -> Void)
 }
 
 protocol SearchProtocol: class {
@@ -42,6 +44,7 @@ final class SearchPresenter:NSObject {
 	}
 	
 }
+// MARK: - SearchPresenterInput
 extension SearchPresenter: SearchPresenterInput {
 	
 	var totalCount: Int {
@@ -107,4 +110,9 @@ extension SearchPresenter: SearchPresenterInput {
 			}
 		}
 	}
+	func downloadItemImageForSearchResult(imageURL: URL,
+																				completion: @escaping (_ result:Result<UIImage, Error>) -> Void) {
+		networkService.downloadItemImageForSearchResult(imageURL: imageURL, completion: completion)
+	}
 }
+

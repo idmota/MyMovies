@@ -55,7 +55,7 @@ class NetworkService:NetworkServiseProtocol {
 		}.resume()
 		
 	}
-	// mark подчистить всюду
+	
 	func downloadItemImageForSearchResult(imageURL: URL?, Repeated: Bool,
 										  completion: @escaping (_ result:UIImage?) -> Void) {
 		

@@ -13,17 +13,14 @@ protocol MoviesListInput: class {
 	func didOpenSearchController()
 	func didLoadView()
 	func downloadItemImageForSearchResult(imageURL: URL,
-										  completion: @escaping (_ result:Result<UIImage, Error>) -> Void)
+																				completion: @escaping (_ result:Result<UIImage, Error>) -> Void)
 }
 
 
 protocol MoviesListProtocol: class { // input
 	var menuView: UIView {get}
 	func succes()
-	func failure(error:Error)
-	func downloadItemImageForSearchResult(imageURL: URL,
-										  completion: @escaping (_ result:Result<UIImage, Error>) -> Void)
-	
+	func failure(error:Error)	
 }
 
 protocol MoviesListPresenterProtocol: class {
@@ -31,12 +28,9 @@ protocol MoviesListPresenterProtocol: class {
 	var totalCount:Int { get }
 	var currentCount: Int { get }
 	func movie(at index: Int) -> MovieModel
-	var urlModel: CommonsMenuModel { get }
-	
-	
 }
 
-final class MoviesListPresenter:NSObject, MoviesListPresenterProtocol {
+final class MoviesListPresenter:NSObject {
 	
 	var menuIsShow:Bool = false
 	unowned var view:MoviesListProtocol
@@ -52,6 +46,21 @@ final class MoviesListPresenter:NSObject, MoviesListPresenterProtocol {
 	private var total:Int = 1
 	private var isFetchInProgress = false
 	
+	
+	
+	init(view: MoviesListProtocol, networkService: NetworkServiseProtocol,
+			 urlModel:CommonsMenuModel, router: MoviesListRouter) {
+		self.view = view
+		self.networkService = networkService
+		self.urlModel = urlModel
+		self.router = router
+		super.init()
+		
+	}
+	
+}
+
+extension MoviesListPresenter: MoviesListPresenterProtocol{
 	var totalCount: Int {
 		return total
 	}
@@ -64,20 +73,10 @@ final class MoviesListPresenter:NSObject, MoviesListPresenterProtocol {
 		return moviesList[index]
 	}
 	
-	init(view: MoviesListProtocol, networkService: NetworkServiseProtocol,
-		 urlModel:CommonsMenuModel, router: MoviesListRouter) {
-		self.view = view
-		self.networkService = networkService
-		self.urlModel = urlModel
-		self.router = router
-		super.init()
-				
-	}
-	
 	private func getGenresList() {
 		let url = Url.getFenresList()
 		networkService.getResponser(url:url,
-									model: GenresListModel.self) { [weak self] result in
+																model: GenresListModel.self) { [weak self] result in
 			guard let self = self else {return}
 			DispatchQueue.main.async {
 				switch result {
@@ -90,7 +89,6 @@ final class MoviesListPresenter:NSObject, MoviesListPresenterProtocol {
 			
 		}
 	}
-	
 	func getMoviesList() {
 		guard !isFetchInProgress else {
 			return
@@ -103,7 +101,7 @@ final class MoviesListPresenter:NSObject, MoviesListPresenterProtocol {
 		self.isFetchInProgress = true
 		let url = Url.getUrlFromCategory(urlModel, page: currentPage)
 		networkService.getResponser(url:url,
-									model: MoviesListModel.self) { [weak self] result in
+																model: MoviesListModel.self) { [weak self] result in
 			guard let self = self else {return}
 			DispatchQueue.main.async {
 				
@@ -134,8 +132,10 @@ final class MoviesListPresenter:NSObject, MoviesListPresenterProtocol {
 			}
 		}
 	}
+	
 }
 
+// MARK: - MoviesListInput
 extension MoviesListPresenter: MoviesListInput {
 	func didLoadView() {
 		getGenresList()
@@ -153,11 +153,13 @@ extension MoviesListPresenter: MoviesListInput {
 		router.openMovieDetail(model: moviesList[index], animated: true)
 	}
 	func downloadItemImageForSearchResult(imageURL: URL,
-										  completion: @escaping (_ result:Result<UIImage, Error>) -> Void) {
+																				completion: @escaping (_ result:Result<UIImage, Error>) -> Void) {
 		networkService.downloadItemImageForSearchResult(imageURL: imageURL, completion: completion)
 	}
 	
 }
+
+// MARK: - MoviesListRouterOutput
 extension MoviesListPresenter: MoviesListRouterOutput {
 	func showCommonMenu(animated: Bool) {
 		if (menuIsShow)
@@ -184,7 +186,7 @@ extension MoviesListPresenter: MoviesListRouterOutput {
 		menuIsShow = true
 		
 		guard let menuVC = commonMenu else {return}
-	
+		
 		view.menuView.addSubview(menuVC.view)
 		
 		menuVC.view.translatesAutoresizingMaskIntoConstraints = false

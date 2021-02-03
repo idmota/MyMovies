@@ -48,7 +48,9 @@ final class CommonsMenuController: UIViewController {
 	}()
 	
 }
-extension CommonsMenuController:CommonsMenuControllerProtocol, UITableViewDelegate, UITableViewDataSource {
+
+// MARK: - UITableViewDataSource
+extension CommonsMenuController: UITableViewDelegate, UITableViewDataSource, CommonsMenuControllerProtocol {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		guard let lPresenter = presenter else {return 0}
 		return lPresenter.totalCount

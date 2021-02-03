@@ -16,6 +16,7 @@ final class SearchRouter: NSObject {
 		self.routers = router
 	}
 }
+// MARK: - SearchRouterInput
 extension SearchRouter: SearchRouterInput{
 	func openMovieDetail(model:MovieModel, animated:Bool) {
 		let projectDetails = MovieDetailBuilder.make(router: routers, model: model)

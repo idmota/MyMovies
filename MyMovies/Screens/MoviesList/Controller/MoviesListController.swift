@@ -134,6 +134,7 @@ final class MoviesListController: UIViewController {
 	}
 	
 }
+// MARK: - MoviesListProtocol
 extension MoviesListController: MoviesListProtocol {
 	var menuView: UIView {
 		get {
@@ -148,22 +149,18 @@ extension MoviesListController: MoviesListProtocol {
 	func failure(error: Error) {
 		Logger.handleError(error)
 	}
+}
+// MARK: - MoviesListCollectionViewInput
+extension MoviesListController: MoviesListCollectionViewInput {
+	
 	func downloadItemImageForSearchResult(imageURL: URL,
 										  completion: @escaping (_ result:Result<UIImage, Error>) -> Void) {
 		presenter?.downloadItemImageForSearchResult(imageURL: imageURL, completion: completion)
-	}
-	
+	}	
 }
-extension MoviesListController:UICollectionViewDataSourcePrefetching, UICollectionViewDelegate, UICollectionViewDataSource {
+// MARK: - UICollectionViewDataSourcePrefetching
+extension MoviesListController: UICollectionViewDelegate, UICollectionViewDataSource {
 	
-	func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-		if indexPaths.contains(where: isLoadingCell) {
-			presenter?.getMoviesList()
-		}
-	}
-	func numberOfSections(in collectionView: UICollectionView) -> Int {
-		return 1
-	}
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		guard let lPresenter = presenter else {return 0}
 		return lPresenter.currentCount
@@ -188,11 +185,16 @@ extension MoviesListController:UICollectionViewDataSourcePrefetching, UICollecti
 			
 		}
 	}
-
+}
+// MARK: - UICollectionViewDataSourcePrefetching
+extension MoviesListController: UICollectionViewDataSourcePrefetching {
+	func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+		if indexPaths.contains(where: isLoadingCell) {
+			presenter?.getMoviesList()
+		}
+	}
 	private func isLoadingCell(for indexPath: IndexPath) -> Bool {
 		guard let lPresenter = presenter else {return false}
 		return indexPath.row >= lPresenter.currentCount-1
 	}
-	
 }
-

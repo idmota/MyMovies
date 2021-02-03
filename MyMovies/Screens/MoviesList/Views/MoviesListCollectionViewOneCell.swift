@@ -7,6 +7,8 @@
 
 import UIKit
 
+
+
 class MoviesListCollectionViewOneCell: UICollectionViewCell {
 	let circleRatingSize:CGFloat = 36
 	enum imageLogoSize {
@@ -14,7 +16,7 @@ class MoviesListCollectionViewOneCell: UICollectionViewCell {
 		static let height:CGFloat = 180 // 231
 		
 	}
-	weak var delegate: MoviesListProtocol?
+	weak var delegate: MoviesListCollectionViewInput?
 	private let imageCache = MyCache.sharedInstance
 
 	override init(frame: CGRect) {
@@ -28,16 +30,12 @@ class MoviesListCollectionViewOneCell: UICollectionViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	override func layoutIfNeeded() {
-		super.layoutIfNeeded()
-		
-		CATransaction.begin()
-		CATransaction.setDisableActions(true)
-		
+	override func draw(_ rect: CGRect) {
+		super.draw(rect)
 		vGradientLayer.frame = circleView.bounds
-		CATransaction.commit()
-	}
 	
+	}
+
 	private var imageURL: URL? {
 		didSet {
 			self.downloadItemImageForSearchResult(imageURL: imageURL)

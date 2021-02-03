@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import class UIKit.UIImage
 
 protocol CommonsMenuControllerProtocol:class {
 	
@@ -39,7 +40,7 @@ final class CommonsMenuPresenter:NSObject  {
 	}
 	
 }
-
+// MARK: - CommonsMenuPresenterProtocol
 extension CommonsMenuPresenter: CommonsMenuPresenterProtocol {
 	func didLoadView() {
 		menuModels = [
@@ -54,3 +55,4 @@ extension CommonsMenuPresenter: CommonsMenuPresenterProtocol {
 		router.openScreen(openModel: itemMenu(at: index))
 	}
 }
+

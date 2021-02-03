@@ -33,7 +33,7 @@ final class WalkthroughPresenter: NSObject {
 	}
 	
 }
-
+// MARK: - WalkthroughPresenterProtocol
 extension WalkthroughPresenter:WalkthroughPresenterProtocol {
 	
 	var totalCount: Int {

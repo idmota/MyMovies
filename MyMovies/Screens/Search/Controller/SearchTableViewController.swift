@@ -104,13 +104,10 @@ final class SearchTableViewController: UIViewController {
 	}()
 }
 
-extension SearchTableViewController: UICollectionViewDataSourcePrefetching, UICollectionViewDataSource, UICollectionViewDelegate {
+// MARK: - UICollectionViewDataSource
+extension SearchTableViewController: UICollectionViewDataSource, UICollectionViewDelegate {
 	
-	func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-		if indexPaths.contains(where: isLoadingCell) {
-			presenter?.getNextPage()
-		}
-	}
+
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		collectionView.deselectItem(at: indexPath, animated: true)
 		presenter?.didPressOpenDetail(at: indexPath.row)
@@ -126,24 +123,39 @@ extension SearchTableViewController: UICollectionViewDataSourcePrefetching, UICo
 		placeholder.isHidden = lPresenter.currentCount != 0
 		return lPresenter.currentCount
 	}
-	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		
 		let cell:MoviesListCollectionViewOneCell = collectionView.dequeueReusableCell(for: indexPath)
 		guard let lPresenter = presenter else {return cell}
 		let movie = lPresenter.movie(at: indexPath.row)
-
+		cell.delegate = self
 		cell.fill(model:movie)
 		return cell
+	}
+}
+// MARK: - MoviesListCollectionViewInput
+extension SearchTableViewController: MoviesListCollectionViewInput {
+	
+	func downloadItemImageForSearchResult(imageURL: URL,
+											completion: @escaping (_ result:Result<UIImage, Error>) -> Void) {
+		presenter?.downloadItemImageForSearchResult(imageURL: imageURL, completion: completion)
+	}
+}
+
+// MARK: - UICollectionViewDataSourcePrefetching
+extension SearchTableViewController: UICollectionViewDataSourcePrefetching {
+	func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+		if indexPaths.contains(where: isLoadingCell) {
+			presenter?.getNextPage()
+		}
 	}
 	
 	func isLoadingCell(for indexPath: IndexPath) -> Bool {
 		guard let lPresenter = presenter else {return false}
 		return indexPath.row >= lPresenter.currentCount-1
 	}
-	
 }
-
+// MARK: - SearchProtocol
 extension SearchTableViewController: SearchProtocol {
 	func succes() {
 		collectionView.reloadData()
@@ -152,11 +164,9 @@ extension SearchTableViewController: SearchProtocol {
 	func failure(error: Error) {
 		Logger.handleError(error)
 	}
-	
-	
-	
-	
 }
+
+// MARK: - UITextFieldDelegate
 extension SearchTableViewController: UITextFieldDelegate {
 	func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
 		if let searchText = textField.text {

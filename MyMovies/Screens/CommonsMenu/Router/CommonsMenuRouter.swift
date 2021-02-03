@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CommonsMenuRouter: CommonsMenuRouterInput {
+final class CommonsMenuRouter: NSObject {
 	
 	let router: RouterImp
 	
@@ -16,7 +16,10 @@ final class CommonsMenuRouter: CommonsMenuRouterInput {
 	init(router: RouterImp) {
 		self.router = router
 	}
-	
+}
+
+// MARK: - CommonsMenuRouterInput
+extension CommonsMenuRouter: CommonsMenuRouterInput{
 	func openScreen(openModel: CommonsMenuModel) {
 		let projectDetails = MoviesListModelFactory.make(router: router, model:openModel)
 		router.setRoot(projectDetails, animated: true)

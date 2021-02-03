@@ -138,6 +138,7 @@ final class WalkthroughController: UIViewController  {
 		return gradient
 	}()
 }
+// MARK: - WalkthroughControllerProtocol
 extension WalkthroughController: WalkthroughControllerProtocol {
 	func succes() {
 		collectionView.reloadData()
@@ -148,7 +149,7 @@ extension WalkthroughController: WalkthroughControllerProtocol {
 	}
 	
 }
-
+// MARK: - UICollectionViewDataSource
 extension WalkthroughController: UICollectionViewDelegate, UICollectionViewDataSource {
 	
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
