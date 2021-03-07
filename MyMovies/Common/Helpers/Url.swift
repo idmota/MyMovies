@@ -11,11 +11,11 @@ enum Url {
 
 	static let token: String = "cb606896c629b59ff2130946a21edeeb"
 	
-	static let urlDetail: String = "https://api.themoviedb.org/3/"
+	static let urlDetail: String = "https://api.tmdb.org/3/"
 	
 	static let urlYoutube: String = "https://www.youtube.com/watch?v="
 	static let urlPoster: String = "https://image.tmdb.org/t/p/"
-	static let urlList:String = "https://api.themoviedb.org/3/genre/tv/list?api_key=\(token)&language=ru-RU"
+	static let urlList:String = "https://api.tmdb.org/3/genre/tv/list?api_key=\(token)&language=ru-RU"
 	
 	static func getPosterURL(path:String)->URL? {
 		let stringUrl = "\(urlPoster)\(apiImg.logo_sizes.w154)\(path)"

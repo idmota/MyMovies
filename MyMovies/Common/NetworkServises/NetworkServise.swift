@@ -42,26 +42,6 @@ class NetworkService:NetworkServiseProtocol {
 		}.resume()
 		
 	}
-//	func getResponser<T>(requestUrl:URL, model: T.Type, completion: @escaping (Result<T, Error>) -> Void) where T : Decodable {
-//		let sessionConfig = URLSessionConfiguration.default
-//		sessionConfig.timeoutIntervalForRequest = 5
-//		sessionConfig.timeoutIntervalForResource = 10
-//
-//		URLSession(configuration: sessionConfig).dataTask(with: requestUrl) { (data, response, error) in
-//			if let error = error {
-//				completion(.failure(error))
-//			}
-//			do {
-//				let retData:T =  try JSONDecoder().decode(T.self,
-//														  from: data!)
-//				completion(.success(retData))
-//			} catch {
-//				completion(.failure(error))
-//
-//			}
-//		}.resume()
-//
-//	}
 	
 	func downloadItemImageForSearchResult(imageURL: URL?, Repeated: Bool,
 										  completion: @escaping (_ result:UIImage?) -> Void) {
