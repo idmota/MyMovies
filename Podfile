@@ -6,6 +6,6 @@ target 'MyMovies' do
   use_frameworks!
 
   pod "youtube-ios-player-helper", "~> 1.0.2"
-  # Pods for MyMovies
+  pod 'RealmSwift', '~> 10.7'
 
 end

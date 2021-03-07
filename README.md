@@ -21,3 +21,4 @@
 > 
 [<img src="readmeInfo/demoMyMovie.png" width="40%">](https://youtu.be/qLOfvTZ_Kng)
 
+ps.: api https://api.themoviedb.org/ временно не доступен. Один из IP адресов заблокирован. Для проверки работоспособности воспользуйтесь VPN

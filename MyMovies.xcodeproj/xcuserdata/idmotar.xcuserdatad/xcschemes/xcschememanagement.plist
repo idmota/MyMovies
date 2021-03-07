@@ -9,9 +9,19 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>MyMoviesTests.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>2AA4472E25BDE21F00F1F487</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>2ADDFFD62566973E00B25BA8</key>
 		<dict>
 			<key>primary</key>

@@ -147,7 +147,8 @@ extension MoviesListController: MoviesListProtocol {
 	}
 	
 	func failure(error: Error) {
-		Logger.handleError(error)
+		showFailView(error.localizedDescription)
+//		Logger.handleError(error)
 	}
 }
 // MARK: - MoviesListCollectionViewInput

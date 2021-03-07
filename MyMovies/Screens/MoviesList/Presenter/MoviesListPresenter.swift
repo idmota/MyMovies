@@ -75,15 +75,15 @@ extension MoviesListPresenter: MoviesListPresenterProtocol{
 	
 	private func getGenresList() {
 		let url = Url.getFenresList()
-		networkService.getResponser(url:url,
-																model: GenresListModel.self) { [weak self] result in
+		networkService.getResponser(url:url, model: GenresListModel.self) { [weak self] result in
 			guard let self = self else {return}
 			DispatchQueue.main.async {
 				switch result {
 				case .success(let resultGenres):
 					self.genresList = resultGenres.genres
-				case .failure(let error):
-					self.view.failure(error: error)
+				case .failure(let _):
+//					self.view.failure(error: error)
+					break
 				}
 			}
 			

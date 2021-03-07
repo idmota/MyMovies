@@ -17,16 +17,20 @@ protocol NetworkServiseProtocol {
 }
 
 class NetworkService:NetworkServiseProtocol {
-	func getResponser<T>(url:String, model: T.Type, completion: @escaping (Result<T, Error>) -> Void) where T : Decodable, T : Encodable {
+	func getResponser<T>(url:String, model: T.Type, completion: @escaping (Result<T, Error>) -> Void) where T : Decodable {
 		guard let requestUrl = URL(string: url) else {
 			completion(.failure(NSError(domain: "error.URLIsNotCorrect", code: 0, userInfo: nil)))
 			return
 		}
-		
-		URLSession.shared.dataTask(with: requestUrl) { (data, response, error) in
+		let sessionConfig = URLSessionConfiguration.default
+		sessionConfig.timeoutIntervalForRequest = 5
+		sessionConfig.timeoutIntervalForResource = 5
+		URLSession(configuration: sessionConfig).dataTask(with: requestUrl) { (data, response, error) in
 			if let error = error {
 				completion(.failure(error))
+				return
 			}
+			//guard let data = data else { completion(.failure(error!)); return}
 			do {
 				let retData:T =  try JSONDecoder().decode(T.self,
 														  from: data!)
@@ -38,23 +42,26 @@ class NetworkService:NetworkServiseProtocol {
 		}.resume()
 		
 	}
-	func getResponser<T>(requestUrl:URL, model: T.Type, completion: @escaping (Result<T, Error>) -> Void) where T : Decodable {
-		
-		URLSession.shared.dataTask(with: requestUrl) { (data, response, error) in
-			if let error = error {
-				completion(.failure(error))
-			}
-			do {
-				let retData:T =  try JSONDecoder().decode(T.self,
-														  from: data!)
-				completion(.success(retData))
-			} catch {
-				completion(.failure(error))
-				
-			}
-		}.resume()
-		
-	}
+//	func getResponser<T>(requestUrl:URL, model: T.Type, completion: @escaping (Result<T, Error>) -> Void) where T : Decodable {
+//		let sessionConfig = URLSessionConfiguration.default
+//		sessionConfig.timeoutIntervalForRequest = 5
+//		sessionConfig.timeoutIntervalForResource = 10
+//
+//		URLSession(configuration: sessionConfig).dataTask(with: requestUrl) { (data, response, error) in
+//			if let error = error {
+//				completion(.failure(error))
+//			}
+//			do {
+//				let retData:T =  try JSONDecoder().decode(T.self,
+//														  from: data!)
+//				completion(.success(retData))
+//			} catch {
+//				completion(.failure(error))
+//
+//			}
+//		}.resume()
+//
+//	}
 	
 	func downloadItemImageForSearchResult(imageURL: URL?, Repeated: Bool,
 										  completion: @escaping (_ result:UIImage?) -> Void) {
@@ -102,7 +109,7 @@ class NetworkService:NetworkServiseProtocol {
 	}
 	func getWalkthroughModels(completion: @escaping (Result<[WalkthroughModel], Error>) -> Void) {
 		let url = Bundle.main.url(forResource: "Walkthrough", withExtension: "json")!
-		getResponser(requestUrl: url, model: [WalkthroughModel].self, completion: completion)
+		getResponser(url: url.absoluteString, model: [WalkthroughModel].self, completion: completion)
 	}
 }
 
